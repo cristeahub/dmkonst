@@ -20,10 +20,24 @@ end entity stack;
 
 architecture behavioural of stack is
 
-  -- Fill in type and signal declarations here.
+  type stack_storage is array(size downto 0) of operand_t;
+
+  signal sp : integer := 0;
+  signal stack_mem : stack_storage := (others => (others => '0'));
 
 begin  -- architecture behavioural
 
-  -- Fill in processes here.
+  process (rst, clk, push) is
+  begin
+    if rst = '1' then
+      top <= (others => '0');
+    end if;
+    
+    if push = '1' then
+      stack_mem(sp) <= value_in;
+      sp <= sp + 1;
+      top <= value_in;
+    end if;
+  end process;
 
 end architecture behavioural;
