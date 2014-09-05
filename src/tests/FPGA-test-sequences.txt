@@ -1,0 +1,38 @@
+The RPNC is controlled via a UART register control interface while running on the FPGA. Here are some test sequences that can be used with the RPNC control infrastructure to check some functionality. The sequences can be sent directly as text over the serial port.
+
+The command format is as follows:
+
+Command Format		Description
+------------------------------------------------------------------------------------------------
+r <adddr>\n 		read the value of a register. <addr> must be 4 hex characters.
+w <val> <addr>\n	write 1-byte value <val> to a register. <addr> must be 4 hex characters
+
+The following addresses are assumed for the one-byte control registers.
+
+Address		R/W	Description
+-----------------------------------------------------------------------------
+0000		R	Current stack_top from RPNC
+0001		RW	Instructions left to execute, decremented on read_en
+0002		RW	Current read pointer, incremented on read_en
+0003		RW	RPNC reset signal (active high)
+8000..80FF	RW	Instruction memory, see compendium for encoding
+
+
+reset sequence:
+w 00 0002\nw 01 0003\nw 00 0003
+
+'alternative' reset sequence for not losing first instr:
+w ff 0002\nw 01 0003\nw 00 0003
+
+instr mem verify:
+r 8000\nr 8001\nr 8002\nr 8003\nr 8004\nr 8005\nr 8006\nr 8007\nr 8008\nr 8009
+
+single step and stack top check sequence:
+w 01 0001\nr 0000
+
+alternative reset, then write 1 2 3 4 5 (stack top should show 1 2 3 4 5 with single step):
+w ff 0002\nw 01 0003\nw 00 0003\nw 01 8000\nw 00 8001\nw 02 8002\nw 00 8003\nw 03 8004\nw 00 8005\nw 04 8006\nw 00 8007\nw 05 8008\nw 00 8009
+
+alternative reset, then 1 2 + 10 + (stack top should show 1 2 3 10 13 with single step)
+w ff 0002\nw 01 0003\nw 00 0003\nw 01 8000\nw 00 8001\nw 02 8002\nw 00 8003\nw 00 8004\nw 01 8005\nw 0A 8006\nw 00 8007\nw 00 8008\nw 01 8009
+
