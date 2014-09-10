@@ -22,9 +22,12 @@
 *.cmd_log
 *_beh.prj
 *.ncd
+*.spl
+*.sym
 isim
 db
 incremental_db
+iseconfig
 work
 *.cr.mti
 vsim.wlf
