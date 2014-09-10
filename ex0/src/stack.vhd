@@ -28,33 +28,37 @@ architecture behavioural of stack is
 begin  -- architecture behavioural
 
   process (rst, clk, push, pop) is
+    variable v_sp : integer := 0;
   begin
     if rising_edge(clk) then
-
+      v_sp := sp;
+      
       if rst = '1' then
-        sp <= 0;
+        v_sp := 0;
         top <= (others => '0');
       end if;
       
       if push = '1' then
-        stack_mem(sp) <= value_in;
-        sp <= sp + 1;
+        stack_mem(v_sp) <= value_in;
         top <= value_in;
+        v_sp := v_sp + 1;
       end if;
       
       if pop = '1' then
-        if sp /= 0 then
-          sp <= sp - 1;
+        if v_sp /= 0 then
+          v_sp := v_sp - 1;
         end if;
 
-        if sp = 1 then
+        if v_sp = 0 then
           top <= (others => '0');
         else
-          top <= stack_mem(sp - 2);
+          top <= stack_mem(v_sp - 1);
         end if;
       end if;
-
-    end if;
+      
+      sp <= v_sp;
+    end if; -- rising edge
+    
   end process;
 
 end architecture behavioural;
