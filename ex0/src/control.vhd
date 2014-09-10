@@ -30,10 +30,42 @@ end entity control;
 
 architecture behavioural of control is
 
-  -- Fill in type and signal declarations here.
+  type state_t is (IDLE, FETCH, DECODE, PUSH_OPERAND, POP_B, POP_A, COMPUTE, PUSH_RESULT);
+  signal state, next_state: state_t;
 
 begin  -- architecture behavioural
 
-  -- Fill in processes here.
+  process (state) is
+  begin
+    read_instruction <= '0';
+    operand_b_wen <= '0';
+    operand_a_wen <= '0';
+    pop <= '0';
+    push <= '0';
+    
+    case state is
+      when FETCH =>
+        read_instruction <= '1';
+      when others =>
+        -- loll
+    end case;
+    
+  end process;
+
+  process (rst, clk) is
+  begin  
+    if rst = '1' then
+      state <= IDLE;
+    elsif rising_edge(clk) then
+      case state is
+        when IDLE =>
+          if empty = '0' then
+            next_state <= FETCH;
+          end if;
+        when others =>
+          -- moar loll
+      end case;
+    end if;  
+  end process;
 
 end architecture behavioural;
