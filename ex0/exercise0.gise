@@ -54,7 +54,7 @@
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
     </transform>
-    <transform xil_pn:end_ts="1409931734" xil_pn:in_ck="4998268313539876672" xil_pn:name="TRAN_copyAbstractToPostAbstractSimulation" xil_pn:start_ts="1409931734">
+    <transform xil_pn:end_ts="1410368694" xil_pn:in_ck="4998268313539876672" xil_pn:name="TRAN_copyAbstractToPostAbstractSimulation" xil_pn:start_ts="1410368694">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
       <outfile xil_pn:name="src/control.vhd"/>

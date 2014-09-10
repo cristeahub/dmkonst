@@ -32,6 +32,7 @@ begin  -- architecture behavioural
     if rising_edge(clk) then
 
       if rst = '1' then
+        sp <= 0;
         top <= (others => '0');
       end if;
       
