@@ -31,7 +31,7 @@ end entity control;
 architecture behavioural of control is
 
   type state_t is (IDLE, FETCH, DECODE, PUSH_OPERAND, POP_B, POP_A, COMPUTE, PUSH_RESULT);
-  signal state, next_state: state_t;
+  signal state : state_t;
 
 begin  -- architecture behavioural
 
@@ -46,6 +46,9 @@ begin  -- architecture behavioural
     case state is
       when FETCH =>
         read_instruction <= '1';
+			when PUSH_OPERAND =>
+				stack_input_select <= STACK_INPUT_OPERAND;
+				push <= '1';
       when others =>
         -- loll
     end case;
@@ -60,9 +63,14 @@ begin  -- architecture behavioural
       case state is
         when IDLE =>
           if empty = '0' then
-            next_state <= FETCH;
+            state <= FETCH;
           end if;
-        when others =>
+				when FETCH =>
+					state <= DECODE;
+				when DECODE =>
+					-- continue here with an if statement
+					state <= PUSH_OPERAND;
+				when others =>
           -- moar loll
       end case;
     end if;  
