@@ -42,7 +42,7 @@
     <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_XST" xil_pn:name="stack_machine.xst"/>
     <file xil_pn:fileType="FILE_HTML" xil_pn:name="stack_machine_envsettings.html"/>
     <file xil_pn:fileType="FILE_HTML" xil_pn:name="stack_machine_summary.html"/>
-    <file xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="stack_machine_tb_beh.prj"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="stack_machine_tb_beh.prj"/>
     <file xil_pn:branch="BehavioralSim" xil_pn:fileType="FILE_ISIM_EXE" xil_pn:name="stack_machine_tb_isim_beh.exe"/>
     <file xil_pn:fileType="FILE_ISIM_MISC" xil_pn:name="stack_machine_tb_isim_beh.wdb"/>
     <file xil_pn:fileType="FILE_XRPT" xil_pn:name="stack_machine_xst.xrpt"/>
@@ -135,6 +135,8 @@
     <transform xil_pn:end_ts="1410534296" xil_pn:in_ck="-7013002305864525246" xil_pn:name="TRAN_ISimulateBehavioralModel" xil_pn:prop_ck="-3843870033537496327" xil_pn:start_ts="1410534296">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForOutputs"/>
+      <status xil_pn:value="OutputChanged"/>
       <outfile xil_pn:name="isim.cmd"/>
       <outfile xil_pn:name="isim.log"/>
       <outfile xil_pn:name="stack_machine_tb_isim_beh.wdb"/>
@@ -167,12 +169,10 @@
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
     </transform>
-    <transform xil_pn:end_ts="1410532831" xil_pn:in_ck="7089375850359390879" xil_pn:name="TRANEXT_xstsynthesize_spartan6" xil_pn:prop_ck="7493491428695148647" xil_pn:start_ts="1410532822">
+    <transform xil_pn:end_ts="1410538468" xil_pn:in_ck="7089375850359390879" xil_pn:name="TRANEXT_xstsynthesize_spartan6" xil_pn:prop_ck="7493491428695148647" xil_pn:start_ts="1410538452">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="WarningsGenerated"/>
       <status xil_pn:value="ReadyToRun"/>
-      <status xil_pn:value="OutOfDateForInputs"/>
-      <status xil_pn:value="InputChanged"/>
       <outfile xil_pn:name="_xmsgs/xst.xmsgs"/>
       <outfile xil_pn:name="stack_machine.lso"/>
       <outfile xil_pn:name="stack_machine.ngc"/>
@@ -181,6 +181,7 @@
       <outfile xil_pn:name="stack_machine.stx"/>
       <outfile xil_pn:name="stack_machine.syr"/>
       <outfile xil_pn:name="stack_machine.xst"/>
+      <outfile xil_pn:name="stack_machine_tb_beh.prj"/>
       <outfile xil_pn:name="stack_machine_xst.xrpt"/>
       <outfile xil_pn:name="webtalk_pn.xml"/>
       <outfile xil_pn:name="xst"/>
