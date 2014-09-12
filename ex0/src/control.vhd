@@ -49,6 +49,7 @@ begin  -- architecture behavioural
 			when PUSH_OPERAND =>
 				stack_input_select <= STACK_INPUT_OPERAND;
 				push <= '1';
+        operand <= instruction(7 downto 0);
       when others =>
         -- loll
     end case;
@@ -56,7 +57,7 @@ begin  -- architecture behavioural
   end process;
 
   process (rst, clk) is
-  begin  
+  begin
     if rst = '1' then
       state <= IDLE;
     elsif rising_edge(clk) then
@@ -68,8 +69,11 @@ begin  -- architecture behavioural
 				when FETCH =>
 					state <= DECODE;
 				when DECODE =>
-					-- continue here with an if statement
-					state <= PUSH_OPERAND;
+					if instruction(15 downto 8) = x"00" then
+            state <= PUSH_OPERAND;
+          else
+            --state <= PUSH_OPERAND;
+          end if;
 				when others =>
           -- moar loll
       end case;
