@@ -1,0 +1,2 @@
+Very satisfied with the ex0.
+It is nice to have an easier project to work on while figuring out how VHDL and our tool chain works.
