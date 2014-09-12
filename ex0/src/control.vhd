@@ -50,6 +50,26 @@ begin  -- architecture behavioural
 				stack_input_select <= STACK_INPUT_OPERAND;
 				push <= '1';
         operand <= instruction(7 downto 0);
+      when POP_B =>
+        operand_b_wen <= '1';
+        pop <= '1';
+      when POP_A =>
+        operand_a_wen <= '1';
+        pop <= '1';
+      when COMPUTE =>
+        if instruction(15 downto 8) = x"01" then
+          alu_operation <= ALU_ADD;
+        else
+          alu_operation <= ALU_SUB;
+        end if;
+      when PUSH_RESULT =>
+        stack_input_select <= STACK_INPUT_RESULT;
+        push <= '1';
+        if instruction(15 downto 8) = x"01" then
+          alu_operation <= ALU_ADD;
+        else
+          alu_operation <= ALU_SUB;
+        end if;
       when others =>
         -- loll
     end case;
@@ -72,8 +92,18 @@ begin  -- architecture behavioural
 					if instruction(15 downto 8) = x"00" then
             state <= PUSH_OPERAND;
           else
-            --state <= PUSH_OPERAND;
+            state <= POP_B;
           end if;
+        when PUSH_OPERAND =>
+          state <= IDLE;
+        when POP_B =>
+          state <= POP_A;
+        when POP_A =>
+          state <= COMPUTE;
+        when COMPUTE =>
+          state <= PUSH_RESULT;
+        when PUSH_RESULT =>
+          state <= IDLE;
 				when others =>
           -- moar loll
       end case;
