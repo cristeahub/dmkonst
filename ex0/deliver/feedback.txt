@@ -1,2 +1,5 @@
-Very satisfied with the ex0.
+We are very satisfied with the ex0.
 It is nice to have an easier project to work on while figuring out how VHDL and our tool chain works.
+
+We did however encounter a problem with stack_machine_tb not working. It did not have an effect on the fgpa program working,
+but it might have confused some groups. Just some more information about what tests to run would be great.
