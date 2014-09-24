@@ -135,6 +135,19 @@ webtalk_impact.xml
 pepExtractor.prj
 impact.xsl
 impact_impact.xwbt
+
+*.vho
+*.txt
+*.pdf
+*.asy
+*.v
+*.veo
+*.cgc
+*.cgp
+*.tcl
+
+coregen_lock
+
 #ignore OS noise
 Thumbs.db
 .DS_Store
