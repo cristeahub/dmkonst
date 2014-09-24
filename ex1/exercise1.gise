@@ -68,22 +68,15 @@
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
     </transform>
-    <transform xil_pn:end_ts="1411577942" xil_pn:in_ck="6513430885064587515" xil_pn:name="TRANEXT_xstsynthesize_spartan6" xil_pn:prop_ck="-44725954950988794" xil_pn:start_ts="1411577930">
+    <transform xil_pn:end_ts="1411579323" xil_pn:in_ck="6513430885064587515" xil_pn:name="TRANEXT_xstsynthesize_spartan6" xil_pn:prop_ck="-44725954950988794" xil_pn:start_ts="1411579311">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="WarningsGenerated"/>
       <status xil_pn:value="ReadyToRun"/>
-      <outfile xil_pn:name=".lso"/>
-      <outfile xil_pn:name="MIPSSystem.lso"/>
-      <outfile xil_pn:name="MIPSSystem.ngc"/>
-      <outfile xil_pn:name="MIPSSystem.ngr"/>
-      <outfile xil_pn:name="MIPSSystem.prj"/>
-      <outfile xil_pn:name="MIPSSystem.stx"/>
-      <outfile xil_pn:name="MIPSSystem.syr"/>
-      <outfile xil_pn:name="MIPSSystem.xst"/>
-      <outfile xil_pn:name="MIPSSystem_xst.xrpt"/>
-      <outfile xil_pn:name="_xmsgs/xst.xmsgs"/>
-      <outfile xil_pn:name="webtalk_pn.xml"/>
-      <outfile xil_pn:name="xst"/>
+      <status xil_pn:value="OutOfDateForInputs"/>
+      <status xil_pn:value="OutOfDateForOutputs"/>
+      <status xil_pn:value="InputAdded"/>
+      <status xil_pn:value="InputRemoved"/>
+      <status xil_pn:value="OutputRemoved"/>
     </transform>
   </transforms>
 
