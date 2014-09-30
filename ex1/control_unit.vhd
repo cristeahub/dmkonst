@@ -13,7 +13,6 @@ entity control_unit is
 						PCWrite : out STD_LOGIC;
 						PCWriteCond : out STD_LOGIC;
 						PCSource : out STD_LOGIC_VECTOR (1 downto 0);
-						Branch : out  STD_LOGIC;
 						MemRead : out  STD_LOGIC;
 						MemtoReg : out  STD_LOGIC;
 						ALUOp : out  STD_LOGIC_VECTOR (1 downto 0);
@@ -46,7 +45,7 @@ begin
 		ALUSrcA <= '0';
 		IorD <= '0';
 		IRWrite <= '0';
-		ALUSrcB <= '0';
+		ALUSrcB <= "00";
 		ALUOp <= "00";
 		MemWrite <= '0';
 		RegWrite <= '0';
@@ -55,7 +54,6 @@ begin
 		PCSource <= "00";
 		PCWriteCond <= '0';
 		PCWrite <= '0';
-		Branch <= '0';
 		
 		case state is
 			when INSTRUCTION_FETCH =>
