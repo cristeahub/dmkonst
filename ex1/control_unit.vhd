@@ -116,6 +116,8 @@ begin
 						state <= BRANCH_COMPLETION;
 					when JUMP =>
 						state <= JUMP_COMPLETION;
+                    when others =>
+                        -- yo
 				end case;
 			when EXECUTION =>
 				state <= R_TYPE_COMPLETION;
@@ -125,6 +127,8 @@ begin
 						state <= MEMORY_ACCESS_READ;
 					when SW =>
 						state <= MEMORY_ACCESS_WRITE;
+                    when others =>
+                        -- yo
 				end case;
 			when MEMORY_ACCESS_READ =>
 				state <= WRITE_BACK;
