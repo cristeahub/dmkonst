@@ -151,3 +151,7 @@ coregen_lock
 #ignore OS noise
 Thumbs.db
 .DS_Store
+
+# ghdl
+*.o
+*.cf
