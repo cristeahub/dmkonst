@@ -35,8 +35,8 @@ use work.test_utils.all;
  
 ENTITY tb_pc IS
 END tb_pc;
- 
 ARCHITECTURE behavior OF tb_pc IS 
+ 
  
     -- Component Declaration for the Unit Under Test (UUT)
  
