@@ -3,26 +3,45 @@ use IEEE.STD_LOGIC_1164.ALL;
 use ieee.numeric_std.all;
 
 package test_utils is
-	procedure assert_equals(expected : std_logic_vector(31 downto 0); received : std_logic_vector(31 downto 0); message : string);
-  procedure assert_equals(expected : signed(31 downto 0); received : signed(31 downto 0); message : string);
+  procedure assert_equals(expected : std_logic_vector; received : std_logic_vector; message : string);
+  procedure assert_equals(expected : signed; received : signed; message : string);
+  procedure assert_equals(expected : std_logic; received : std_logic; message : string);
 end;
 
 package body test_utils is
-	procedure assert_equals(
-		expected : std_logic_vector(31 downto 0);
-		received : std_logic_vector(31 downto 0);
-		message : string) is
-	begin
-		assert expected = received
-				report message;
-	end;
+
+  function to_string(sv: signed) return string is
+    use Std.TextIO.all;
+    variable bv: bit_vector(sv'range) := 
+    to_bitvector(std_logic_vector(sv));
+    variable lp: line;
+  begin
+    write(lp, bv);
+    return lp.all;
+  end;
 
   procedure assert_equals(
-		expected : signed(31 downto 0);
-		received : signed(31 downto 0);
-		message : string) is
-	begin
-		assert expected = received
-				report message;
-	end;
+  expected : std_logic_vector;
+  received : std_logic_vector;
+  message : string) is
+  begin
+    assert_equals(signed(expected), signed(received), message);
+  end;
+
+  procedure assert_equals(
+  expected : signed;
+  received : signed;
+  message : string) is
+  begin
+    report message & " [Expected " & to_string(expected) & " but was " & to_string(received) & "]";
+  end;
+
+  procedure assert_equals(
+  expected : std_logic;
+  received : std_logic;
+  message : string) is
+  begin
+    assert expected = received
+    report message & " [Expected " & std_logic'image(expected) & " but was " & std_logic'image(received) & "]";
+  end;
 end;
