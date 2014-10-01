@@ -93,6 +93,7 @@ begin
     -- read from memory
     control_i_or_d <= '1';
     control_mem_read <= '1';
+    control_mem_write <= '0';
     alu_out_in <= x"abbababb";
     dmem_data_in <= x"cafebabe";
     wait for clk_period;
@@ -102,6 +103,8 @@ begin
 
     -- read instruction
     control_i_or_d <= '0';
+    control_mem_read <= '1';
+    control_mem_write <= '0';
     pc_in <= x"decec00c";
     imem_data_in <= x"ccccdddd";
     wait for clk_period;
@@ -111,6 +114,7 @@ begin
 
     -- write data
     control_i_or_d <= '1';
+    control_mem_read <= '0';
     control_mem_write <= '1';
     alu_out_in <= x"00000011";
     write_data_in <= x"dd00dd00";
