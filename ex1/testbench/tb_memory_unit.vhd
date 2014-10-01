@@ -1,6 +1,6 @@
 library ieee;
 use ieee.std_logic_1164.all;
-use work.test_util.all;
+use work.test_utils.all;
 --use ieee.numeric_std.all;
 
 entity tb_memory_unit is
