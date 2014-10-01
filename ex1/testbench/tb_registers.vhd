@@ -1,6 +1,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use work.testutil.all;
 
 entity tb_registers is
 end tb_registers;
@@ -73,7 +74,52 @@ begin
 
     wait for clk_period*10;
 
-    -- insert stimulus here 
+    -- setup some values
+    reg_write_in <= '1';
+    write_data_in <= x"c0ffee10";
+    write_register_in <= "00000";
+    wait for clk_period
+
+    reg_write_in <= '1';
+    write_data_in <= x"deadbeef";
+    write_register_in <= "00001";
+    wait for clk_period;
+
+    -- read values
+    read_register_1_in <= "00000";
+    read_register_2_in <= "00001";
+    wait for clk_period;
+    assert_equals(read_data_1_out, x"c0ffee10", "Read data 1 out wasn't equal to data written");
+    assert_equals(read_data_2_out, x"deadbeef", "Read data 2 out wasn't equal to data written");
+    wait for clk_period;
+
+    -- write over old values
+    reg_write_in <= '1';
+    write_data_in <= x"abbababb";
+    write_register_in <= "00000";
+    wait for clk_period;
+
+    reg_write_in <= '1';
+    write_data_in <= x"decec0c0";
+    write_register_in <= "00001";
+    wait for clk_period;
+
+    -- check the correct overwrite
+    read_register_1_in <= "00000";
+    read_register_2_in <= "00001";
+    wait for clk_period;
+    assert_equals(read_data_1_out, x"abbababb", "Read data 1 out wasn't equal to data written");
+    assert_equals(read_data_2_out, x"decec0c0", "Read data 2 out wasn't equal to data written");
+    wait for clk_period;
+
+    -- write with reg_write not enabled
+    reg_write_in <= '0';
+    write_data_in <= x"deadbeef";
+    write_register_in <= "00000";
+    wait for clk_period;
+
+    -- check that write did not happened
+    assert_equals(read_data_1_out, x"abbababb", "Read data 1 out wasn't equal to data written");
 
     wait;
   end process;
