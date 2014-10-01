@@ -1,36 +1,33 @@
-LIBRARY ieee;
-USE ieee.std_logic_1164.ALL;
+library ieee;
+use ieee.std_logic_1164.all;
+--use ieee.numeric_std.all;
 
---USE ieee.numeric_std.ALL;
+entity tb_memory_unit is
+end tb_memory_unit;
 
-ENTITY tb_memory_unit IS
-  END tb_memory_unit;
+architecture behavior of tb_memory_unit is 
 
-ARCHITECTURE behavior OF tb_memory_unit IS 
-
-    -- Component Declaration for the Unit Under Test (UUT)
-
-  COMPONENT memory_unit
-    PORT(
-          control_i_or_d : IN  std_logic;
-          control_mem_read : IN  std_logic;
-          control_mem_write : IN  std_logic;
-          pc_in : IN  std_logic_vector(31 downto 0);
-          alu_out_in : IN  std_logic_vector(31 downto 0);
-          mem_data_out : OUT  std_logic_vector(31 downto 0);
-          clk : IN  std_logic;
-          reset : IN  std_logic;
-          imem_data_in : IN  std_logic_vector(31 downto 0);
-          imem_address_out : OUT  std_logic_vector(7 downto 0);
-          dmem_data_in : IN  std_logic_vector(31 downto 0);
-          dmem_address_out : OUT  std_logic_vector(7 downto 0);
-          dmem_data_out : OUT  std_logic_vector(31 downto 0);
-          dmem_write_enable_out : OUT  std_logic
+  -- component declaration for the unit under test (uut)
+  component memory_unit
+    port(
+          control_i_or_d : in  std_logic;
+          control_mem_read : in  std_logic;
+          control_mem_write : in  std_logic;
+          pc_in : in  std_logic_vector(31 downto 0);
+          alu_out_in : in  std_logic_vector(31 downto 0);
+          mem_data_out : out  std_logic_vector(31 downto 0);
+          clk : in  std_logic;
+          reset : in  std_logic;
+          imem_data_in : in  std_logic_vector(31 downto 0);
+          imem_address_out : out  std_logic_vector(7 downto 0);
+          dmem_data_in : in  std_logic_vector(31 downto 0);
+          dmem_address_out : out  std_logic_vector(7 downto 0);
+          dmem_data_out : out  std_logic_vector(31 downto 0);
+          dmem_write_enable_out : out  std_logic
         );
-  END COMPONENT;
+  end component;
 
-
-   --Inputs
+  --inputs
   signal control_i_or_d : std_logic := '0';
   signal control_mem_read : std_logic := '0';
   signal control_mem_write : std_logic := '0';
@@ -41,20 +38,20 @@ ARCHITECTURE behavior OF tb_memory_unit IS
   signal imem_data_in : std_logic_vector(31 downto 0) := (others => '0');
   signal dmem_data_in : std_logic_vector(31 downto 0) := (others => '0');
 
-   --Outputs
+  --outputs
   signal mem_data_out : std_logic_vector(31 downto 0);
   signal imem_address_out : std_logic_vector(7 downto 0);
   signal dmem_address_out : std_logic_vector(7 downto 0);
   signal dmem_data_out : std_logic_vector(31 downto 0);
   signal dmem_write_enable_out : std_logic;
 
-   -- Clock period definitions
+  -- clock period definitions
   constant clk_period : time := 10 ns;
 
-BEGIN
+begin
 
-   -- Instantiate the Unit Under Test (UUT)
-  uut: memory_unit PORT MAP (
+  -- instantiate the unit under test (uut)
+  uut: memory_unit port map (
                               control_i_or_d => control_i_or_d,
                               control_mem_read => control_mem_read,
                               control_mem_write => control_mem_write,
@@ -71,7 +68,7 @@ BEGIN
                               dmem_write_enable_out => dmem_write_enable_out
                             );
 
-   -- Clock process definitions
+  -- clock process definitions
   clk_process :process
   begin
     clk <= '0';
@@ -81,17 +78,17 @@ BEGIN
   end process;
 
 
-   -- Stimulus process
+  -- stimulus process
   stim_proc: process
   begin		
-      -- hold reset state for 100 ns.
+    -- hold reset state for 100 ns.
     wait for 100 ns;	
 
     wait for clk_period*10;
 
-      -- insert stimulus here 
+    -- insert stimulus here 
 
     wait;
   end process;
 
-END;
+eND;
