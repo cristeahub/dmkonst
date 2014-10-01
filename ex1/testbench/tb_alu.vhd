@@ -106,7 +106,7 @@ BEGIN
     operand_b_in <= TO_SIGNED(89, 32);
     alu_control_in <= ALU_CONTROL_OR;
     wait for clk_period;
-    assert_equals(TO_SIGNED(125, 32), alu_result_out, "ALU should AND numbers!");
+    assert_equals(TO_SIGNED(125, 32), alu_result_out, "ALU should OR numbers!");
 
     -- Test SLT
     operand_a_in <= TO_SIGNED(100, 32);
