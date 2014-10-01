@@ -44,9 +44,11 @@ begin
       end if;
 
       if control_mem_read = '1' then
-        mem_data_out <= dmem_data_in;
-      else
-        mem_data_out <= imem_data_in;
+        if control_i_or_d = '1' then
+          mem_data_out <= dmem_data_in;
+        else
+          mem_data_out <= imem_data_in;
+        end if;
       end if;
     end if;
   end process;
