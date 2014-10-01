@@ -1,49 +1,49 @@
-LIBRARY ieee;
-USE ieee.std_logic_1164.ALL;
-USE ieee.numeric_std.ALL;
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
 
-ENTITY tb_registers IS
-  END tb_registers;
+entity tb_registers is
+end tb_registers;
 
-ARCHITECTURE behavior OF tb_registers IS 
+architecture behavior of tb_registers is 
 
-    -- Component Declaration for the Unit Under Test (UUT)
+  -- component declaration for the unit under test (uut)
 
-  COMPONENT registers
-    PORT(
-          clk : IN  std_logic;
-          reset : IN  std_logic;
-          read_register_1_in : IN  std_logic_vector(4 downto 0);
-          read_register_2_in : IN  std_logic_vector(4 downto 0);
-          write_register_in : IN  std_logic_vector(4 downto 0);
-          write_data_in : IN  SIGNED(31 downto 0);
-          reg_write_in : IN  std_logic;
-          read_data_1_out : OUT  SIGNED(31 downto 0);
-          read_data_2_out : OUT  SIGNED(31 downto 0)
+  component registers
+    port(
+          clk : in  std_logic;
+          reset : in  std_logic;
+          read_register_1_in : in  std_logic_vector(4 downto 0);
+          read_register_2_in : in  std_logic_vector(4 downto 0);
+          write_register_in : in  std_logic_vector(4 downto 0);
+          write_data_in : in  signed(31 downto 0);
+          reg_write_in : in  std_logic;
+          read_data_1_out : out  signed(31 downto 0);
+          read_data_2_out : out  signed(31 downto 0)
         );
-  END COMPONENT;
+  end component;
 
 
-   --Inputs
+  --inputs
   signal clk : std_logic := '0';
   signal reset : std_logic := '0';
   signal read_register_1_in : std_logic_vector(4 downto 0) := (others => '0');
   signal read_register_2_in : std_logic_vector(4 downto 0) := (others => '0');
   signal write_register_in : std_logic_vector(4 downto 0) := (others => '0');
-  signal write_data_in : SIGNED(31 downto 0) := (others => '0');
+  signal write_data_in : signed(31 downto 0) := (others => '0');
   signal reg_write_in : std_logic := '0';
 
-   --Outputs
-  signal read_data_1_out : SIGNED(31 downto 0);
-  signal read_data_2_out : SIGNED(31 downto 0);
+  --outputs
+  signal read_data_1_out : signed(31 downto 0);
+  signal read_data_2_out : signed(31 downto 0);
 
-   -- Clock period definitions
+  -- clock period definitions
   constant clk_period : time := 10 ns;
 
-BEGIN
+begin
 
-   -- Instantiate the Unit Under Test (UUT)
-  uut: registers PORT MAP (
+  -- instantiate the unit under test (uut)
+  uut: registers port map (
                             clk => clk,
                             reset => reset,
                             read_register_1_in => read_register_1_in,
@@ -55,7 +55,7 @@ BEGIN
                             read_data_2_out => read_data_2_out
                           );
 
-   -- Clock process definitions
+  -- clock process definitions
   clk_process :process
   begin
     clk <= '0';
@@ -65,17 +65,17 @@ BEGIN
   end process;
 
 
-   -- Stimulus process
+  -- stimulus process
   stim_proc: process
   begin		
-      -- hold reset state for 100 ns.
+    -- hold reset state for 100 ns.
     wait for 100 ns;	
 
     wait for clk_period*10;
 
-      -- insert stimulus here 
+    -- insert stimulus here 
 
     wait;
   end process;
 
-END;
+end;
