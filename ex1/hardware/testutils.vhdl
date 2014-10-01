@@ -33,6 +33,7 @@ package body test_utils is
   received : signed;
   message : string) is
   begin
+    assert expected = received
     report message & " [Expected " & to_string(expected) & " but was " & to_string(received) & "]";
   end;
 

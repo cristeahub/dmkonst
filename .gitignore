@@ -155,3 +155,4 @@ Thumbs.db
 # ghdl
 *.o
 *.cf
+*.vcd
