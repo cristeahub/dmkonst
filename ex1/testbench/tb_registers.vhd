@@ -1,7 +1,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
-use work.testutil.all;
+use work.test_utils.all;
 
 entity tb_registers is
 end tb_registers;
@@ -78,7 +78,7 @@ begin
     reg_write_in <= '1';
     write_data_in <= x"c0ffee10";
     write_register_in <= "00000";
-    wait for clk_period
+    wait for clk_period;
 
     reg_write_in <= '1';
     write_data_in <= x"deadbeef";
