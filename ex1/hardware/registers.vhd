@@ -11,15 +11,15 @@ entity registers is
          read_register_1_in : in  STD_LOGIC_VECTOR (4 downto 0);
          read_register_2_in : in  STD_LOGIC_VECTOR (4 downto 0);
          write_register_in : in  STD_LOGIC_VECTOR (4 downto 0);
-         write_data_in : in  SIGNED (31 downto 0);
+         write_data_in : in  std_logic_vector(31 downto 0);
          reg_write_in : in  STD_LOGIC;
-         read_data_1_out : out  SIGNED (31 downto 0);
-         read_data_2_out : out  SIGNED (31 downto 0));
+         read_data_1_out : out  std_logic_vector (31 downto 0);
+         read_data_2_out : out  std_logic_vector (31 downto 0));
 end registers;
 
 architecture Behavioral of registers is
 
-  type register_file_t is array(size - 1 downto 0) of signed(31 downto 0);
+  type register_file_t is array(size - 1 downto 0) of std_logic_vector(31 downto 0);
 
   signal register_file : register_file_t := (others => (others => '0'));
 

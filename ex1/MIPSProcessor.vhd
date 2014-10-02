@@ -6,8 +6,6 @@
 -- MIPSProcessor.vhd
 -- The MIPS processor component to be used in Exercise 1 and 2.
 
--- TODO replace the architecture DummyArch with a working Behavioral
-
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
@@ -54,6 +52,7 @@ architecture Behavioral of MIPSProcessor is
 
     -- Memory unit signals
     signal mem_data_out : std_logic_vector(31 downto 0);
+    signal write_data_in : std_logic_vector(31 downto 0);
 
     -- ALU signals
     signal operand_a : std_logic_vector(31 downto 0);
@@ -61,6 +60,20 @@ architecture Behavioral of MIPSProcessor is
     signal alu_result_zero : std_logic;
     signal alu_control : std_logic_vector(3 downto 0);
     signal alu_result_out : std_logic_vector(31 downto 0);
+
+    -- Register signals
+    signal read_data_1_out : std_logic_vector (31 downto 0);
+    signal read_data_2_out : std_logic_vector (31 downto 0);
+
+    -- Instruction register signals
+    signal instruction_opcode_out : STD_LOGIC_VECTOR (31 downto 26);
+    signal instruction_rs_out : STD_LOGIC_VECTOR (25 downto 21);
+    signal instruction_rt_out : STD_LOGIC_VECTOR (20 downto 16);
+    signal instruction_address_out : STD_LOGIC_VECTOR (15 downto 0);
+
+    -- MUX signals
+    signal write_register_mux_out : std_logic_vector(4 downto 0);
+    signal write_data_mux_out : std_logic_vector(31 downto 0);
 
 begin
 
@@ -81,6 +94,7 @@ begin
              pc_in => pc_out,
              alu_out_in => alu_result_out,
              mem_data_out => mem_data_out,
+             write_data_in => write_data_in,
              imem_data_in => imem_data_in,
              imem_address_out => imem_address,
              dmem_data_in => dmem_data_in,
@@ -113,6 +127,17 @@ begin
              ALUSrcB => ALUSrcB,
              RegWrite => RegWrite,
              RegDst => RegDst);
+
+  registers : entity work.registers
+  Port map (
+             clk => clk, reset => reset,
+             read_register_1_in => instruction_rs_out,
+             read_register_2_in => instruction_rt_out,
+             write_register_in => write_register_mux_out,
+             write_data_in => write_data_mux_out,
+             reg_write_in => RegWrite,
+             read_data_1_out => read_data_1_out,
+             read_data_2_out => read_data_2_out);
 
 end Behavioral;
 

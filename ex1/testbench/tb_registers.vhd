@@ -17,10 +17,10 @@ architecture behavior of tb_registers is
           read_register_1_in : in  std_logic_vector(4 downto 0);
           read_register_2_in : in  std_logic_vector(4 downto 0);
           write_register_in : in  std_logic_vector(4 downto 0);
-          write_data_in : in  signed(31 downto 0);
+          write_data_in : in  std_logic_vector(31 downto 0);
           reg_write_in : in  std_logic;
-          read_data_1_out : out  signed(31 downto 0);
-          read_data_2_out : out  signed(31 downto 0)
+          read_data_1_out : out  std_logic_vector(31 downto 0);
+          read_data_2_out : out  std_logic_vector(31 downto 0)
         );
   end component;
 
@@ -31,12 +31,12 @@ architecture behavior of tb_registers is
   signal read_register_1_in : std_logic_vector(4 downto 0) := (others => '0');
   signal read_register_2_in : std_logic_vector(4 downto 0) := (others => '0');
   signal write_register_in : std_logic_vector(4 downto 0) := (others => '0');
-  signal write_data_in : signed(31 downto 0) := (others => '0');
+  signal write_data_in : std_logic_vector(31 downto 0) := (others => '0');
   signal reg_write_in : std_logic := '0';
 
   --outputs
-  signal read_data_1_out : signed(31 downto 0);
-  signal read_data_2_out : signed(31 downto 0);
+  signal read_data_1_out : std_logic_vector(31 downto 0);
+  signal read_data_2_out : std_logic_vector(31 downto 0);
 
   -- clock period definitions
   constant clk_period : time := 10 ns;
