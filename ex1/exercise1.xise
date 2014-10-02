@@ -65,6 +65,7 @@
       <association xil_pn:name="Implementation"/>
     </file>
     <file xil_pn:name="MIPSProcessor.vhd" xil_pn:type="FILE_VHDL">
+      <association xil_pn:name="BehavioralSimulation"/>
       <association xil_pn:name="Implementation"/>
     </file>
     <file xil_pn:name="control_unit.vhd" xil_pn:type="FILE_VHDL">
@@ -119,6 +120,7 @@
       <association xil_pn:name="PostTranslateSimulation"/>
     </file>
     <file xil_pn:name="hardware/instruction_register.vhd" xil_pn:type="FILE_VHDL">
+      <association xil_pn:name="BehavioralSimulation"/>
       <association xil_pn:name="Implementation"/>
     </file>
     <file xil_pn:name="testbench/tb_instruction_register.vhd" xil_pn:type="FILE_VHDL">

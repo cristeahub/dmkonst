@@ -1,6 +1,7 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
+USE work.test_utils.ALL;
  
 ENTITY tb_instruction_register IS
 END tb_instruction_register;
@@ -70,7 +71,28 @@ BEGIN
 
       wait for clk_period*10;
 
-      -- insert stimulus here 
+      mem_data_in <= "00010001000100010001000100010001";
+			control_ir_write_in <= '1';
+			
+			wait for clk_period;
+			
+			assert_equals("000100", instruction_opcode_out, "Opcode should be first 6 bits of mem_data_in");
+			assert_equals("01000", instruction_rs_out, "rs out should be next 5 bits");
+			assert_equals("10001", instruction_rt_out, "rt out should be next 5 bits");
+			assert_equals("0001000100010001", instruction_address_out, "address should be last 16 bits");
+			
+			control_ir_write_in <= '0';
+			mem_data_in <= x"aabbccdd";
+			
+			wait for clk_period;
+			
+			assert_equals("000100", instruction_opcode_out, "Opcode should maintain the old value");
+			
+			reset <= '1';
+			
+			wait for clk_period;
+			
+			assert_equals("000000", instruction_opcode_out, "Opcode should become zero on reset");
 
       wait;
    end process;
