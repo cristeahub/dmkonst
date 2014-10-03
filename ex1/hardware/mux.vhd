@@ -17,7 +17,7 @@ begin
 
 		with select_in select
 			data_out <= a_in when '0',
-									b_in when '1';
+									b_in when others;
 
 end Behavioral;
 
