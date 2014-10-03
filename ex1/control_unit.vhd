@@ -1,147 +1,147 @@
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
+library ieee;
+use ieee.std_logic_1164.all;
 use work.constants.all;
 
 entity control_unit is
-    Port ( 
-						clk : in std_logic;
-						reset : in std_logic;
-						Instruction : in  STD_LOGIC_VECTOR (31 downto 26);
-						
-						IRWrite : out STD_LOGIC;
-						IorD : out STD_LOGIC;
-						PCWrite : out STD_LOGIC;
-						PCWriteCond : out STD_LOGIC;
-						PCSource : out STD_LOGIC_VECTOR (1 downto 0);
-						MemRead : out  STD_LOGIC;
-						MemtoReg : out  STD_LOGIC;
-						ALUOp : out  STD_LOGIC_VECTOR (1 downto 0);
-						MemWrite : out  STD_LOGIC;
-						ALUSrcA : out  STD_LOGIC;
-						ALUSrcB : out  STD_LOGIC_VECTOR (1 downto 0);
-						RegWrite : out  STD_LOGIC;
-						RegDst : out  STD_LOGIC);
+  port ( 
+         clk : in std_logic;
+         reset : in std_logic;
+         instruction : in  std_logic_vector (31 downto 26);
+
+         ir_write : out std_logic;
+         i_or_d : out std_logic;
+         pc_write : out std_logic;
+         pc_write_cond : out std_logic;
+         pc_source : out std_logic_vector (1 downto 0);
+         mem_read : out  std_logic;
+         mem_to_reg : out  std_logic;
+         alu_op : out  std_logic_vector (1 downto 0);
+         mem_write : out  std_logic;
+         alu_src_a : out  std_logic;
+         alu_src_b : out  std_logic_vector (1 downto 0);
+         reg_write : out  std_logic;
+         reg_dst : out  std_logic);
 end control_unit;
 
-architecture Behavioral of control_unit is
+architecture behavioral of control_unit is
 
-type state_t is ( INSTRUCTION_FETCH,
-									INSTRUCTION_DECODE,
-									EXECUTION,
-									BRANCH_COMPLETION,
-									JUMP_COMPLETION,
-									R_TYPE_COMPLETION,
-									MEMORY_ADDRESS_COMPUTATION,
-									MEMORY_ACCESS_READ,
-									MEMORY_ACCESS_WRITE,
-									WRITE_BACK );
-signal state : state_t;
+  type state_t is ( INSTRUCTION_FETCH,
+                    INSTRUCTION_DECODE,
+                    EXECUTION,
+                    BRANCH_COMPLETION,
+                    JUMP_COMPLETION,
+                    R_TYPE_COMPLETION,
+                    MEMORY_ADDRESS_COMPUTATION,
+                    MEMORY_ACCESS_READ,
+                    MEMORY_ACCESS_WRITE,
+                    WRITE_BACK );
+  signal state : state_t;
 
 begin
 
-	process (state) is
-	begin
-		MemRead <= '0';
-		ALUSrcA <= '0';
-		IorD <= '0';
-		IRWrite <= '0';
-		ALUSrcB <= "00";
-		ALUOp <= "00";
-		MemWrite <= '0';
-		RegWrite <= '0';
-		RegDst <= '0';
-		MemToReg <= '0';
-		PCSource <= "00";
-		PCWriteCond <= '0';
-		PCWrite <= '0';
-		
-		case state is
-			when INSTRUCTION_FETCH =>
-				ALUSrcB <= "01";
-				MemRead <= '1';
-				IRWrite <= '1';
-				PCWrite <= '1';
-			when INSTRUCTION_DECODE =>
-				ALUSrcB <= "11";
-			when JUMP_COMPLETION =>
-				PCWrite <= '1';
-				PCSource <= "10";
-			when BRANCH_COMPLETION =>
-				ALUSrcA <= '1';
-				ALUSrcB <= "00";
-				ALUOp <= "01";
-				PCWriteCond <= '1';
-				PCSource <= "01";
-			when EXECUTION =>
-				ALUSrcA <= '1';
-				ALUOp <= "10";
-			when R_TYPE_COMPLETION =>
-				RegDst <= '1';
-				RegWrite <= '1';
-			when MEMORY_ADDRESS_COMPUTATION =>
-				ALUSrcA <= '1';
-				ALUSrcB <= "10";
-			when MEMORY_ACCESS_READ =>
-				MemRead <= '1';
-				IorD <= '1';
-			when WRITE_BACK =>
-				RegWrite <= '1';
-				MemToReg <= '1';
-			when MEMORY_ACCESS_WRITE =>
-				MemWrite <= '1';
-				IorD <= '1';
-		end case;
+  process (state) is
+  begin
+    mem_read <= '0';
+    alu_src_a <= '0';
+    i_or_d <= '0';
+    ir_write <= '0';
+    alu_src_b <= "00";
+    alu_op <= "00";
+    mem_write <= '0';
+    reg_write <= '0';
+    reg_dst <= '0';
+    mem_to_reg <= '0';
+    pc_source <= "00";
+    pc_write_cond <= '0';
+    pc_write <= '0';
 
-end process;
+    case state is
+      when INSTRUCTION_FETCH =>
+        alu_src_b <= "01";
+        mem_read <= '1';
+        ir_write <= '1';
+        pc_write <= '1';
+      when INSTRUCTION_DECODE =>
+        alu_src_b <= "11";
+      when JUMP_COMPLETION =>
+        pc_write <= '1';
+        pc_source <= "10";
+      when BRANCH_COMPLETION =>
+        alu_src_a <= '1';
+        alu_src_b <= "00";
+        alu_op <= "01";
+        pc_write_cond <= '1';
+        pc_source <= "01";
+      when EXECUTION =>
+        alu_src_a <= '1';
+        alu_op <= "10";
+      when R_TYPE_COMPLETION =>
+        reg_dst <= '1';
+        reg_write <= '1';
+      when MEMORY_ADDRESS_COMPUTATION =>
+        alu_src_a <= '1';
+        alu_src_b <= "10";
+      when MEMORY_ACCESS_READ =>
+        mem_read <= '1';
+        i_or_d <= '1';
+      when WRITE_BACK =>
+        reg_write <= '1';
+        mem_to_reg <= '1';
+      when MEMORY_ACCESS_WRITE =>
+        mem_write <= '1';
+        i_or_d <= '1';
+    end case;
+
+  end process;
 
 
-process (reset, clk) is
-begin
+  process (reset, clk) is
+  begin
 
-	if reset = '1' then
-		state <= INSTRUCTION_FETCH;
-	elsif rising_edge(clk) then
-		case state is
-			when INSTRUCTION_FETCH =>
-				state <= INSTRUCTION_DECODE;
-			when INSTRUCTION_DECODE =>
-				case Instruction is
-					when LW =>
-						state <= MEMORY_ADDRESS_COMPUTATION;
-					when SW =>
-						state <= MEMORY_ADDRESS_COMPUTATION;
-					when R_TYPE =>
-						state <= EXECUTION;
-					when BRANCH =>
-						state <= BRANCH_COMPLETION;
-					when JUMP =>
-						state <= JUMP_COMPLETION;
-                    when others =>
-                        -- yo
-				end case;
-			when EXECUTION =>
-				state <= R_TYPE_COMPLETION;
-			when MEMORY_ADDRESS_COMPUTATION =>
-				case Instruction is
-					when LW =>
-						state <= MEMORY_ACCESS_READ;
-					when SW =>
-						state <= MEMORY_ACCESS_WRITE;
-                    when others =>
-                        -- yo
-				end case;
-			when MEMORY_ACCESS_READ =>
-				state <= WRITE_BACK;
-			when others =>
-				-- JUMP_COMPLETION
-				-- BRANCH_COMPLETION
-				-- R_TYPE_COMPLETION
-				-- MEMORY_ACCESS_WRITE
-				-- WRITE_BACK
-				state <= INSTRUCTION_FETCH;
-		end case;
-	end if;
+    if reset = '1' then
+      state <= instruction_fetch;
+    elsif rising_edge(clk) then
+      case state is
+        when INSTRUCTION_FETCH =>
+          state <= INSTRUCTION_DECODE;
+        when INSTRUCTION_DECODE =>
+          case instruction is
+            when LW =>
+              state <= MEMORY_ADDRESS_COMPUTATION;
+            when SW =>
+              state <= MEMORY_ADDRESS_COMPUTATION;
+            when R_TYPE =>
+              state <= EXECUTION;
+            when BRANCH =>
+              state <= BRANCH_COMPLETION;
+            when JUMP =>
+              state <= JUMP_COMPLETION;
+            when others =>
+          -- yo
+          end case;
+        when EXECUTION =>
+          state <= R_TYPE_COMPLETION;
+        when MEMORY_ADDRESS_COMPUTATION =>
+          case instruction is
+            when LW =>
+              state <= MEMORY_ACCESS_READ;
+            when SW =>
+              state <= MEMORY_ACCESS_WRITE;
+            when others =>
+          -- yo
+          end case;
+        when MEMORY_ACCESS_READ =>
+          state <= WRITE_BACK;
+        when others =>
+          -- jump_completion
+          -- branch_completion
+          -- r_type_completion
+          -- memory_access_write
+          -- write_back
+          state <= INSTRUCTION_FETCH;
+      end case;
+    end if;
 
-end process;
+  end process;
 
-end Behavioral;
+end behavioral;
