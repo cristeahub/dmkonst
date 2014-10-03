@@ -14,4 +14,11 @@ package constants is
   constant ALU_CONTROL_AND : std_logic_vector(3 downto 0) := "0000";
   constant ALU_CONTROL_OR : std_logic_vector(3 downto 0) := "0001";
   constant ALU_CONTROL_SLT : std_logic_vector(3 downto 0) := "0111";
+  
+  constant ALU_FUNCTION_ADD : std_logic_vector(5 downto 0) := "100000";
+  constant ALU_FUNCTION_SUBTRACT : std_logic_vector(5 downto 0) := "100010";
+  constant ALU_FUNCTION_AND : std_logic_vector(5 downto 0) := "100100";
+  constant ALU_FUNCTION_OR : std_logic_vector(5 downto 0) := "100101";
+  constant ALU_FUNCTION_SLT : std_logic_vector(5 downto 0) := "101010";
+  
 end package constants;
