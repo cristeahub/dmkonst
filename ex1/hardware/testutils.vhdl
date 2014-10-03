@@ -10,6 +10,8 @@ end;
 
 package body test_utils is
 
+  shared variable test_i : integer := 0;
+
   function to_string(sv: signed) return string is
     use Std.TextIO.all;
     variable bv: bit_vector(sv'range) := 
@@ -35,6 +37,9 @@ package body test_utils is
   begin
     assert expected = received
     report message & " [Expected " & to_string(expected) & " but was " & to_string(received) & "]";
+
+    test_i:=test_i+1;
+    report "Passed test [" & integer'image(test_i) & "]";
   end;
 
   procedure assert_equals(
@@ -44,5 +49,8 @@ package body test_utils is
   begin
     assert expected = received
     report message & " [Expected " & std_logic'image(expected) & " but was " & std_logic'image(received) & "]";
+
+    test_i:=test_i+1;
+    report "Passed test [" & integer'image(test_i) & "]";
   end;
 end;
