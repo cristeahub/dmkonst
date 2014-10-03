@@ -11,6 +11,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use work.constants.all;
 
 entity MIPSProcessor is
   generic (
@@ -57,10 +58,7 @@ architecture behavioral of MIPSProcessor is
   signal write_data_in : std_logic_vector(31 downto 0);
 
   -- alu signals
-  signal operand_a : std_logic_vector(31 downto 0);
-  signal operand_b : std_logic_vector(31 downto 0);
   signal alu_result_zero : std_logic;
-  signal alu_control : std_logic_vector(3 downto 0);
   signal alu_result_out : std_logic_vector(31 downto 0);
 
     -- register signals
@@ -76,18 +74,26 @@ architecture behavioral of MIPSProcessor is
 	-- MUX signals
 	signal write_register_mux_out : std_logic_vector(4 downto 0);
 	signal write_data_mux_out : std_logic_vector(31 downto 0);
+  signal alu_a_mux_out : std_logic_vector(31 downto 0);
+  signal alu_b_mux_out : std_logic_vector(31 downto 0);
 
 	-- Latches
 	signal latch_alu_out : std_logic_vector (DATA_WIDTH - 1 downto 0);
 	signal latch_memory_data_register : std_logic_vector (DATA_WIDTH - 1 downto 0);
+  signal latch_a_out : std_logic_vector (DATA_WIDTH - 1 downto 0);
+  signal latch_b_out : std_logic_vector (DATA_WIDTH - 1 downto 0);
+  
+  -- Misc
+  signal sign_extend_out : std_logic_vector (DATA_WIDTH - 1 downto 0);
+  signal shift_left_2_out : std_logic_vector (DATA_WIDTH -1 downto 0);
 
 begin
 
   alu: entity work.alu
   port map (
-             operand_a_in => operand_a,
-             operand_b_in => operand_b,
-             alu_control_in => alu_control,
+             operand_a_in => alu_a_mux_out,
+             operand_b_in => alu_b_mux_out,
+             alu_control_in => ALU_CONTROL_ADD,
              zero_out => alu_result_zero,
              alu_result_out => alu_result_out);
 
@@ -172,16 +178,44 @@ begin
              select_in => mem_to_reg,
              data_out => write_data_mux_out);
   
+  alu_a_mux : entity work.mux
+  Port map (
+             a_in => pc_out,
+             b_in => latch_a_out,
+             select_in => alu_src_a,
+             data_out => alu_a_mux_out);
+  
+  alu_b_mux : entity work.mux_4
+  Port map (
+             a_in => latch_b_out,
+             b_in => x"00000004",
+             c_in => sign_extend_out,
+             d_in => shift_left_2_out,
+             select_in => alu_src_b,
+             data_out => alu_b_mux_out);
+  
   -- Latches
   alu_out : entity work.value_storage
   Port map (
              clk => clk,
              value_in => alu_result_out,
              value_out => latch_alu_out);
-  
+
   memory_data_register : entity work.value_storage
   Port map (
              clk => clk,
              value_in => mem_data_out,
              value_out => latch_memory_data_register);
+
+  latch_a : entity work.value_storage
+  Port map (
+             clk => clk,
+             value_in => read_data_1_out,
+             value_out => latch_a_out);
+
+  latch_b : entity work.value_storage
+  Port map (
+             clk => clk,
+             value_in => read_data_2_out,
+             value_out => latch_b_out);
 end behavioral;
