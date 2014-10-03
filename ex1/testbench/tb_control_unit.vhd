@@ -15,19 +15,19 @@ ARCHITECTURE behavior OF tb_control_unit IS
          clk : IN  std_logic;
          reset : IN  std_logic;
          Instruction : IN  std_logic_vector(31 downto 26);
-         IRWrite : OUT  std_logic;
-         IorD : OUT  std_logic;
-         PCWrite : OUT  std_logic;
-         PCWriteCond : OUT  std_logic;
-         PCSource : OUT  std_logic_vector(1 downto 0);
-         MemRead : OUT  std_logic;
-         MemtoReg : OUT  std_logic;
-         ALUOp : OUT  std_logic_vector(1 downto 0);
-         MemWrite : OUT  std_logic;
-         ALUSrcA : OUT  std_logic;
-         ALUSrcB : OUT  std_logic_vector(1 downto 0);
-         RegWrite : OUT  std_logic;
-         RegDst : OUT  std_logic
+         ir_write : OUT  std_logic;
+         i_or_d : OUT  std_logic;
+         pc_write : OUT  std_logic;
+         pc_write_cond : OUT  std_logic;
+         pc_source : OUT  std_logic_vector(1 downto 0);
+         mem_read : OUT  std_logic;
+         mem_to_reg : OUT  std_logic;
+         alu_op : OUT  std_logic_vector(1 downto 0);
+         mem_write : OUT  std_logic;
+         alu_src_a : OUT  std_logic;
+         alu_src_b : OUT  std_logic_vector(1 downto 0);
+         reg_write : OUT  std_logic;
+         reg_dst : OUT  std_logic
         );
     END COMPONENT;
     
@@ -38,19 +38,19 @@ ARCHITECTURE behavior OF tb_control_unit IS
    signal Instruction : std_logic_vector(31 downto 26) := (others => '0');
 
  	--Outputs
-   signal IRWrite : std_logic;
-   signal IorD : std_logic;
-   signal PCWrite : std_logic;
-   signal PCWriteCond : std_logic;
-   signal PCSource : std_logic_vector(1 downto 0);
-   signal MemRead : std_logic;
-   signal MemtoReg : std_logic;
-   signal ALUOp : std_logic_vector(1 downto 0);
-   signal MemWrite : std_logic;
-   signal ALUSrcA : std_logic;
-   signal ALUSrcB : std_logic_vector(1 downto 0);
-   signal RegWrite : std_logic;
-   signal RegDst : std_logic;
+   signal ir_write : std_logic;
+   signal i_or_d : std_logic;
+   signal pc_write : std_logic;
+   signal pc_write_cond : std_logic;
+   signal pc_source : std_logic_vector(1 downto 0);
+   signal mem_read : std_logic;
+   signal mem_to_reg : std_logic;
+   signal alu_op : std_logic_vector(1 downto 0);
+   signal mem_write : std_logic;
+   signal alu_src_a : std_logic;
+   signal alu_src_b : std_logic_vector(1 downto 0);
+   signal reg_write : std_logic;
+   signal reg_dst : std_logic;
 
    -- Clock period definitions
    constant clk_period : time := 10 ns;
@@ -61,20 +61,20 @@ BEGIN
    uut: control_unit PORT MAP (
           clk => clk,
           reset => reset,
-          Instruction => Instruction,
-          IRWrite => IRWrite,
-          IorD => IorD,
-          PCWrite => PCWrite,
-          PCWriteCond => PCWriteCond,
-          PCSource => PCSource,
-          MemRead => MemRead,
-          MemtoReg => MemtoReg,
-          ALUOp => ALUOp,
-          MemWrite => MemWrite,
-          ALUSrcA => ALUSrcA,
-          ALUSrcB => ALUSrcB,
-          RegWrite => RegWrite,
-          RegDst => RegDst
+          instruction => instruction,
+          ir_write => ir_write,
+          i_or_d => i_or_d,
+          pc_write => pc_write,
+          pc_write_cond => pc_write_cond,
+          pc_source => pc_source,
+          mem_read => mem_read,
+          mem_to_reg => mem_to_reg,
+          alu_op => alu_op,
+          mem_write => mem_write,
+          alu_src_a => alu_src_a,
+          alu_src_b => alu_src_b,
+          reg_write => reg_write,
+          reg_dst => reg_dst
         );
 
    -- Clock process definitions
@@ -92,22 +92,22 @@ BEGIN
 	 
 			procedure check_state_instruction_fetch is
 			begin
-				assert_equals('0', IorD, "IorD should be 0");
-				assert_equals("01", ALUSrcB, "ALUSrcB should be 01");
-				assert_equals('1', IRWrite, "IRWrite should be 1");
-				assert_equals('1', MemRead, "MemRead should be 1");
+				assert_equals('0', i_or_d, "i_or_d should be 0");
+				assert_equals("01", alu_src_b, "alu_src_b should be 01");
+				assert_equals('1', ir_write, "IRWrite should be 1");
+				assert_equals('1', mem_read, "mem_read should be 1");
 			end procedure check_state_instruction_fetch;
 			
 			procedure check_state_instruction_decode is
 			begin
-				assert_equals("11", ALUSrcB, "ALUSrcB should be 11");
+				assert_equals("11", alu_src_b, "alu_src_b should be 11");
 			end procedure check_state_instruction_decode;
 			
 			procedure check_state_memory_address_computation is
 			begin
-				assert_equals('1', ALUSrcA, "");
-				assert_equals("10", ALUSrcB, "");
-				assert_equals("00", ALUOp, "");
+				assert_equals('1', alu_src_a, "");
+				assert_equals("10", alu_src_b, "");
+				assert_equals("00", alu_op, "");
 			end procedure check_state_memory_address_computation;
 	 
    begin
@@ -129,15 +129,15 @@ BEGIN
 			
 			wait for clk_period;
 			
-			assert_equals('1', ALUSrcA, "ALUSrcA should be 1");
-			assert_equals("00", ALUSrcB, "ALUSrcB should be 00");
-			assert_equals("10", ALUOp, "ALUOp should be 10");
+			assert_equals('1', alu_src_a, "alu_src_a should be 1");
+			assert_equals("00", alu_src_b, "alu_src_b should be 00");
+			assert_equals("10", alu_op, "alu_op should be 10");
 			
 			wait for clk_period;
 			
-			assert_equals('1', RegDst, "RegDst should be 1");
-			assert_equals('1', RegWrite, "RegWrite should be 1");
-			assert_equals('0', MemToReg, "MemToReg should be 0");
+			assert_equals('1', reg_dst, "reg_dst should be 1");
+			assert_equals('1', reg_write, "reg_write should be 1");
+			assert_equals('0', mem_to_reg, "mem_to_reg should be 0");
 			
 			wait for clk_period;
 			
@@ -153,8 +153,8 @@ BEGIN
 			
 			wait for clk_period;
 			
-			assert_equals('1', PCWrite, "");
-			assert_equals("10", PCSource, "");
+			assert_equals('1', pc_write, "");
+			assert_equals("10", pc_source, "");
 			
 			wait for clk_period;
 			
@@ -170,11 +170,11 @@ BEGIN
 			
 			wait for clk_period;
 			
-			assert_equals('1', ALUSrcA, "");
-			assert_equals("00", ALUSrcB, "");
-			assert_equals("01", ALUOp, "");
-			assert_equals('1', PCWriteCond, "");
-			assert_equals("01", PCSource, "");
+			assert_equals('1', alu_src_a, "");
+			assert_equals("00", alu_src_b, "");
+			assert_equals("01", alu_op, "");
+			assert_equals('1', pc_write_cond, "");
+			assert_equals("01", pc_source, "");
 			
 			wait for clk_period;
 			
@@ -194,15 +194,15 @@ BEGIN
 			
 			wait for clk_period;
 			
-			assert_equals('1', MemRead, "");
-			assert_equals('0', MemWrite, "");
-			assert_equals('1', IorD, "");
+			assert_equals('1', mem_read, "");
+			assert_equals('0', mem_write, "");
+			assert_equals('1', i_or_d, "");
 			
 			wait for clk_period;
 			
-			assert_equals('0', RegDst, "");
-			assert_equals('1', RegWrite, "");
-			assert_equals('1', MemToReg, "");
+			assert_equals('0', reg_dst, "");
+			assert_equals('1', reg_write, "");
+			assert_equals('1', mem_to_reg, "");
 			
 			wait for clk_period;
 			
@@ -222,9 +222,9 @@ BEGIN
 			
 			wait for clk_period;
 			
-			assert_equals('1', MemWrite, "");
-			assert_equals('0', MemRead, "");
-			assert_equals('1', IorD, "");
+			assert_equals('1', mem_write, "");
+			assert_equals('0', mem_read, "");
+			assert_equals('1', i_or_d, "");
 			
 			wait for clk_period;
 			

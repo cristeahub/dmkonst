@@ -29,7 +29,6 @@ entity MIPSProcessor is
 );
 end MIPSProcessor;
 
-<<<<<<< HEAD
 architecture behavioral of MIPSProcessor is
 
   -- pc signals
@@ -150,7 +149,7 @@ begin
 	Port map (
 						 clk => clk, reset => reset,
 						 mem_data_in => mem_data_out,
-						 control_ir_write_in => ir_write
+						 control_ir_write_in => ir_write,
 						 instruction_opcode_out => instruction_opcode_out,
 						 instruction_rs_out => instruction_rs_out,
 						 instruction_rt_out => instruction_rt_out,
@@ -185,9 +184,4 @@ begin
              clk => clk,
              value_in => mem_data_out,
              value_out => latch_memory_data_register);
-             
-  
-
-
 end behavioral;
-
