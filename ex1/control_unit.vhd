@@ -98,50 +98,51 @@ begin
   process (reset, clk) is
   begin
 
-    if reset = '1' then
-      state <= instruction_fetch;
-    elsif rising_edge(clk) then
-      case state is
-        when INSTRUCTION_FETCH =>
-          state <= INSTRUCTION_DECODE;
-        when INSTRUCTION_DECODE =>
-          case instruction is
-            when LW =>
-              state <= MEMORY_ADDRESS_COMPUTATION;
-            when SW =>
-              state <= MEMORY_ADDRESS_COMPUTATION;
-            when R_TYPE =>
-              state <= EXECUTION;
-            when BRANCH =>
-              state <= BRANCH_COMPLETION;
-            when JUMP =>
-              state <= JUMP_COMPLETION;
-            when others =>
-          -- yo
-          end case;
-        when EXECUTION =>
-          state <= R_TYPE_COMPLETION;
-        when MEMORY_ADDRESS_COMPUTATION =>
-          case instruction is
-            when LW =>
-              state <= MEMORY_ACCESS_READ;
-            when SW =>
-              state <= MEMORY_ACCESS_WRITE;
-            when others =>
-          -- yo
-          end case;
-        when MEMORY_ACCESS_READ =>
-          state <= WRITE_BACK;
-        when others =>
-          -- jump_completion
-          -- branch_completion
-          -- r_type_completion
-          -- memory_access_write
-          -- write_back
-          state <= INSTRUCTION_FETCH;
-      end case;
+    if rising_edge(clk) then
+			if reset = '1' then
+				state <= instruction_fetch;
+			else
+				case state is
+					when INSTRUCTION_FETCH =>
+						state <= INSTRUCTION_DECODE;
+					when INSTRUCTION_DECODE =>
+						case instruction is
+							when LW =>
+								state <= MEMORY_ADDRESS_COMPUTATION;
+							when SW =>
+								state <= MEMORY_ADDRESS_COMPUTATION;
+							when R_TYPE =>
+								state <= EXECUTION;
+							when BRANCH =>
+								state <= BRANCH_COMPLETION;
+							when JUMP =>
+								state <= JUMP_COMPLETION;
+							when others =>
+						-- yo
+						end case;
+					when EXECUTION =>
+						state <= R_TYPE_COMPLETION;
+					when MEMORY_ADDRESS_COMPUTATION =>
+						case instruction is
+							when LW =>
+								state <= MEMORY_ACCESS_READ;
+							when SW =>
+								state <= MEMORY_ACCESS_WRITE;
+							when others =>
+						-- yo
+						end case;
+					when MEMORY_ACCESS_READ =>
+						state <= WRITE_BACK;
+					when others =>
+						-- jump_completion
+						-- branch_completion
+						-- r_type_completion
+						-- memory_access_write
+						-- write_back
+						state <= INSTRUCTION_FETCH;
+				end case;
+			end if;
     end if;
-
   end process;
 
 end behavioral;
