@@ -29,6 +29,7 @@ entity MIPSProcessor is
 );
 end MIPSProcessor;
 
+<<<<<<< HEAD
 architecture behavioral of MIPSProcessor is
 
   -- pc signals
@@ -73,9 +74,13 @@ architecture behavioral of MIPSProcessor is
   signal instruction_rt_out : std_logic_vector (20 downto 16);
   signal instruction_address_out : std_logic_vector (15 downto 0);
 
-    -- mux signals
-  signal write_register_mux_out : std_logic_vector(4 downto 0);
-  signal write_data_mux_out : std_logic_vector(31 downto 0);
+	-- MUX signals
+	signal write_register_mux_out : std_logic_vector(4 downto 0);
+	signal write_data_mux_out : std_logic_vector(31 downto 0);
+
+	-- Latches
+	signal latch_alu_out : std_logic_vector (DATA_WIDTH - 1 downto 0);
+	signal latch_memory_data_register : std_logic_vector (DATA_WIDTH - 1 downto 0);
 
 begin
 
@@ -94,7 +99,7 @@ begin
              control_mem_read => mem_read,
              control_mem_write => mem_write,
              pc_in => pc_out,
-             alu_out_in => alu_result_out,
+             alu_out_in => latch_alu_out,
              mem_data_out => mem_data_out,
              write_data_in => write_data_in,
              imem_data_in => imem_data_in,
@@ -140,6 +145,48 @@ begin
              reg_write_in => reg_write,
              read_data_1_out => read_data_1_out,
              read_data_2_out => read_data_2_out);
+						 
+	instruction_register : entity work.instruction_register
+	Port map (
+						 clk => clk, reset => reset,
+						 mem_data_in => mem_data_out,
+						 control_ir_write_in => ir_write
+						 instruction_opcode_out => instruction_opcode_out,
+						 instruction_rs_out => instruction_rs_out,
+						 instruction_rt_out => instruction_rt_out,
+						 instruction_address_out => instruction_address_out);
+  
+  -- Muxes
+  write_register_mux : entity work.mux
+  Generic map (
+    DATA_WIDTH => 5)
+  Port map (
+             a_in => instruction_rt_out,
+             b_in => instruction_address_out(15 downto 11),
+             select_in => reg_dst,
+             data_out => write_register_mux_out);
+             
+  write_data_mux : entity work.mux
+  Port map (
+             a_in => latch_alu_out,
+             b_in => latch_memory_data_register,
+             select_in => mem_to_reg,
+             data_out => write_data_mux_out);
+  
+  -- Latches
+  alu_out : entity work.value_storage
+  Port map (
+             clk => clk,
+             value_in => alu_result_out,
+             value_out => latch_alu_out);
+  
+  memory_data_register : entity work.value_storage
+  Port map (
+             clk => clk,
+             value_in => mem_data_out,
+             value_out => latch_memory_data_register);
+             
+  
 
 
 end behavioral;
