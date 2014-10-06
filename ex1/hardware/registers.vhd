@@ -4,7 +4,7 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity registers is
   Generic (
-            size : natural := 8);
+            size : natural := 32);
 
   Port ( clk : in STD_LOGIC;
          reset : in STD_LOGIC;

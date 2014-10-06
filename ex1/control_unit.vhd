@@ -6,7 +6,7 @@ entity control_unit is
   port ( 
          clk : in std_logic;
          reset : in std_logic;
-         instruction : in  std_logic_vector (31 downto 26);
+         instruction_in : in  std_logic_vector (31 downto 26);
 
          ir_write : out std_logic;
          i_or_d : out std_logic;
@@ -106,7 +106,7 @@ begin
 					when INSTRUCTION_FETCH =>
 						state <= INSTRUCTION_DECODE;
 					when INSTRUCTION_DECODE =>
-						case instruction is
+						case instruction_in is
 							when LW =>
 								state <= MEMORY_ADDRESS_COMPUTATION;
 							when SW =>
@@ -123,7 +123,7 @@ begin
 					when EXECUTION =>
 						state <= R_TYPE_COMPLETION;
 					when MEMORY_ADDRESS_COMPUTATION =>
-						case instruction is
+						case instruction_in is
 							when LW =>
 								state <= MEMORY_ACCESS_READ;
 							when SW =>

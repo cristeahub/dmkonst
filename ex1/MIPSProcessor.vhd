@@ -37,7 +37,6 @@ architecture behavioral of MIPSProcessor is
   signal write_enable_in : std_logic;
 
   -- control signals
-  signal instruction : std_logic_vector(31 downto 26);
   signal ir_write : std_logic;
   signal i_or_d : std_logic;
   signal pc_write : std_logic;
@@ -54,7 +53,6 @@ architecture behavioral of MIPSProcessor is
 
   -- memory unit signals
   signal mem_data_out : std_logic_vector(31 downto 0);
-  signal write_data_in : std_logic_vector(31 downto 0);
 
   -- alu signals
   signal alu_result_zero : std_logic;
@@ -92,7 +90,7 @@ architecture behavioral of MIPSProcessor is
   signal sign_extend_b_out : std_logic_vector (27 downto 0);
   signal shift_left_b_out : std_logic_vector (27 downto 0);
 
-  signal sign_extend_b_in : std_logic_vector(25 downto 0);
+  signal shift_left_b_in : std_logic_vector(25 downto 0);
   signal pc_mux_c_in : std_logic_vector(31 downto 0);
 
 begin
@@ -117,10 +115,10 @@ begin
              control_i_or_d => i_or_d,
              control_mem_read => mem_read,
              control_mem_write => mem_write,
-             pc_in => pc_out,
-             alu_out_in => latch_alu_out,
+             pc_in => pc_out(7 downto 0),
+             alu_out_in => latch_alu_out(7 downto 0),
              mem_data_out => mem_data_out,
-             write_data_in => write_data_in,
+             write_data_in => latch_b_out,
              imem_data_in => imem_data_in,
              imem_address_out => imem_address,
              dmem_data_in => dmem_data_in,
@@ -141,7 +139,7 @@ begin
   port map (
              clk => clk,
              reset => reset,
-             instruction => instruction,
+             instruction_in => instruction_opcode_out,
              ir_write => ir_write,
              i_or_d => i_or_d,
              pc_write => pc_write,
@@ -247,7 +245,7 @@ begin
 
   shift_left_a : entity work.shift_left_2
   port map (
-             data_in => sign_extend_a_out,
+             data_in => sign_extend_a_out(29 downto 0),
              data_out => shift_left_a_out);
 
   sign_extend_a : entity work.sign_extend
@@ -255,17 +253,12 @@ begin
              data_in => instruction_address_out,
              data_out => sign_extend_a_out);
 
+  shift_left_b_in <= instruction_rs_out & instruction_rt_out & instruction_address_out;
+
   shift_left_b : entity work.shift_left_2
   generic map (DATA_WIDTH => 28)
   port map (
-             data_in => sign_extend_b_out,
+             data_in => shift_left_b_in,
              data_out => shift_left_b_out);
 
-  sign_extend_b_in <= instruction_rs_out & instruction_rt_out & instruction_address_out;
-
-  sign_extend_b : entity work.sign_extend
-  generic map (DATA_IN_WIDTH => 26, DATA_OUT_WIDTH => 28)
-  port map (
-             data_in => sign_extend_b_in,
-             data_out => sign_extend_b_out);
 end behavioral;

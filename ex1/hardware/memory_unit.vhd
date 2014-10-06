@@ -7,8 +7,8 @@ entity memory_unit is
   Port ( control_i_or_d : in  STD_LOGIC;
          control_mem_read : in  STD_LOGIC;
          control_mem_write : in  STD_LOGIC;
-         pc_in : in  STD_LOGIC_VECTOR (31 downto 0);
-         alu_out_in : in  STD_LOGIC_VECTOR (31 downto 0);
+         pc_in : in  STD_LOGIC_VECTOR (7 downto 0);
+         alu_out_in : in  STD_LOGIC_VECTOR (7 downto 0);
          mem_data_out : out  STD_LOGIC_VECTOR (31 downto 0);
          write_data_in : in STD_LOGIC_VECTOR (31 downto 0);
          clk : in  STD_LOGIC;
@@ -33,9 +33,9 @@ begin
       end if;
 
       if control_i_or_d = '1' then
-        dmem_address_out <= alu_out_in(7 downto 0);
+        dmem_address_out <= alu_out_in;
       else
-        imem_address_out <= pc_in(7 downto 0);
+        imem_address_out <= pc_in;
       end if;
 
       if control_mem_write = '1' then
