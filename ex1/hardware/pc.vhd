@@ -14,13 +14,15 @@ architecture Behavioral of pc is
   signal write_enable_in : std_logic;
 begin
 
+  write_enable_in <= (alu_result_zero and control_pc_write_cond) or control_pc_write;
+
 	PC : process ( clk, write_enable_in )
 	begin
-
-    write_enable_in <= (alu_result_zero and control_pc_write_cond) or control_pc_write;
 	
-		if (rising_edge(clk) and write_enable_in = '1') then
-			pc_out <= pc_in;
+		if rising_edge(clk) then
+      if write_enable_in = '1' then
+        pc_out <= pc_in;
+      end if;
 		end if;
 	
 	end process; -- PC

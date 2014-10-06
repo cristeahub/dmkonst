@@ -33,7 +33,6 @@ end MIPSProcessor;
 architecture behavioral of MIPSProcessor is
 
   -- pc signals
-  signal pc_in : std_logic_vector(31 downto 0);
   signal pc_out : std_logic_vector(31 downto 0);
   signal write_enable_in : std_logic;
 
@@ -94,6 +93,7 @@ architecture behavioral of MIPSProcessor is
   signal shift_left_b_out : std_logic_vector (27 downto 0);
 
   signal sign_extend_b_in : std_logic_vector(25 downto 0);
+  signal pc_mux_c_in : std_logic_vector(31 downto 0);
 
 begin
 
@@ -101,7 +101,7 @@ begin
   port map (
              operand_a_in => alu_a_mux_out,
              operand_b_in => alu_b_mux_out,
-             alu_control_in => ALU_CONTROL_ADD,
+             alu_control_in => alu_control_out,
              zero_out => alu_result_zero,
              alu_result_out => alu_result_out);
 
@@ -134,7 +134,7 @@ begin
              control_pc_write => pc_write,
              control_pc_write_cond => pc_write_cond,
              alu_result_zero => alu_result_zero,
-             pc_in => pc_in,
+             pc_in => pc_mux_out,
              pc_out => pc_out);
 
   control_unit: entity work.control_unit
@@ -210,11 +210,12 @@ begin
              select_in => alu_src_b,
              data_out => alu_b_mux_out);
 
+  pc_mux_c_in <= pc_out(31 downto 28) & shift_left_b_out;
   pc_mux : entity work.mux_4
   port map (
              a_in => alu_result_out,
              b_in => latch_alu_out,
-             c_in => shift_left_b_out,
+             c_in => pc_mux_c_in,
              d_in => x"00000000",
              select_in => pc_source,
              data_out => pc_mux_out);
