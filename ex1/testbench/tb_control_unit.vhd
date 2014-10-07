@@ -14,7 +14,7 @@ ARCHITECTURE behavior OF tb_control_unit IS
     PORT(
          clk : IN  std_logic;
          reset : IN  std_logic;
-         Instruction : IN  std_logic_vector(31 downto 26);
+         instruction_in : IN  std_logic_vector(31 downto 26);
          ir_write : OUT  std_logic;
          i_or_d : OUT  std_logic;
          pc_write : OUT  std_logic;
@@ -35,7 +35,7 @@ ARCHITECTURE behavior OF tb_control_unit IS
    --Inputs
    signal clk : std_logic := '0';
    signal reset : std_logic := '0';
-   signal Instruction : std_logic_vector(31 downto 26) := (others => '0');
+   signal instruction_in : std_logic_vector(31 downto 26) := (others => '0');
 
  	--Outputs
    signal ir_write : std_logic;
@@ -61,7 +61,7 @@ BEGIN
    uut: control_unit PORT MAP (
           clk => clk,
           reset => reset,
-          instruction => instruction,
+          instruction_in => instruction_in,
           ir_write => ir_write,
           i_or_d => i_or_d,
           pc_write => pc_write,
@@ -125,7 +125,7 @@ BEGIN
 			
 			check_state_instruction_decode;
 			
-			Instruction <= R_TYPE;
+			instruction_in <= R_TYPE;
 			
 			wait for clk_period;
 			
@@ -149,7 +149,7 @@ BEGIN
 			
 			check_state_instruction_decode;
 			
-			Instruction <= JUMP;
+			instruction_in <= JUMP;
 			
 			wait for clk_period;
 			
@@ -166,7 +166,7 @@ BEGIN
 			
 			check_state_instruction_decode;
 			
-			Instruction <= BRANCH;
+			instruction_in <= BRANCH;
 			
 			wait for clk_period;
 			
@@ -186,7 +186,7 @@ BEGIN
 			
 			check_state_instruction_decode;
 			
-			Instruction <= LW;
+			instruction_in <= LW;
 			
 			wait for clk_period;
 			
@@ -214,7 +214,7 @@ BEGIN
 			
 			check_state_instruction_decode;
 			
-			Instruction <= SW;
+			instruction_in <= SW;
 			
 			wait for clk_period;
 			

@@ -14,8 +14,8 @@ architecture behavior of tb_memory_unit is
           control_i_or_d : in  std_logic;
           control_mem_read : in  std_logic;
           control_mem_write : in  std_logic;
-          pc_in : in  std_logic_vector(31 downto 0);
-          alu_out_in : in  std_logic_vector(31 downto 0);
+          pc_in : in  std_logic_vector(7 downto 0);
+          alu_out_in : in  std_logic_vector(7 downto 0);
           mem_data_out : out  std_logic_vector(31 downto 0);
           write_data_in : in std_logic_vector(31 downto 0);
           clk : in  std_logic;
@@ -33,8 +33,8 @@ architecture behavior of tb_memory_unit is
   signal control_i_or_d : std_logic := '0';
   signal control_mem_read : std_logic := '0';
   signal control_mem_write : std_logic := '0';
-  signal pc_in : std_logic_vector(31 downto 0) := (others => '0');
-  signal alu_out_in : std_logic_vector(31 downto 0) := (others => '0');
+  signal pc_in : std_logic_vector(7 downto 0) := (others => '0');
+  signal alu_out_in : std_logic_vector(7 downto 0) := (others => '0');
   signal write_data_in : std_logic_vector(31 downto 0) := (others => '0');
   signal clk : std_logic := '0';
   signal reset : std_logic := '0';
@@ -94,7 +94,7 @@ begin
     control_i_or_d <= '1';
     control_mem_read <= '1';
     control_mem_write <= '0';
-    alu_out_in <= x"abbababb";
+    alu_out_in <= x"bb";
     dmem_data_in <= x"cafebabe";
     wait for clk_period;
     assert_equals(x"cafebabe", mem_data_out, "Testing memory read data correctly");
@@ -105,7 +105,7 @@ begin
     control_i_or_d <= '0';
     control_mem_read <= '1';
     control_mem_write <= '0';
-    pc_in <= x"decec00c";
+    pc_in <= x"0c";
     imem_data_in <= x"ccccdddd";
     wait for clk_period;
     assert_equals(x"ccccdddd", mem_data_out, "Testing instruction data out");
@@ -116,7 +116,7 @@ begin
     control_i_or_d <= '1';
     control_mem_read <= '0';
     control_mem_write <= '1';
-    alu_out_in <= x"00000011";
+    alu_out_in <= x"11";
     write_data_in <= x"dd00dd00";
     wait for clk_period;
     assert_equals(x"dd00dd00", dmem_data_out, "Testing write data");

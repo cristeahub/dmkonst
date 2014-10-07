@@ -10,15 +10,14 @@ ARCHITECTURE behavior OF tb_shift_left_2 IS
     -- Component Declaration for the Unit Under Test (UUT)
  
     COMPONENT shift_left_2
-    PORT(
-         data_in : IN  std_logic_vector(31 downto 0);
-         data_out : OUT  std_logic_vector(31 downto 0)
-        );
+    Generic (DATA_WIDTH : integer := 32);
+    Port ( data_in : in  STD_LOGIC_VECTOR (DATA_WIDTH - 3 downto 0);
+           data_out : out  STD_LOGIC_VECTOR (DATA_WIDTH - 1 downto 0));
     END COMPONENT;
     
 
    --Inputs
-   signal data_in : std_logic_vector(31 downto 0) := (others => '0');
+   signal data_in : std_logic_vector(29 downto 0) := (others => '0');
 
  	--Outputs
    signal data_out : std_logic_vector(31 downto 0);
@@ -39,18 +38,18 @@ BEGIN
    stim_proc: process
    begin
 
-      data_in <= x"00000004";
-      
+      data_in <= "000000000000000000000000000100";
+
       wait for clk_period;
-      
+
       assert_equals(x"00000010", data_out, "Should shift left by 2");
-      
+
       wait for clk_period;
-      
-      data_in <= x"00000001";
-      
+
+      data_in <= "000000000000000000000000000001";
+
       wait for clk_period;
-      
+
       assert_equals(x"00000004", data_out, "Should shift left by 2");
 
       wait;
