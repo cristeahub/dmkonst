@@ -33,7 +33,7 @@ begin
           alu_result := x"00000000";
         end if;
       when others =>
-        -- yo
+        alu_result  := x"00000000";
     end case;
     if alu_result = x"00000000" then
       zero_out <= '1';
