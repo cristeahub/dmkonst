@@ -25,17 +25,15 @@ architecture Behavioral of registers is
 
 begin
 
-  read_data_1_out <= register_file(to_integer(unsigned(read_register_1_in)));
-  read_data_2_out <= register_file(to_integer(unsigned(read_register_2_in)));
-
-  process (reset, clk) is
+  registers: process (reset, clk) is
   begin
 
-    if rising_edge(clk) then
-
-      if reset = '1' then
+    if reset = '1' then
         register_file <= (others => (others => '0'));
-      end if;
+    elsif rising_edge(clk) then
+    
+      read_data_1_out <= register_file(to_integer(unsigned(read_register_1_in)));
+      read_data_2_out <= register_file(to_integer(unsigned(read_register_2_in)));
 
       if reg_write_in = '1' then
         register_file(to_integer(unsigned(write_register_in))) <= write_data_in;
