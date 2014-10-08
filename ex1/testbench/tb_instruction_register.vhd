@@ -18,8 +18,7 @@ ARCHITECTURE behavior OF tb_instruction_register IS
          instruction_rs_out : OUT  std_logic_vector(25 downto 21);
          instruction_rt_out : OUT  std_logic_vector(20 downto 16);
          instruction_address_out : OUT  std_logic_vector(15 downto 0);
-         clk : IN  std_logic;
-         reset : IN  std_logic
+         clk : IN  std_logic
         );
     END COMPONENT;
     
@@ -28,7 +27,6 @@ ARCHITECTURE behavior OF tb_instruction_register IS
    signal mem_data_in : std_logic_vector(31 downto 0) := (others => '0');
    signal control_ir_write_in : std_logic := '0';
    signal clk : std_logic := '0';
-   signal reset : std_logic := '0';
 
  	--Outputs
    signal instruction_opcode_out : std_logic_vector(31 downto 26);
@@ -49,8 +47,7 @@ BEGIN
           instruction_rs_out => instruction_rs_out,
           instruction_rt_out => instruction_rt_out,
           instruction_address_out => instruction_address_out,
-          clk => clk,
-          reset => reset
+          clk => clk
         );
 
    -- Clock process definitions
@@ -87,12 +84,6 @@ BEGIN
 			wait for clk_period;
 			
 			assert_equals("000100", instruction_opcode_out, "Opcode should maintain the old value");
-			
-			reset <= '1';
-			
-			wait for clk_period;
-			
-			assert_equals("000000", instruction_opcode_out, "Opcode should become zero on reset");
 
       wait;
    end process;

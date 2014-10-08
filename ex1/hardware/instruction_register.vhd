@@ -4,7 +4,6 @@ use ieee.numeric_std.all;
 
 entity instruction_register is
     port ( clk : in  std_logic;
-           reset : in  std_logic;
            mem_data_in : in  std_logic_vector (31 downto 0);
            control_ir_write_in : in  std_logic;
            instruction_opcode_out : out  std_logic_vector (31 downto 26);
@@ -15,24 +14,18 @@ entity instruction_register is
 end instruction_register;
 
 architecture behavioral of instruction_register is
-
+  signal temp : std_logic_vector(31 downto 0);
 begin
+  instruction_opcode_out <= temp(31 downto 26);
+  instruction_rs_out <= temp(25 downto 21);
+  instruction_rt_out <= temp(20 downto 16);
+  instruction_address_out <= temp(15 downto 0);
 
-  process (reset, clk) is
-  begin
+  process (clk) is
+  begin 
     if rising_edge(clk) then
-      if reset = '1' then
-        instruction_opcode_out <= (others => '0');
-        instruction_rs_out <= (others => '0');
-        instruction_rt_out <= (others => '0');
-        instruction_address_out <= (others => '0');
-      end if;
-
       if control_ir_write_in = '1' then
-        instruction_opcode_out <= mem_data_in(31 downto 26);
-        instruction_rs_out <= mem_data_in(25 downto 21);
-        instruction_rt_out <= mem_data_in(20 downto 16);
-        instruction_address_out <= mem_data_in(15 downto 0);
+        temp <= mem_data_in;
       end if;
     end if;
   end process;

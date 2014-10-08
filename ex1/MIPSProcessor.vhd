@@ -165,7 +165,7 @@ begin
 
   instruction_register : entity work.instruction_register
   Port map (
-             clk => clk, reset => reset,
+             clk => clk,
              mem_data_in => mem_data_out,
              control_ir_write_in => ir_write,
              instruction_opcode_out => instruction_opcode_out,
