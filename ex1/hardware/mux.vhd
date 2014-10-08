@@ -16,8 +16,8 @@ architecture Behavioral of mux is
 begin
 
 		with select_in select
-			data_out <= a_in when '0',
-									b_in when others;
+			data_out <= b_in when '1',
+									a_in when others;
 
 end Behavioral;
 
