@@ -7,6 +7,7 @@ entity control_unit is
          clk : in std_logic;
          reset : in std_logic;
          instruction_in : in  std_logic_vector (31 downto 26);
+         processor_enable : in std_logic;
 
          ir_write : out std_logic;
          i_or_d : out std_logic;
@@ -25,7 +26,8 @@ end control_unit;
 
 architecture behavioral of control_unit is
 
-  type state_t is ( INSTRUCTION_FETCH,
+  type state_t is ( IDLE,
+                    INSTRUCTION_FETCH,
                     INSTRUCTION_DECODE,
                     EXECUTION,
                     BRANCH_COMPLETION,
@@ -56,6 +58,8 @@ begin
     pc_write <= '0';
 
     case state is
+      when IDLE =>
+        -- yo
       when INSTRUCTION_FETCH =>
         alu_src_b <= "01";
         mem_read <= '1';
@@ -95,53 +99,52 @@ begin
   end process;
 
 
-  process (reset, clk) is
+  process (reset, clk, processor_enable) is
   begin
-
-    if rising_edge(clk) then
-			if reset = '1' then
-				state <= instruction_fetch;
-			else
-				case state is
-					when INSTRUCTION_FETCH =>
-						state <= INSTRUCTION_DECODE;
-					when INSTRUCTION_DECODE =>
-						case instruction_in is
-							when LW =>
-								state <= MEMORY_ADDRESS_COMPUTATION;
-							when SW =>
-								state <= MEMORY_ADDRESS_COMPUTATION;
-							when R_TYPE =>
-								state <= EXECUTION;
-							when BRANCH =>
-								state <= BRANCH_COMPLETION;
-							when JUMP =>
-								state <= JUMP_COMPLETION;
-							when others =>
-						-- yo
-						end case;
-					when EXECUTION =>
-						state <= R_TYPE_COMPLETION;
-					when MEMORY_ADDRESS_COMPUTATION =>
-						case instruction_in is
-							when LW =>
-								state <= MEMORY_ACCESS_READ;
-							when SW =>
-								state <= MEMORY_ACCESS_WRITE;
-							when others =>
-						-- yo
-						end case;
-					when MEMORY_ACCESS_READ =>
-						state <= WRITE_BACK;
-					when others =>
-						-- jump_completion
-						-- branch_completion
-						-- r_type_completion
-						-- memory_access_write
-						-- write_back
-						state <= INSTRUCTION_FETCH;
-				end case;
-			end if;
+    if reset = '1' then
+      state <= IDLE;
+    elsif rising_edge(clk) and processor_enable = '1' then
+      case state is
+        when IDLE =>
+          state <= IDLE;
+        when INSTRUCTION_FETCH =>
+          state <= INSTRUCTION_DECODE;
+        when INSTRUCTION_DECODE =>
+          case instruction_in is
+            when LW =>
+              state <= MEMORY_ADDRESS_COMPUTATION;
+            when SW =>
+              state <= MEMORY_ADDRESS_COMPUTATION;
+            when R_TYPE =>
+              state <= EXECUTION;
+            when BRANCH =>
+              state <= BRANCH_COMPLETION;
+            when JUMP =>
+              state <= JUMP_COMPLETION;
+            when others =>
+          -- yo
+          end case;
+        when EXECUTION =>
+          state <= R_TYPE_COMPLETION;
+        when MEMORY_ADDRESS_COMPUTATION =>
+          case instruction_in is
+            when LW =>
+              state <= MEMORY_ACCESS_READ;
+            when SW =>
+              state <= MEMORY_ACCESS_WRITE;
+            when others =>
+          -- yo
+          end case;
+        when MEMORY_ACCESS_READ =>
+          state <= WRITE_BACK;
+        when others =>
+          -- jump_completion
+          -- branch_completion
+          -- r_type_completion
+          -- memory_access_write
+          -- write_back
+          state <= INSTRUCTION_FETCH;
+      end case;
     end if;
   end process;
 

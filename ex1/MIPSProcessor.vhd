@@ -138,6 +138,7 @@ begin
              clk => clk,
              reset => reset,
              instruction_in => instruction_opcode_out,
+             processor_enable => processor_enable,
              ir_write => ir_write,
              i_or_d => i_or_d,
              pc_write => pc_write,
