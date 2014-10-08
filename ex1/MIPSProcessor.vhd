@@ -111,9 +111,7 @@ begin
 
   memory_unit: entity work.memory_unit
   port map (
-             clk => clk, reset => reset,
              control_i_or_d => i_or_d,
-             control_mem_read => mem_read,
              control_mem_write => mem_write,
              pc_in => pc_out(7 downto 0),
              alu_out_in => latch_alu_out(7 downto 0),
