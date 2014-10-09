@@ -106,7 +106,7 @@ begin
     elsif rising_edge(clk) and processor_enable = '1' then
       case state is
         when IDLE =>
-          state <= IDLE;
+          state <= INSTRUCTION_FETCH;
         when INSTRUCTION_FETCH =>
           state <= INSTRUCTION_DECODE;
         when INSTRUCTION_DECODE =>
