@@ -38,6 +38,7 @@ ARCHITECTURE behavior OF tb_MIPSProcessor IS
 	signal proc_dmem_data_out : std_logic_vector(DATA_WIDTH-1 downto 0) := (others => '0');
 	signal proc_dmem_write_enable : std_logic_vector(0 downto 0) := (others => '0');
 	signal proc_dmem_address : std_logic_vector(ADDR_WIDTH-1 downto 0) := (others => '0');
+  signal control_instruction : std_logic_vector(5 downto 0) := (others => '0');
 	
 	-- driven only from testbench
 	signal imem_data_out : std_logic_vector(DATA_WIDTH-1 downto 0) := (others => '0');
@@ -59,7 +60,8 @@ Processor: entity work.MIPSProcessor(Behavioral) port map (
 						dmem_data_in => dmem_data_in,
 						dmem_address => proc_dmem_address,
 						dmem_data_out => proc_dmem_data_out,
-						dmem_write_enable => proc_dmem_write_enable(0)
+						dmem_write_enable => proc_dmem_write_enable(0),
+            control_instruction => control_instruction
 					);
 		  
 -- instantiate the instruction memory

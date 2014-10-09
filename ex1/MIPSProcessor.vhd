@@ -26,7 +26,8 @@ entity MIPSProcessor is
     dmem_data_in      : in  std_logic_vector(DATA_WIDTH-1 downto 0);
     dmem_address      : out std_logic_vector(ADDR_WIDTH-1 downto 0);
     dmem_data_out     : out std_logic_vector(DATA_WIDTH-1 downto 0);
-    dmem_write_enable : out std_logic
+    dmem_write_enable : out std_logic;
+    control_instruction : inout std_logic_vector(5 downto 0)
 );
 end MIPSProcessor;
 
@@ -133,6 +134,8 @@ begin
              alu_result_zero => alu_result_zero,
              pc_in => pc_mux_out,
              pc_out => pc_out);
+             
+  control_instruction <= instruction_opcode_out;
 
   control_unit: entity work.control_unit
   port map (
@@ -202,9 +205,9 @@ begin
   alu_b_mux : entity work.mux_4
   Port map (
              a_in => latch_b_out,
-             b_in => x"00000004",
+             b_in => x"00000001",
              c_in => sign_extend_a_out,
-             d_in => shift_left_a_out,
+             d_in => sign_extend_a_out,
              select_in => alu_src_b,
              data_out => alu_b_mux_out);
 
@@ -243,20 +246,15 @@ begin
              value_in => read_data_2_out,
              value_out => latch_b_out);
 
-  shift_left_a : entity work.shift_left_2
-  port map (
-             data_in => sign_extend_a_out(29 downto 0),
-             data_out => shift_left_a_out);
-
   sign_extend_a : entity work.sign_extend
   port map (
              data_in => instruction_address_out,
              data_out => sign_extend_a_out);
 
   shift_left_b_in <= instruction_rs_out & instruction_rt_out & instruction_address_out;
-
-  shift_left_b : entity work.shift_left_2
-  generic map (DATA_WIDTH => 28)
+  
+  sign_extend_b : entity work.sign_extend
+  generic map (DATA_IN_WIDTH => 26, DATA_OUT_WIDTH => 28)
   port map (
              data_in => shift_left_b_in,
              data_out => shift_left_b_out);

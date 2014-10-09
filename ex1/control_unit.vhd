@@ -66,6 +66,7 @@ begin
         ir_write <= '1';
         pc_write <= '1';
       when INSTRUCTION_DECODE =>
+        ir_write <= '1';
         alu_src_b <= "11";
       when JUMP_COMPLETION =>
         pc_write <= '1';
