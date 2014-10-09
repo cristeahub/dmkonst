@@ -127,6 +127,7 @@ begin
   pc: entity work.pc
   port map (
              clk => clk,
+             reset => reset,
              control_pc_write => pc_write,
              control_pc_write_cond => pc_write_cond,
              alu_result_zero => alu_result_zero,
