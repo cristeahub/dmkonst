@@ -31,7 +31,8 @@ entity MIPSProcessor is
     state             : inout state_t;
     write_register_mux_out : inout std_logic_vector(4 downto 0);
     write_data_mux_out : inout std_logic_vector(31 downto 0);
-    read_data_1_out : inout std_logic_vector(31 downto 0)
+    read_data_1_out : inout std_logic_vector(31 downto 0);
+    pc_out_debug : out STD_LOGIC_vector(31 downto 0)
 );
 end MIPSProcessor;
 
@@ -99,6 +100,8 @@ architecture behavioral of MIPSProcessor is
   signal pc_mux_c_in : std_logic_vector(31 downto 0);
 
 begin
+
+  pc_out_debug <= pc_out;
 
   alu: entity work.alu
   port map (
@@ -196,7 +199,7 @@ begin
   write_data_mux : entity work.mux
   Port map (
              a_in => latch_alu_out,
-             b_in => latch_memory_data_register,
+             b_in => mem_data_out, --latch_memory_data_register,
              select_in => mem_to_reg,
              data_out => write_data_mux_out);
 
