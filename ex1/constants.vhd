@@ -21,4 +21,17 @@ package constants is
   constant ALU_FUNCTION_OR : std_logic_vector(5 downto 0) := "100101";
   constant ALU_FUNCTION_SLT : std_logic_vector(5 downto 0) := "101010";
   
+  type state_t is ( IDLE,
+                    READY,
+                    INSTRUCTION_FETCH,
+                    INSTRUCTION_DECODE,
+                    EXECUTION,
+                    BRANCH_COMPLETION,
+                    JUMP_COMPLETION,
+                    R_TYPE_COMPLETION,
+                    MEMORY_ADDRESS_COMPUTATION,
+                    MEMORY_ACCESS_READ,
+                    MEMORY_ACCESS_WRITE,
+                    WRITE_BACK );
+  
 end package constants;

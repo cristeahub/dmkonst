@@ -27,7 +27,11 @@ entity MIPSProcessor is
     dmem_address      : out std_logic_vector(ADDR_WIDTH-1 downto 0);
     dmem_data_out     : out std_logic_vector(DATA_WIDTH-1 downto 0);
     dmem_write_enable : out std_logic;
-    control_instruction : inout std_logic_vector(5 downto 0)
+    control_instruction : inout std_logic_vector(5 downto 0);
+    state             : inout state_t;
+    write_register_mux_out : inout std_logic_vector(4 downto 0);
+    write_data_mux_out : inout std_logic_vector(31 downto 0);
+    read_data_1_out : inout std_logic_vector(31 downto 0)
 );
 end MIPSProcessor;
 
@@ -62,7 +66,7 @@ architecture behavioral of MIPSProcessor is
   signal alu_control_out : std_logic_vector(3 downto 0);
 
   -- register signals
-  signal read_data_1_out : std_logic_vector (31 downto 0);
+  --signal read_data_1_out : std_logic_vector (31 downto 0);
   signal read_data_2_out : std_logic_vector (31 downto 0);
 
   -- instruction register signals
@@ -72,8 +76,8 @@ architecture behavioral of MIPSProcessor is
   signal instruction_address_out : std_logic_vector (15 downto 0);
 
   -- MUX signals
-  signal write_register_mux_out : std_logic_vector(4 downto 0);
-  signal write_data_mux_out : std_logic_vector(31 downto 0);
+  --signal write_register_mux_out : std_logic_vector(4 downto 0);
+  --signal write_data_mux_out : std_logic_vector(31 downto 0);
   signal alu_a_mux_out : std_logic_vector(31 downto 0);
   signal alu_b_mux_out : std_logic_vector(31 downto 0);
   signal pc_mux_out : std_logic_vector(31 downto 0);
@@ -117,7 +121,7 @@ begin
              pc_in => pc_out(7 downto 0),
              alu_out_in => latch_alu_out(7 downto 0),
              mem_data_out => mem_data_out,
-             write_data_in => latch_b_out,
+             write_data_in => read_data_2_out,
              imem_data_in => imem_data_in,
              imem_address_out => imem_address,
              dmem_data_in => dmem_data_in,
@@ -155,7 +159,8 @@ begin
              alu_src_a => alu_src_a,
              alu_src_b => alu_src_b,
              reg_write => reg_write,
-             reg_dst => reg_dst);
+             reg_dst => reg_dst,
+             state => state);
 
   registers : entity work.registers
   port map (
@@ -198,13 +203,13 @@ begin
   alu_a_mux : entity work.mux
   Port map (
              a_in => pc_out,
-             b_in => latch_a_out,
+             b_in => read_data_1_out,
              select_in => alu_src_a,
              data_out => alu_a_mux_out);
 
   alu_b_mux : entity work.mux_4
   Port map (
-             a_in => latch_b_out,
+             a_in => read_data_2_out,
              b_in => x"00000001",
              c_in => sign_extend_a_out,
              d_in => sign_extend_a_out,

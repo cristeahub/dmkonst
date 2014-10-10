@@ -21,23 +21,13 @@ entity control_unit is
          alu_src_a : out  std_logic;
          alu_src_b : out  std_logic_vector (1 downto 0);
          reg_write : out  std_logic;
-         reg_dst : out  std_logic);
+         reg_dst : out  std_logic;
+         state : inout state_t);
 end control_unit;
 
 architecture behavioral of control_unit is
 
-  type state_t is ( IDLE,
-                    INSTRUCTION_FETCH,
-                    INSTRUCTION_DECODE,
-                    EXECUTION,
-                    BRANCH_COMPLETION,
-                    JUMP_COMPLETION,
-                    R_TYPE_COMPLETION,
-                    MEMORY_ADDRESS_COMPUTATION,
-                    MEMORY_ACCESS_READ,
-                    MEMORY_ACCESS_WRITE,
-                    WRITE_BACK );
-  signal state : state_t;
+  
 
 begin
 
@@ -58,15 +48,14 @@ begin
     pc_write <= '0';
 
     case state is
-      when IDLE =>
+      when IDLE|READY =>
         -- yo
       when INSTRUCTION_FETCH =>
         alu_src_b <= "01";
         mem_read <= '1';
-        ir_write <= '1';
         pc_write <= '1';
-      when INSTRUCTION_DECODE =>
         ir_write <= '1';
+      when INSTRUCTION_DECODE =>
         alu_src_b <= "11";
       when JUMP_COMPLETION =>
         pc_write <= '1';
@@ -107,6 +96,8 @@ begin
     elsif rising_edge(clk) and processor_enable = '1' then
       case state is
         when IDLE =>
+          state <= READY;
+        when READY =>
           state <= INSTRUCTION_FETCH;
         when INSTRUCTION_FETCH =>
           state <= INSTRUCTION_DECODE;
