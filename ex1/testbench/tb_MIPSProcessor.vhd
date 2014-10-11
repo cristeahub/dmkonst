@@ -41,7 +41,6 @@ ARCHITECTURE behavior OF tb_MIPSProcessor IS
 	signal proc_dmem_address : std_logic_vector(ADDR_WIDTH-1 downto 0) := (others => '0');
   signal control_instruction : std_logic_vector(5 downto 0) := (others => '0');
   signal state : state_t;
-  signal pc_out_debug : std_logic_vector(31 downto 0);
   signal write_register_mux_out : std_logic_vector(4 downto 0);
   signal write_data_mux_out : std_logic_vector(31 downto 0);
   signal read_data_1_out : std_logic_vector(31 downto 0);
@@ -69,7 +68,6 @@ Processor: entity work.MIPSProcessor(Behavioral) port map (
 						dmem_write_enable => proc_dmem_write_enable(0),
             control_instruction => control_instruction,
             state => state,
-            pc_out_debug => pc_out_debug,
             write_register_mux_out => write_register_mux_out,
             write_data_mux_out => write_data_mux_out,
             read_data_1_out => read_data_1_out

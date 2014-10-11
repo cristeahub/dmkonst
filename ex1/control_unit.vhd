@@ -81,7 +81,6 @@ begin
       when WRITE_BACK =>
         reg_write <= '1';
         mem_to_reg <= '1';
-        i_or_d <= '1';
       when MEMORY_ACCESS_WRITE =>
         mem_write <= '1';
         i_or_d <= '1';

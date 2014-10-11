@@ -6,34 +6,28 @@
 -- MIPSProcessor.vhd
 -- the mips processor component to be used in exercise 1 and 2.
 
--- todo replace the architecture dummyarch with a working behavioral
-
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use work.constants.all;
 
 entity MIPSProcessor is
-  generic (
-            ADDR_WIDTH : integer := 8;
-            DATA_WIDTH : integer := 32
-          );
-  port (
-    clk, reset        : in  std_logic;
-    processor_enable  : in  std_logic;
-    imem_data_in      : in  std_logic_vector(DATA_WIDTH-1 downto 0);
-    imem_address      : out std_logic_vector(ADDR_WIDTH-1 downto 0);
-    dmem_data_in      : in  std_logic_vector(DATA_WIDTH-1 downto 0);
-    dmem_address      : out std_logic_vector(ADDR_WIDTH-1 downto 0);
-    dmem_data_out     : out std_logic_vector(DATA_WIDTH-1 downto 0);
-    dmem_write_enable : out std_logic;
-    control_instruction : inout std_logic_vector(5 downto 0);
-    state             : inout state_t;
-    write_register_mux_out : inout std_logic_vector(4 downto 0);
-    write_data_mux_out : inout std_logic_vector(31 downto 0);
-    read_data_1_out : inout std_logic_vector(31 downto 0);
-    pc_out_debug : out STD_LOGIC_vector(31 downto 0)
-);
+  generic ( ADDR_WIDTH : integer := 8;
+            DATA_WIDTH : integer := 32);
+
+  port ( clk, reset        : in  std_logic;
+         processor_enable  : in  std_logic;
+         imem_data_in      : in  std_logic_vector(DATA_WIDTH-1 downto 0);
+         imem_address      : out std_logic_vector(ADDR_WIDTH-1 downto 0);
+         dmem_data_in      : in  std_logic_vector(DATA_WIDTH-1 downto 0);
+         dmem_address      : out std_logic_vector(ADDR_WIDTH-1 downto 0);
+         dmem_data_out     : out std_logic_vector(DATA_WIDTH-1 downto 0);
+         dmem_write_enable : out std_logic;
+         control_instruction : inout std_logic_vector(5 downto 0);
+         state             : inout state_t;
+         write_register_mux_out : inout std_logic_vector(4 downto 0);
+         write_data_mux_out : inout std_logic_vector(31 downto 0);
+         read_data_1_out : inout std_logic_vector(31 downto 0));
 end MIPSProcessor;
 
 architecture behavioral of MIPSProcessor is
@@ -57,9 +51,6 @@ architecture behavioral of MIPSProcessor is
   signal reg_write : std_logic;
   signal reg_dst : std_logic;
 
-  -- memory unit signals
-  signal mem_data_out : std_logic_vector(31 downto 0);
-
   -- alu signals
   signal alu_result_zero : std_logic;
   signal alu_result_out : std_logic_vector(31 downto 0);
@@ -70,39 +61,54 @@ architecture behavioral of MIPSProcessor is
   --signal read_data_1_out : std_logic_vector (31 downto 0);
   signal read_data_2_out : std_logic_vector (31 downto 0);
 
-  -- instruction register signals
-  signal instruction_opcode_out : std_logic_vector (31 downto 26);
-  signal instruction_rs_out : std_logic_vector (25 downto 21);
-  signal instruction_rt_out : std_logic_vector (20 downto 16);
-  signal instruction_address_out : std_logic_vector (15 downto 0);
+  -- Instruction aliases
+  alias instruction_opcode : std_logic_vector(31 downto 26) is imem_data_in(31 downto 26);
+  alias instruction_rs : std_logic_vector(25 downto 21) is imem_data_in(25 downto 21);
+  alias instruction_rt : std_logic_vector(20 downto 16) is imem_data_in(20 downto 16);
+  alias instruction_rd : std_logic_vector(15 downto 11) is imem_data_in(15 downto 11);
+  alias instruction_address : std_logic_vector(15 downto 0) is imem_data_in(15 downto 0);
+  alias instruction_funct : std_logic_vector(5 downto 0) is imem_data_in(5 downto 0);
+  alias instruction_jump_address : std_logic_vector(25 downto 0) is imem_data_in(25 downto 0);
 
   -- MUX signals
-  --signal write_register_mux_out : std_logic_vector(4 downto 0);
-  --signal write_data_mux_out : std_logic_vector(31 downto 0);
   signal alu_a_mux_out : std_logic_vector(31 downto 0);
   signal alu_b_mux_out : std_logic_vector(31 downto 0);
   signal pc_mux_out : std_logic_vector(31 downto 0);
 
   -- Latches
   signal latch_alu_out : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal latch_memory_data_register : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal latch_a_out : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal latch_b_out : std_logic_vector (DATA_WIDTH - 1 downto 0);
 
   -- Misc
   signal sign_extend_a_out : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal shift_left_a_out : std_logic_vector (DATA_WIDTH -1 downto 0);
-
   signal sign_extend_b_out : std_logic_vector (27 downto 0);
-  signal shift_left_b_out : std_logic_vector (27 downto 0);
-
-  signal shift_left_b_in : std_logic_vector(25 downto 0);
   signal pc_mux_c_in : std_logic_vector(31 downto 0);
+  signal imem_address_keepalive : std_logic_vector(31 downto 0);
 
 begin
 
-  pc_out_debug <= pc_out;
+  -- Debug wires
+  control_instruction <= instruction_opcode;
 
+  -- Wire it up!
+  dmem_write_enable <= mem_write;
+  dmem_data_out <= read_data_2_out;
+  dmem_address <= latch_alu_out(7 downto 0);
+
+  -- To create the illusion of single-cycle Instruction loads,
+  -- simply keep the instruction memory address constant during
+  -- the entire execution cycle.
+  process (ir_write)
+  begin
+    if rising_edge(ir_write) then
+      imem_address_keepalive <= pc_out;
+    end if;
+  end process;
+
+  with ir_write select
+    imem_address <= pc_out(7 downto 0) when '1',
+                    imem_address_keepalive(7 downto 0) when others;
+
+  -- Here be entity declarations
   alu: entity work.alu
   port map (
              operand_a_in => alu_a_mux_out,
@@ -113,24 +119,9 @@ begin
 
   alu_control : entity work.alu_control
   port map (
-             alu_function_in => instruction_address_out(5 downto 0),
+             alu_function_in => instruction_funct,
              control_alu_op => alu_op,
              alu_control_out => alu_control_out);
-
-  memory_unit: entity work.memory_unit
-  port map (
-             control_i_or_d => i_or_d,
-             control_mem_write => mem_write,
-             pc_in => pc_out(7 downto 0),
-             alu_out_in => latch_alu_out(7 downto 0),
-             mem_data_out => mem_data_out,
-             write_data_in => read_data_2_out,
-             imem_data_in => imem_data_in,
-             imem_address_out => imem_address,
-             dmem_data_in => dmem_data_in,
-             dmem_data_out => dmem_data_out,
-             dmem_address_out => dmem_address,
-             dmem_write_enable_out => dmem_write_enable);
 
   pc: entity work.pc
   port map (
@@ -141,14 +132,12 @@ begin
              alu_result_zero => alu_result_zero,
              pc_in => pc_mux_out,
              pc_out => pc_out);
-             
-  control_instruction <= instruction_opcode_out;
 
   control_unit: entity work.control_unit
   port map (
              clk => clk,
              reset => reset,
-             instruction_in => instruction_opcode_out,
+             instruction_in => instruction_opcode,
              processor_enable => processor_enable,
              ir_write => ir_write,
              i_or_d => i_or_d,
@@ -168,38 +157,28 @@ begin
   registers : entity work.registers
   port map (
              clk => clk, reset => reset,
-             read_register_1_in => instruction_rs_out,
-             read_register_2_in => instruction_rt_out,
+             read_register_1_in => instruction_rs,
+             read_register_2_in => instruction_rt,
              write_register_in => write_register_mux_out,
              write_data_in => write_data_mux_out,
              reg_write_in => reg_write,
              read_data_1_out => read_data_1_out,
              read_data_2_out => read_data_2_out);
 
-  instruction_register : entity work.instruction_register
-  Port map (
-             clk => clk,
-             mem_data_in => mem_data_out,
-             control_ir_write_in => ir_write,
-             instruction_opcode_out => instruction_opcode_out,
-             instruction_rs_out => instruction_rs_out,
-             instruction_rt_out => instruction_rt_out,
-             instruction_address_out => instruction_address_out);
-
   -- Muxes
   write_register_mux : entity work.mux
   Generic map (
-    DATA_WIDTH => 5)
+                DATA_WIDTH => 5)
   Port map (
-             a_in => instruction_rt_out,
-             b_in => instruction_address_out(15 downto 11),
+             a_in => instruction_rt,
+             b_in => instruction_rd,
              select_in => reg_dst,
              data_out => write_register_mux_out);
 
   write_data_mux : entity work.mux
   Port map (
              a_in => latch_alu_out,
-             b_in => mem_data_out, --latch_memory_data_register,
+             b_in => dmem_data_in,
              select_in => mem_to_reg,
              data_out => write_data_mux_out);
 
@@ -219,7 +198,7 @@ begin
              select_in => alu_src_b,
              data_out => alu_b_mux_out);
 
-  pc_mux_c_in <= pc_out(31 downto 28) & shift_left_b_out;
+  pc_mux_c_in <= pc_out(31 downto 28) & sign_extend_b_out;
   pc_mux : entity work.mux_4
   port map (
              a_in => alu_result_out,
@@ -236,35 +215,15 @@ begin
              value_in => alu_result_out,
              value_out => latch_alu_out);
 
-  memory_data_register : entity work.value_storage
-  Port map (
-             clk => clk,
-             value_in => mem_data_out,
-             value_out => latch_memory_data_register);
-
-  latch_a : entity work.value_storage
-  Port map (
-             clk => clk,
-             value_in => read_data_1_out,
-             value_out => latch_a_out);
-
-  latch_b : entity work.value_storage
-  Port map (
-             clk => clk,
-             value_in => read_data_2_out,
-             value_out => latch_b_out);
-
   sign_extend_a : entity work.sign_extend
   port map (
-             data_in => instruction_address_out,
+             data_in => instruction_address,
              data_out => sign_extend_a_out);
 
-  shift_left_b_in <= instruction_rs_out & instruction_rt_out & instruction_address_out;
-  
   sign_extend_b : entity work.sign_extend
   generic map (DATA_IN_WIDTH => 26, DATA_OUT_WIDTH => 28)
   port map (
-             data_in => shift_left_b_in,
-             data_out => shift_left_b_out);
+             data_in => instruction_jump_address,
+             data_out => sign_extend_b_out);
 
 end behavioral;
