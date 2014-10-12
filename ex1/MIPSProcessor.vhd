@@ -46,7 +46,7 @@ architecture behavioral of MIPSProcessor is
   signal mem_to_reg : std_logic;
   signal alu_op : std_logic_vector(1 downto 0);
   signal mem_write : std_logic;
-  signal alu_src_a : std_logic;
+  signal alu_src_a : std_logic_vector(1 downto 0);
   signal alu_src_b : std_logic_vector(1 downto 0);
   signal reg_write : std_logic;
   signal reg_dst : std_logic;
@@ -182,19 +182,21 @@ begin
              select_in => mem_to_reg,
              data_out => write_data_mux_out);
 
-  alu_a_mux : entity work.mux
+  alu_a_mux : entity work.mux_4
   Port map (
              a_in => pc_out,
              b_in => read_data_1_out,
+             c_in => sign_extend_a_out,
+             d_in => x"00000000", -- Unused mux slot. Fill with Ground.
              select_in => alu_src_a,
              data_out => alu_a_mux_out);
 
   alu_b_mux : entity work.mux_4
   Port map (
              a_in => read_data_2_out,
-             b_in => x"00000001",
+             b_in => x"00000001", -- Used to increment PC by one.
              c_in => sign_extend_a_out,
-             d_in => sign_extend_a_out,
+             d_in => x"00000010", -- Used for load upper immediate sll 16.
              select_in => alu_src_b,
              data_out => alu_b_mux_out);
 
@@ -204,7 +206,7 @@ begin
              a_in => alu_result_out,
              b_in => latch_alu_out,
              c_in => pc_mux_c_in,
-             d_in => x"00000000",
+             d_in => x"00000000", -- Unused mux slot. Fill with ground.
              select_in => pc_source,
              data_out => pc_mux_out);
 
