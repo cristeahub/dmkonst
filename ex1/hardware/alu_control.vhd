@@ -19,11 +19,14 @@ begin
                           ALU_CONTROL_AND when ALU_FUNCTION_AND,
                           ALU_CONTROL_OR when ALU_FUNCTION_OR,
                           ALU_CONTROL_SLT when ALU_FUNCTION_SLT,
-                          "0000" when others;
+                          ALU_CONTROL_SLL when ALU_FUNCTION_SLL,
+                          ALU_CONTROL_SRL when ALU_FUNCTION_SRL,
+                          "0000" when others; -- Should be replaced with a passthrough instruction.
 
   with control_alu_op select
     alu_control_out <= ALU_CONTROL_ADD when "00",
                        ALU_CONTROL_SUBTRACT when "01",
+                       ALU_CONTROL_SLL when "11",
                        r_type_alu_control when others;
 
 end Behavioral;

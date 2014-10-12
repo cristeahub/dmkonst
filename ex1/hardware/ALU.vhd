@@ -32,6 +32,10 @@ begin
         else
           alu_result := x"00000000";
         end if;
+      when ALU_CONTROL_SLL =>
+        alu_result := signed(shift_left(unsigned(operand_a_in), to_integer(unsigned(operand_b_in))));
+      when ALU_CONTROL_SRL =>
+        alu_result := signed(shift_right(unsigned(operand_a_in), to_integer(unsigned(operand_b_in))));
       when others =>
         alu_result  := x"00000000";
     end case;
