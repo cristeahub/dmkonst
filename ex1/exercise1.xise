@@ -53,9 +53,6 @@
       <association xil_pn:name="BehavioralSimulation"/>
       <association xil_pn:name="Implementation"/>
     </file>
-    <file xil_pn:name="MIPSSystem.ucf" xil_pn:type="FILE_UCF">
-      <association xil_pn:name="Implementation"/>
-    </file>
     <file xil_pn:name="MIPSSystem.vhd" xil_pn:type="FILE_VHDL">
       <association xil_pn:name="BehavioralSimulation"/>
       <association xil_pn:name="Implementation"/>
@@ -174,6 +171,9 @@
     </file>
     <file xil_pn:name="hardware/alu_control.vhd" xil_pn:type="FILE_VHDL">
       <association xil_pn:name="BehavioralSimulation"/>
+      <association xil_pn:name="Implementation"/>
+    </file>
+    <file xil_pn:name="MIPSSystem.ucf" xil_pn:type="FILE_UCF">
       <association xil_pn:name="Implementation"/>
     </file>
   </files>
@@ -494,7 +494,7 @@
   </properties>
 
   <bindings>
-    <binding xil_pn:location="/registers" xil_pn:name="MIPSSystem.ucf"/>
+    <binding xil_pn:location="/MIPSSystem" xil_pn:name="MIPSSystem.ucf"/>
   </bindings>
 
   <libraries/>
