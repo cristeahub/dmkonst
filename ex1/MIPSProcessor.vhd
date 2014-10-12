@@ -38,11 +38,9 @@ architecture behavioral of MIPSProcessor is
 
   -- control signals
   signal ir_write : std_logic;
-  signal i_or_d : std_logic;
   signal pc_write : std_logic;
   signal pc_write_cond : std_logic;
   signal pc_source : std_logic_vector(1 downto 0);
-  signal mem_read : std_logic;
   signal mem_to_reg : std_logic;
   signal alu_op : std_logic_vector(1 downto 0);
   signal mem_write : std_logic;
@@ -140,11 +138,9 @@ begin
              instruction_in => instruction_opcode,
              processor_enable => processor_enable,
              ir_write => ir_write,
-             i_or_d => i_or_d,
              pc_write => pc_write,
              pc_write_cond => pc_write_cond,
              pc_source => pc_source,
-             mem_read => mem_read,
              mem_to_reg => mem_to_reg,
              alu_op => alu_op,
              mem_write => mem_write,

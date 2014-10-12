@@ -10,11 +10,9 @@ entity control_unit is
          processor_enable : in std_logic;
 
          ir_write : out std_logic;
-         i_or_d : out std_logic;
          pc_write : out std_logic;
          pc_write_cond : out std_logic;
          pc_source : out std_logic_vector (1 downto 0);
-         mem_read : out  std_logic;
          mem_to_reg : out  std_logic;
          alu_op : out  std_logic_vector (1 downto 0);
          mem_write : out  std_logic;
@@ -33,9 +31,7 @@ begin
 
   process (state) is
   begin
-    mem_read <= '0';
     alu_src_a <= "00";
-    i_or_d <= '0';
     ir_write <= '0';
     alu_src_b <= "00";
     alu_op <= "00";
@@ -52,7 +48,6 @@ begin
         -- yo
       when INSTRUCTION_FETCH =>
         alu_src_b <= "01";
-        mem_read <= '1';
         pc_write <= '1';
         ir_write <= '1';
       when INSTRUCTION_DECODE =>
@@ -76,14 +71,12 @@ begin
         alu_src_a <= "01";
         alu_src_b <= "10";
       when MEMORY_ACCESS_READ =>
-        mem_read <= '1';
-        i_or_d <= '1';
+			-- No new stuff. We allways read
       when WRITE_BACK =>
         reg_write <= '1';
         mem_to_reg <= '1';
       when MEMORY_ACCESS_WRITE =>
         mem_write <= '1';
-        i_or_d <= '1';
       when LOAD_UPPER_IMMEDIATE_COMPUTATION =>
         alu_src_a <= "10";
         alu_src_b <= "11";
