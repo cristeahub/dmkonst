@@ -27,7 +27,6 @@ package constants is
   constant ALU_FUNCTION_SLT : std_logic_vector(5 downto 0) := "101010";
   
   type state_t is ( IDLE,
-                    READY,
                     INSTRUCTION_FETCH,
                     INSTRUCTION_DECODE,
                     EXECUTION,

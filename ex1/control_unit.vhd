@@ -44,7 +44,7 @@ begin
     pc_write <= '0';
 
     case state is
-      when IDLE|READY =>
+      when IDLE =>
         -- yo
       when INSTRUCTION_FETCH =>
         alu_src_b <= "01";
@@ -95,8 +95,6 @@ begin
     elsif rising_edge(clk) and processor_enable = '1' then
       case state is
         when IDLE =>
-          state <= READY;
-        when READY =>
           state <= INSTRUCTION_FETCH;
         when INSTRUCTION_FETCH =>
           state <= INSTRUCTION_DECODE;
