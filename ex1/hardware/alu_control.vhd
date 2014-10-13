@@ -5,12 +5,11 @@ use work.constants.all;
 entity alu_control is
     Port ( alu_function_in : in  STD_LOGIC_VECTOR (5 downto 0);
            control_alu_op : in  STD_LOGIC_VECTOR (1 downto 0);
-           alu_control_out : out  STD_LOGIC_VECTOR (3 downto 0));
+           alu_control_out : out alu_control_t);
 end alu_control;
 
 architecture Behavioral of alu_control is
-  --shared variable r_type_alu_control : STD_LOGIC_VECTOR(3 downto 0);
-  signal r_type_alu_control : STD_LOGIC_VECTOR(3 downto 0);
+  signal r_type_alu_control : alu_control_t;
 begin
 
   with alu_function_in select
@@ -21,7 +20,7 @@ begin
                           ALU_CONTROL_SLT when ALU_FUNCTION_SLT,
                           ALU_CONTROL_SLL when ALU_FUNCTION_SLL,
                           ALU_CONTROL_SRL when ALU_FUNCTION_SRL,
-                          "0000" when others; -- Should be replaced with a passthrough instruction.
+                          ALU_CONTROL_ADD when others; -- Should be replaced with a passthrough instruction.
 
   with control_alu_op select
     alu_control_out <= ALU_CONTROL_ADD when "00",

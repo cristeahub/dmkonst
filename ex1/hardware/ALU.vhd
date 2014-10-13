@@ -6,7 +6,7 @@ use work.constants.all;
 entity ALU is
   Port ( operand_a_in : in  std_logic_vector (31 downto 0);
          operand_b_in : in  std_logic_vector (31 downto 0);
-         alu_control_in : in  STD_LOGIC_VECTOR (3 downto 0);
+         alu_control_in : in alu_control_t;
          zero_out : out  STD_LOGIC;
          alu_result_out : out  std_logic_vector (31 downto 0));
 end ALU;
@@ -17,6 +17,7 @@ begin
     variable alu_result : signed (31 downto 0);
   begin
     zero_out <= '0';
+
     case alu_control_in is
       when ALU_CONTROL_ADD =>
         alu_result := signed(operand_a_in) + signed(operand_b_in);
@@ -39,9 +40,11 @@ begin
       when others =>
         alu_result  := x"00000000";
     end case;
+
     if alu_result = x"00000000" then
       zero_out <= '1';
     end if;
+
     alu_result_out <= std_logic_vector(alu_result);
   end process;
 

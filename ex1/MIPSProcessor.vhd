@@ -53,7 +53,7 @@ architecture behavioral of MIPSProcessor is
   signal alu_result_zero : std_logic;
   signal alu_result_out : std_logic_vector(31 downto 0);
 
-  signal alu_control_out : std_logic_vector(3 downto 0);
+  signal alu_control_out : alu_control_t;
 
   -- register signals
   --signal read_data_1_out : std_logic_vector (31 downto 0);

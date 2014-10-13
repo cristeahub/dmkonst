@@ -10,13 +10,13 @@ package constants is
   constant SW : std_logic_vector(31 downto 26) := "101011";
   constant BRANCH : std_logic_vector(31 downto 26) := "000100";
 
-  constant ALU_CONTROL_SLL : std_logic_vector(3 downto 0) := "1000"; -- This value is just made up
-  constant ALU_CONTROL_SRL : std_logic_vector(3 downto 0) := "0100"; -- This value is just made up
-  constant ALU_CONTROL_ADD : std_logic_vector(3 downto 0) := "0010";
-  constant ALU_CONTROL_SUBTRACT : std_logic_vector(3 downto 0) := "0110";
-  constant ALU_CONTROL_AND : std_logic_vector(3 downto 0) := "0000";
-  constant ALU_CONTROL_OR : std_logic_vector(3 downto 0) := "0001";
-  constant ALU_CONTROL_SLT : std_logic_vector(3 downto 0) := "0111";
+  type alu_control_t is ( ALU_CONTROL_ADD,
+                          ALU_CONTROL_SUBTRACT,
+                          ALU_CONTROL_AND,
+                          ALU_CONTROL_OR,
+                          ALU_CONTROL_SLT,
+                          ALU_CONTROL_SLL,
+                          ALU_CONTROL_SRL );
 
   constant ALU_FUNCTION_SLL : std_logic_vector(5 downto 0) := "000000";
   constant ALU_FUNCTION_SRL : std_logic_vector(5 downto 0) := "000010";
