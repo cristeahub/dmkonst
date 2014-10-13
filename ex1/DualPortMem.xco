@@ -1,7 +1,7 @@
 ##############################################################
 #
 # Xilinx Core Generator version 12.4
-# Date: Fri Sep 19 11:31:28 2014
+# Date: Mon Oct 13 09:37:40 2014
 #
 ##############################################################
 #
@@ -27,7 +27,7 @@ SET implementationfiletype = Ngc
 SET package = csg324
 SET removerpms = false
 SET simulationfiles = Behavioral
-SET speedgrade = -2
+SET speedgrade = -3
 SET verilogsim = true
 SET vhdlsim = true
 # END Project Options
@@ -90,4 +90,4 @@ CSET write_width_a=32
 CSET write_width_b=8
 # END Parameters
 GENERATE
-# CRC: b3ac7224
+# CRC: bde19e92
