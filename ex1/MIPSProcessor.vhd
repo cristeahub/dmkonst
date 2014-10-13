@@ -152,7 +152,7 @@ begin
 
   registers : entity work.registers
   port map (
-             clk => clk, reset => reset,
+             clk => clk,
              read_register_1_in => instruction_rs,
              read_register_2_in => instruction_rt,
              write_register_in => write_register_mux_out,
@@ -206,7 +206,7 @@ begin
              select_in => pc_source,
              data_out => pc_mux_out);
 
-  -- Latches
+  -- Flip-flops
   alu_out : entity work.value_storage
   Port map (
              clk => clk,

@@ -7,7 +7,6 @@ entity registers is
             size : natural := 32);
 
   Port ( clk : in STD_LOGIC;
-         reset : in STD_LOGIC;
          read_register_1_in : in  STD_LOGIC_VECTOR (4 downto 0);
          read_register_2_in : in  STD_LOGIC_VECTOR (4 downto 0);
          write_register_in : in  STD_LOGIC_VECTOR (4 downto 0);
@@ -25,12 +24,10 @@ architecture Behavioral of registers is
 
 begin
 
-  registers: process (reset, clk) is
+  registers: process (clk) is
   begin
 
-    if reset = '1' then
-        register_file <= (others => (others => '0'));
-    elsif rising_edge(clk) then
+    if rising_edge(clk) then
     
       read_data_1_out <= register_file(to_integer(unsigned(read_register_1_in)));
       read_data_2_out <= register_file(to_integer(unsigned(read_register_2_in)));
