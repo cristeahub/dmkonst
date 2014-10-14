@@ -24,11 +24,7 @@ entity control_unit is
 end control_unit;
 
 architecture behavioral of control_unit is
-
-  
-
 begin
-
   process (state) is
   begin
     alu_src_a <= "00";
@@ -44,8 +40,8 @@ begin
     pc_write <= '0';
 
     case state is
-      when IDLE =>
-        -- yo
+      when IDLE|MEMORY_ACCESS_READ =>
+        -- Nothing special happens here.
       when INSTRUCTION_FETCH =>
         alu_src_b <= "01";
         pc_write <= '1';
@@ -70,8 +66,6 @@ begin
       when MEMORY_ADDRESS_COMPUTATION =>
         alu_src_a <= "01";
         alu_src_b <= "10";
-      when MEMORY_ACCESS_READ =>
-			-- No new stuff. We allways read
       when WRITE_BACK =>
         reg_write <= '1';
         mem_to_reg <= '1';
@@ -86,7 +80,6 @@ begin
     end case;
 
   end process;
-
 
   process (reset, clk, processor_enable) is
   begin
@@ -113,7 +106,7 @@ begin
             when JUMP =>
               state <= JUMP_COMPLETION;
             when others =>
-          -- yo
+              -- yo
           end case;
         when EXECUTION =>
           state <= R_TYPE_COMPLETION;
@@ -126,7 +119,7 @@ begin
             when SW =>
               state <= MEMORY_ACCESS_WRITE;
             when others =>
-          -- yo
+              -- yo
           end case;
         when MEMORY_ACCESS_READ =>
           state <= WRITE_BACK;
