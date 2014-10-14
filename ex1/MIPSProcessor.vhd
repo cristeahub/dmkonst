@@ -22,12 +22,7 @@ entity MIPSProcessor is
          dmem_data_in      : in  std_logic_vector(DATA_WIDTH-1 downto 0);
          dmem_address      : out std_logic_vector(ADDR_WIDTH-1 downto 0);
          dmem_data_out     : out std_logic_vector(DATA_WIDTH-1 downto 0);
-         dmem_write_enable : out std_logic;
-         control_instruction : inout std_logic_vector(5 downto 0);
-         state             : inout state_t;
-         write_register_mux_out : inout std_logic_vector(4 downto 0);
-         write_data_mux_out : inout std_logic_vector(31 downto 0);
-         read_data_1_out : inout std_logic_vector(31 downto 0));
+         dmem_write_enable : out std_logic);
 end MIPSProcessor;
 
 architecture behavioral of MIPSProcessor is
@@ -56,7 +51,7 @@ architecture behavioral of MIPSProcessor is
   signal alu_control_out : alu_control_t;
 
   -- register signals
-  --signal read_data_1_out : std_logic_vector (31 downto 0);
+  signal read_data_1_out : std_logic_vector (31 downto 0);
   signal read_data_2_out : std_logic_vector (31 downto 0);
 
   -- Instruction aliases
@@ -73,6 +68,8 @@ architecture behavioral of MIPSProcessor is
   signal alu_a_mux_out : std_logic_vector(31 downto 0);
   signal alu_b_mux_out : std_logic_vector(31 downto 0);
   signal pc_mux_out : std_logic_vector(31 downto 0);
+  signal write_register_mux_out : std_logic_vector(4 downto 0);
+  signal write_data_mux_out : std_logic_vector(31 downto 0);
 
   -- Latches
   signal latch_alu_out : std_logic_vector (DATA_WIDTH - 1 downto 0);
@@ -83,9 +80,6 @@ architecture behavioral of MIPSProcessor is
   signal pc_mux_c_in : std_logic_vector(31 downto 0);
 
 begin
-
-  -- Debug wires
-  control_instruction <= instruction_opcode;
 
   -- Wire it up!
   dmem_write_enable <= mem_write;
@@ -141,8 +135,7 @@ begin
              alu_src_a => alu_src_a,
              alu_src_b => alu_src_b,
              reg_write => reg_write,
-             reg_dst => reg_dst,
-             state => state);
+             reg_dst => reg_dst);
 
   registers : entity work.registers
   port map (

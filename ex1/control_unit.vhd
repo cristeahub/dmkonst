@@ -19,11 +19,11 @@ entity control_unit is
          alu_src_a : out  std_logic_vector (1 downto 0);
          alu_src_b : out  std_logic_vector (1 downto 0);
          reg_write : out  std_logic;
-         reg_dst : out  std_logic;
-         state : inout state_t);
+         reg_dst : out  std_logic);
 end control_unit;
 
 architecture behavioral of control_unit is
+  signal state : state_t;
 begin
   process (state) is
   begin
