@@ -45,9 +45,9 @@ begin
       when INSTRUCTION_FETCH =>
         alu_src_b <= "01";
         pc_write <= '1';
-        ir_write <= '1';
       when INSTRUCTION_DECODE =>
         alu_src_b <= "10";
+        ir_write <= '1';
       when JUMP_COMPLETION =>
         pc_write <= '1';
         pc_source <= "10";

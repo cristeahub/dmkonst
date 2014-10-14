@@ -60,13 +60,14 @@ architecture behavioral of MIPSProcessor is
   signal read_data_2_out : std_logic_vector (31 downto 0);
 
   -- Instruction aliases
-  alias instruction_opcode : std_logic_vector(31 downto 26) is imem_data_in(31 downto 26);
-  alias instruction_rs : std_logic_vector(25 downto 21) is imem_data_in(25 downto 21);
-  alias instruction_rt : std_logic_vector(20 downto 16) is imem_data_in(20 downto 16);
-  alias instruction_rd : std_logic_vector(15 downto 11) is imem_data_in(15 downto 11);
-  alias instruction_address : std_logic_vector(15 downto 0) is imem_data_in(15 downto 0);
-  alias instruction_funct : std_logic_vector(5 downto 0) is imem_data_in(5 downto 0);
-  alias instruction_jump_address : std_logic_vector(25 downto 0) is imem_data_in(25 downto 0);
+  signal cached_instruction : std_logic_vector(31 downto 0);
+  alias instruction_opcode : std_logic_vector(31 downto 26) is cached_instruction(31 downto 26);
+  alias instruction_rs : std_logic_vector(25 downto 21) is cached_instruction(25 downto 21);
+  alias instruction_rt : std_logic_vector(20 downto 16) is cached_instruction(20 downto 16);
+  alias instruction_rd : std_logic_vector(15 downto 11) is cached_instruction(15 downto 11);
+  alias instruction_address : std_logic_vector(15 downto 0) is cached_instruction(15 downto 0);
+  alias instruction_funct : std_logic_vector(5 downto 0) is cached_instruction(5 downto 0);
+  alias instruction_jump_address : std_logic_vector(25 downto 0) is cached_instruction(25 downto 0);
 
   -- MUX signals
   signal alu_a_mux_out : std_logic_vector(31 downto 0);
@@ -80,7 +81,6 @@ architecture behavioral of MIPSProcessor is
   signal sign_extend_a_out : std_logic_vector (DATA_WIDTH - 1 downto 0);
   signal sign_extend_b_out : std_logic_vector (27 downto 0);
   signal pc_mux_c_in : std_logic_vector(31 downto 0);
-  signal imem_address_keepalive : std_logic_vector(31 downto 0);
 
 begin
 
@@ -92,21 +92,15 @@ begin
   dmem_data_out <= read_data_2_out;
   dmem_address <= latch_alu_out(7 downto 0);
 
-  -- To create the illusion of single-cycle Instruction loads,
-  -- simply keep the instruction memory address constant during
-  -- the entire execution cycle.
-  process (ir_write)
-  begin
-    if rising_edge(ir_write) then
-      imem_address_keepalive <= pc_out;
-    end if;
-  end process;
-
-  with ir_write select
-    imem_address <= pc_out(7 downto 0) when '1',
-                    imem_address_keepalive(7 downto 0) when others;
+  imem_address <= pc_out(7 downto 0);
 
   -- Here be entity declarations
+  instruction_register : entity work.instruction_register
+  port map ( clk => clk,
+             instruction_in => imem_data_in,
+             control_instruction_write => ir_write,
+             instruction_out => cached_instruction );
+
   alu: entity work.alu
   port map (
              operand_a_in => alu_a_mux_out,
