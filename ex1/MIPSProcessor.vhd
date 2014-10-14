@@ -78,6 +78,7 @@ architecture behavioral of MIPSProcessor is
   signal sign_extend_a_out : std_logic_vector (DATA_WIDTH - 1 downto 0);
   signal sign_extend_b_out : std_logic_vector (27 downto 0);
   signal pc_mux_c_in : std_logic_vector(31 downto 0);
+  signal pc_write_enable : std_logic;
 
 begin
 
@@ -109,13 +110,12 @@ begin
              control_alu_op => alu_op,
              alu_control_out => alu_control_out);
 
+  pc_write_enable <= (alu_result_zero and pc_write_cond) or pc_write;
   pc: entity work.pc
   port map (
              clk => clk,
              reset => reset,
-             control_pc_write => pc_write,
-             control_pc_write_cond => pc_write_cond,
-             alu_result_zero => alu_result_zero,
+             write_enable_in => pc_write_enable,
              pc_in => pc_mux_out,
              pc_out => pc_out);
 

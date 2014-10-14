@@ -13,8 +13,7 @@ architecture Behavioral of alu_control is
 begin
 
   with alu_function_in select
-    r_type_alu_control <= ALU_CONTROL_ADD when ALU_FUNCTION_ADD,
-                          ALU_CONTROL_SUBTRACT when ALU_FUNCTION_SUBTRACT,
+    r_type_alu_control <= ALU_CONTROL_SUBTRACT when ALU_FUNCTION_SUBTRACT,
                           ALU_CONTROL_AND when ALU_FUNCTION_AND,
                           ALU_CONTROL_OR when ALU_FUNCTION_OR,
                           ALU_CONTROL_SLT when ALU_FUNCTION_SLT,
