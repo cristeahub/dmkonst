@@ -1,10 +1,49 @@
 \section{Introduction}
+\label{sec:intro}
 
-```
+``
 Introduction: introduces the task of the assignment and the challenges it brings.
 Also, it gives a brief introduction to how the task was approached and in which way the solution was reached.
-```
+``
 
-What is a multi cycle processor? State of the art.
+A single cycle processor requires each instruction to take exactly one cycle.
+This means that each instruction's time is bound by the slowest instruction.
 
+A multi cycle processor requires multiple cycles to execute an instruction.
+Because of this the processor is not bound by the slowest instruction.
+Complex instructions will use more cycles and still be slow, but less complex instructions will use fewer cycles.
+The total time it takes to run less complex, but more common instructions will be lower.
 
+\subsection{Requirements}
+\label{subsec:req}
+The assignment's main requirement is to make a multi cycle MIPS processor\cite[p.47]{compendium}.
+A suggested architecture is given in Figure 4.1 \cite[p.45]{compendium}, which was recommended to use.
+Some architectual units were given in the support files, which could be included in the final design.
+
+The following part of the MIPS instruction set is implemented on the FPGA.
+
+\begin{itemize}
+    \item ALU instructions (ADD, SUB, SLT, AND, OR)
+    \item Conditional Branch (BEZ)
+    \item LOAD and STORE (LW, SW)
+    \item Load Immediate (LDI)
+    \item Jump Instruction (JMP)
+\end{itemize}
+
+Note: the {\bf LDI} (Load Immediate) instruction is not a part of the MIPS instruction set\footnote{Figure C.1 \cite[p.66]{compendium}}.
+The {\bf LUI} (Load Upper Immediate) is the closest match.
+This instruction loads the value into the upper 16 bits of the register.
+The support files handed out already used this instruction.
+
+The system is first tested and verified in software, before moving on to testing on hardware.
+The testing of the system both in software and in hardware is detailed in section%\vref{sec:testing}.
+
+\subsection{Challenges and procedure}
+
+The assignment provides several tasks that needs solving, these are detailed in section%\vref{sec:tasks}.
+One goal set for the assignment is making sure all code complies with the standard set forth by the toolmakers (need to reword toolmakers).
+
+The assignment is tackled on a bottom-up approach.
+After an initial top design each smaller part of the system is made.
+These smaller parts is tested to make sure they work.
+When all parts are working individually they are tested together.
