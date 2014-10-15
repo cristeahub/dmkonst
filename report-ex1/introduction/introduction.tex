@@ -6,28 +6,31 @@ Introduction: introduces the task of the assignment and the challenges it brings
 Also, it gives a brief introduction to how the task was approached and in which way the solution was reached.
 ``
 
-A single cycle processor requires each instruction to take exactly one cycle.
-This means that each instruction's time is bound by the slowest instruction.
+This report presents a solution to Project \#1 of TDT4255 at NTNU.
+The main requirement of the assignment is to make a multi cycle MIPS processor\cite[p.47]{compendium}. The design should be verified with VHDL testbenches, and finally tested by deploying it to the Xilinx Spartan-6 FPGA.
 
-A multi cycle processor requires multiple cycles to execute an instruction.
-Because of this the processor is not bound by the slowest instruction.
-Complex instructions will use more cycles and still be slow, but less complex instructions will use fewer cycles.
-The total time it takes to run less complex, but more common instructions will be lower.
+\subsection{Single- and multi cycle processors}
+
+A single cycle processor is able to execute any of its instructions within a single clock period.
+This results in simpler hardware, but restricts the processors clock period to the execution time of its slowest instruction.
+Disadvantages include having idle datapath elements during some instructions, slow average execution time, and sometimes being required to duplicate execution units.
+
+To work around these issues, the datapath can be partitioned into multiple register-separated elements.
+Instructions now require multiple cycles to finish, but simple instructions are no longer bound by the execution time of more complex ones.
+This design allows reuse of datapath elements during different execution stages, resulting in a smaller footprint.
+Clock speed also increases significantly, as the critical path is reduced to the longest register-separated datapath segment.
 
 \subsection{Requirements}
 \label{subsec:req}
-The assignment's main requirement is to make a multi cycle MIPS processor\cite[p.47]{compendium}.
-A suggested architecture is given in Figure 4.1 \cite[p.45]{compendium}, which was recommended to use.
-Some architectual units were given in the support files, which could be included in the final design.
+A suggested architecture was provided in Figure 4.1 \cite[p.45]{compendium}, but was abandoned in favor of the basic multi cycle architecture presented in lecture 4.\cite{lecture-4}
 
-The following part of the MIPS instruction set is implemented on the FPGA.
+The final processor design implements the following subset of the MIPS instruction set.
 
 \begin{itemize}
-    \item ALU instructions (ADD, SUB, SLT, AND, OR)
+    \item ALU instructions (ADD, SUB, SLT, AND, OR, SLL, SRL)
     \item Conditional Branch (BEZ)
-    \item LOAD and STORE (LW, SW)
-    \item Load Immediate (LDI)
     \item Jump Instruction (JMP)
+    \item LOAD, STORE, Load immediate (LW, SW, LDI)
 \end{itemize}
 
 Note: the {\bf LDI} (Load Immediate) instruction is not a part of the MIPS instruction set\footnote{Figure C.1 \cite[p.66]{compendium}}.
