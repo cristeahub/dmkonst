@@ -4,3 +4,18 @@
 Conclusion: a brief conclusion of the performed work.
 Round up the challenges and results.
 ```
+
+All requirements given in the assignment were completed.
+In addition, the processor is fairly efficient as several optimizations has been made after completing the initial design.
+
+Our approach of first implementing support for the required instructions, and confirming that they fork on the FPGA, before making optimizations and adding extra instructions proved to be smart.
+In the end, there was time for profiling of the processor to identify bottlenecks.
+Removing the largest bottlenecks ended up increasing the clock frequency to 78 MHz % TODO: Is this number correct
+
+The most difficult part of this assignment was getting familiar with writing vhdl code.
+Writing small components by themselves and testing them with testbenches was easy enough,
+but inspecting the generated RTL often showed that the written VHDL did not properly describe the intended components.
+In addition, testing the final processor design was quite tedious, as there were many signals to keep track of to figure out where the processor diverged from desired behavior.
+
+In conclusion, it was a challenging and educational assignment.
+Things learned from it will be helpful both in the next assignment as well as in the course TDT4295.
