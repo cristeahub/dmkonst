@@ -24,13 +24,13 @@ begin
                           ALU_CONTROL_ADD when others; -- Should be replaced with a passthrough instruction.
 
   with control_alu_op select
-    alu_control_out <= ALU_CONTROL_ADD when "00",
-                       ALU_CONTROL_SUBTRACT when "01",
-                       ALU_CONTROL_SLL when "11",
+    alu_control_out <= ALU_CONTROL_ADD when ALU_OP_LOAD_STORE,
+                       ALU_CONTROL_SUBTRACT when ALU_OP_BRANCH,
+                       ALU_CONTROL_SLL when ALU_OP_LOAD_UPPER,
                        r_type_alu_control when others;
 
   with control_alu_op select
-    shamt_out <= "10000" when "11",
+    shamt_out <= "10000" when ALU_OP_LOAD_UPPER,
                  shamt_in when others;
 
 end Behavioral;

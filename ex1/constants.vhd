@@ -26,6 +26,11 @@ package constants is
   constant ALU_FUNCTION_OR : std_logic_vector(5 downto 0) := "100101";
   constant ALU_FUNCTION_SLT : std_logic_vector(5 downto 0) := "101010";
   
+  constant ALU_OP_LOAD_STORE : std_logic_vector(1 downto 0) :=  "00";
+  constant ALU_OP_BRANCH : std_logic_vector(1 downto 0) :=  "01";
+  constant ALU_OP_R_TYPE : std_logic_vector(1 downto 0) :=  "10";
+  constant ALU_OP_LOAD_UPPER : std_logic_vector(1 downto 0) :=  "11";
+
   type state_t is ( IDLE,
                     INSTRUCTION_FETCH,
                     INSTRUCTION_DECODE,

@@ -30,7 +30,7 @@ begin
     alu_src_a <= '0';
     ir_write <= '0';
     alu_src_b <= "00";
-    alu_op <= "00";
+    alu_op <= ALU_OP_LOAD_STORE;
     mem_write <= '0';
     reg_write <= '0';
     reg_dst <= '0';
@@ -54,12 +54,12 @@ begin
       when BRANCH_COMPLETION =>
         alu_src_a <= '1';
         alu_src_b <= "00";
-        alu_op <= "01";
+        alu_op <= ALU_OP_BRANCH;
         pc_write_cond <= '1';
         pc_source <= "01";
       when EXECUTION =>
         alu_src_a <= '1';
-        alu_op <= "10";
+        alu_op <= ALU_OP_R_TYPE;
       when R_TYPE_COMPLETION =>
         reg_dst <= '1';
         reg_write <= '1';
@@ -73,7 +73,7 @@ begin
         mem_write <= '1';
       when LOAD_UPPER_IMMEDIATE_COMPUTATION =>
         alu_src_b <= "10";
-        alu_op <= "11";
+        alu_op <= ALU_OP_LOAD_UPPER;
       when LOAD_UPPER_IMMEDIATE_COMPLETION =>
         reg_write <= '1';
     end case;
