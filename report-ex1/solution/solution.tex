@@ -1,11 +1,12 @@
 \section{Solution}
 
-```
+``
 Solution: describes your solution of the task.
 Contains a detailed description of all the subtasks which have been solved and how they contribute to the solution for the given task.
 The use of diagrams, figures, tables and similar is welcome as a support to your description.
-```
+``
 
+% TODO: Putt dette i introduksjonen? Eventuelt putt lista i et vedlegg
 \subsection{Development Process \& Tools}
 
 Development was done on computers in the computer lab running Ubuntu 12.04.
@@ -35,7 +36,15 @@ ghdl and gtkwave also proved useful, as it allowed us to work locally when only 
 
 \subsection{Architecture}
 
-Utgangspunkt, endringer, hvorfor, endelig resultat
+The architecture is based on the architecture from the lecture slides 4.% TODO: \ref{slides}
+However it is not complete and needs to be extended to support all aspects of a multi cycle design.
+The final design is visible in the figure %\ref{fig:final-design} %TODO: skal vi ha fila her?
+
+One big change is the external memory which is not present in the suggested architecture.
+This difference made it so that the memory module is not needed.
+All interaction is done with the external memory directly.
+In changing the design the processor has gone from a von Neumann architecture to a full Hardvard architecture.
+An advantage of this is the lack of a need to abstract away two separate external memories when no advatage is gained.
 
 \subsubsection{MIPS subset}
 
