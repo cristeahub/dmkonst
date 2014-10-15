@@ -1,0 +1,1801 @@
+<head><META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" alink="#000099" link="#000099" vlink="#990099" text="#000000">
+<a name="anchor1"></a>
+<table border="0" cellpadding="1" cellspacing="1" bgcolor="#DDDDDD">
+<tr>
+<td>
+<table border="0" cellpadding="1" cellspacing="1" bgcolor="#DDDDDD">
+<tr>
+<td><big>Release 12.4 Trace  (lin)</big></td>
+</tr>
+<tr>
+<td>Copyright (c) 1995-2010 Xilinx, Inc.  All rights reserved.</td>
+</tr>
+<tr>
+<td><b>/opt/Xilinx/12.4/ISE_DS/ISE/bin/lin/unwrapped/trce -intstyle ise -v 3 -s 3 -n 3
+-fastpaths -xml MIPSSystem.twx MIPSSystem.ncd -o MIPSSystem.twr MIPSSystem.pcf
+-ucf MIPSSystem.ucf
+
+</b></td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<table>
+<tr>
+<td><b>Design file:</b></td><td>MIPSSystem.ncd</td>
+</tr>
+<tr>
+<td><b>Physical constraint file:</b></td><td>MIPSSystem.pcf</td>
+</tr>
+<tr>
+<td><b>Device,package,speed:</b></td><td>xc6slx16,csg324,C,-3 (PRODUCTION 1.15 2010-12-02)</td>
+</tr>
+<tr>
+<td><b>Report level: </b></td><td>verbose report</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<hr>
+<table border="1" cellpadding="1" cellspacing="1">
+<tbody>
+<tr>
+<td align="left"><b>Environment Variable</b></td><td align="left"><b>Effect</b></td>
+</tr>
+<tr>
+<td align="left">NONE</td><td align="center">No environment variables were set</td>
+</tr>
+</tbody>
+</table>
+<a name="anchor2"></a>
+<table border="0" cellpadding="1" cellspacing="1">
+<td>
+<tr>
+<td>INFO:Timing:2752 - To get complete path coverage, use the unconstrained paths option. All paths that are not constrained will be reported in the unconstrained paths section(s) of the report.</td>
+</tr>
+</td>
+</table>
+<a name="anchor3"></a>
+<table border="0" cellpadding="1" cellspacing="1">
+<td>
+<tr>
+<td>INFO:Timing:3339 - The clock-to-out numbers in this timing report are based on a 50 Ohm transmission line loading model.  For the details of this model, and for more information on accounting for different loading conditions, please see the device datasheet.</td>
+</tr>
+</td>
+</table>
+<a name="anchor4"></a>
+<br>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr>
+<td><b>Timing constraint: TS_sys_clk_pin = PERIOD TIMEGRP "sys_clk_pin" 24 MHz HIGH 50%;</b></td>
+</tr>
+<tr>
+<td>2160547 paths analyzed, 1573 endpoints analyzed, 0 failing endpoints</td>
+</tr>
+<tr>
+<td>0 timing errors detected. (0 setup errors, 0 hold errors, 0 component switching limit errors)</td>
+</tr><tr><td> Minimum period is  13.603ns.</td></tr></table>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr>
+<td><b>Paths for end point MIPSProcInst/pc/pc_out_6 (SLICE_X36Y28.C4), 63312 paths
+</b></td>
+</tr>
+</table>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr>
+<td>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr bgcolor="#DDDDDD">
+<td><b>Slack (setup path):</b>28.063ns  <b>(requirement - (data path - clock path skew + uncertainty))</b></td>
+</tr>
+<tr>
+<td>
+<table border="1" cellpadding="1">
+<tr>
+<td><b>Source: </b>MIPSProcInst/control_unit/state_FSM_FFd1_1 (FF)</td><td><b>clk: </b>clk_BUFGP rising at 0.000ns</td>
+</tr>
+<tr>
+<td><b>Destination: </b>MIPSProcInst/pc/pc_out_6 (FF)</td><td><b>clk: </b>clk_BUFGP rising at 41.666ns</td>
+</tr>
+</table>
+</td><td> </td>
+</tr>
+<tr>
+<td>
+<table border="1">
+<tr>
+<td align="center"><b>Requirement</b>
+<br>41.666ns</td><td align="center"><b>Data Path Delay</b>
+<br>13.566ns (Levels of Logic = 10)</td><td align="center"><b>Clock Path Skew:</b>
+<br>-0.002ns (0.151 - 0.153)</td><td align="center"><b>Clock Uncertainty</b>
+<br>0.035ns</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<table border="1">
+<tr>
+<td colspan="2">Clock Uncertainty: 0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE</td>
+</tr>
+<tr>
+<td>Total System Jitter (TSJ):</td><td>0.070ns</td>
+</tr>
+<tr>
+<td>Total Input Jitter (TIJ):</td><td>0.000ns</td>
+</tr>
+<tr>
+<td>Discrete Jitter (DJ):</td><td>0.000ns</td>
+</tr>
+<tr>
+<td>Phase Error (PE):</td><td>0.000ns</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<table border="1">
+<tr>
+<td>Maximum Data Path at Slow Process Corner: MIPSProcInst/control_unit/state_FSM_FFd1_1 to MIPSProcInst/pc/pc_out_6</td>
+</tr>
+<tr>
+<td>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr valign="bottom" align="left">
+<td><b>Location</b></td><td><b>Delay type</b></td><td align="right"><b>Delay(ns)</b></td><td align="left"><b>Physical Resource <br>Logical Resource(s)</b></td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X36Y25.AQ</td><td>Tcko</td><td align="right">0.408</td><td align="left">MIPSProcInst/control_unit/state_FSM_FFd1_2<br>MIPSProcInst/control_unit/state_FSM_FFd1_1</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X27Y25.A3</td><td>net (fanout=6)</td><td align="right">1.120</td><td align="left">MIPSProcInst/control_unit/state_FSM_FFd1_1<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X27Y25.A</td><td>Tilo</td><td align="right">0.259</td><td align="left">HostCommInst/procResetSignal<br>MIPSProcInst/alu_a_mux/Mmux_data_out1021</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X36Y25.A4</td><td>net (fanout=17)</td><td align="right">2.015</td><td align="left">MIPSProcInst/N86<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X36Y25.A</td><td>Tilo</td><td align="right">0.205</td><td align="left">MIPSProcInst/control_unit/state_FSM_FFd1_2<br>MIPSProcInst/alu_a_mux/Mmux_data_out111</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X20Y22.B2</td><td>net (fanout=14)</td><td align="right">2.203</td><td align="left">MIPSProcInst/alu_a_mux_out&lt;19&gt;<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X20Y22.B</td><td>Tilo</td><td align="right">0.205</td><td align="left">MIPSProcInst/alu_b_mux_out&lt;4&gt;<br>MIPSProcInst/alu/Sh1121</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X20Y22.C4</td><td>net (fanout=3)</td><td align="right">0.350</td><td align="left">MIPSProcInst/alu/Sh112<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X20Y22.C</td><td>Tilo</td><td align="right">0.205</td><td align="left">MIPSProcInst/alu_b_mux_out&lt;4&gt;<br>MIPSProcInst/alu/Mmux_alu_result6272</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X35Y23.B1</td><td>net (fanout=1)</td><td align="right">1.272</td><td align="left">MIPSProcInst/alu/Mmux_alu_result6271<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X35Y23.B</td><td>Tilo</td><td align="right">0.259</td><td align="left">MIPSProcInst/alu_out/value_out&lt;5&gt;<br>MIPSProcInst/alu/Mmux_alu_result6273</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X35Y23.A5</td><td>net (fanout=1)</td><td align="right">0.187</td><td align="left">MIPSProcInst/alu/Mmux_alu_result6272<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X35Y23.A</td><td>Tilo</td><td align="right">0.259</td><td align="left">MIPSProcInst/alu_out/value_out&lt;5&gt;<br>MIPSProcInst/alu/Mmux_alu_result6275</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X30Y22.C1</td><td>net (fanout=2)</td><td align="right">1.072</td><td align="left">MIPSProcInst/alu_result_out&lt;4&gt;<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X30Y22.C</td><td>Tilo</td><td align="right">0.204</td><td align="left">MIPSProcInst/alu_out/value_out&lt;0&gt;<br>MIPSProcInst/pc_write_enable5_SW0</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X30Y22.D5</td><td>net (fanout=1)</td><td align="right">0.195</td><td align="left">N53<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X30Y22.D</td><td>Tilo</td><td align="right">0.203</td><td align="left">MIPSProcInst/alu_out/value_out&lt;0&gt;<br>MIPSProcInst/pc_write_enable6</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X24Y22.B1</td><td>net (fanout=1)</td><td align="right">0.964</td><td align="left">MIPSProcInst/pc_write_enable6<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X24Y22.B</td><td>Tilo</td><td align="right">0.205</td><td align="left">MIPSProcInst/pc/pc_out&lt;29&gt;<br>MIPSProcInst/pc_write_enable9</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X36Y28.C4</td><td>net (fanout=32)</td><td align="right">1.435</td><td align="left">MIPSProcInst/pc_write_enable<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X36Y28.CLK</td><td>Tas</td><td align="right">0.341</td><td align="left">MIPSProcInst/pc/pc_out&lt;7&gt;<br>MIPSProcInst/pc/pc_out_6_rstpot<br>MIPSProcInst/pc/pc_out_6</td>
+</tr>
+<tr>
+<td></td><td align="right"><b>Total</b></td><td align="right">13.566ns</td><td>(2.753ns logic, 10.813ns route)<br>(20.3% logic, 79.7% route)</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a name="anchor7"></a>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr>
+<td>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr bgcolor="#DDDDDD">
+<td><b>Slack (setup path):</b>28.148ns  <b>(requirement - (data path - clock path skew + uncertainty))</b></td>
+</tr>
+<tr>
+<td>
+<table border="1" cellpadding="1">
+<tr>
+<td><b>Source: </b>MIPSProcInst/control_unit/state_FSM_FFd4_1 (FF)</td><td><b>clk: </b>clk_BUFGP rising at 0.000ns</td>
+</tr>
+<tr>
+<td><b>Destination: </b>MIPSProcInst/pc/pc_out_6 (FF)</td><td><b>clk: </b>clk_BUFGP rising at 41.666ns</td>
+</tr>
+</table>
+</td><td> </td>
+</tr>
+<tr>
+<td>
+<table border="1">
+<tr>
+<td align="center"><b>Requirement</b>
+<br>41.666ns</td><td align="center"><b>Data Path Delay</b>
+<br>13.493ns (Levels of Logic = 9)</td><td align="center"><b>Clock Path Skew:</b>
+<br>0.010ns (0.294 - 0.284)</td><td align="center"><b>Clock Uncertainty</b>
+<br>0.035ns</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<table border="1">
+<tr>
+<td colspan="2">Clock Uncertainty: 0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE</td>
+</tr>
+<tr>
+<td>Total System Jitter (TSJ):</td><td>0.070ns</td>
+</tr>
+<tr>
+<td>Total Input Jitter (TIJ):</td><td>0.000ns</td>
+</tr>
+<tr>
+<td>Discrete Jitter (DJ):</td><td>0.000ns</td>
+</tr>
+<tr>
+<td>Phase Error (PE):</td><td>0.000ns</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<table border="1">
+<tr>
+<td>Maximum Data Path at Slow Process Corner: MIPSProcInst/control_unit/state_FSM_FFd4_1 to MIPSProcInst/pc/pc_out_6</td>
+</tr>
+<tr>
+<td>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr valign="bottom" align="left">
+<td><b>Location</b></td><td><b>Delay type</b></td><td align="right"><b>Delay(ns)</b></td><td align="left"><b>Physical Resource <br>Logical Resource(s)</b></td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X28Y28.AQ</td><td>Tcko</td><td align="right">0.408</td><td align="left">MIPSProcInst/control_unit/state_FSM_FFd4_2<br>MIPSProcInst/control_unit/state_FSM_FFd4_1</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X31Y24.A1</td><td>net (fanout=6)</td><td align="right">1.632</td><td align="left">MIPSProcInst/control_unit/state_FSM_FFd4_1<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X31Y24.A</td><td>Tilo</td><td align="right">0.259</td><td align="left">MIPSProcInst/control_unit/state_FSM_FFd2_3<br>MIPSProcInst/control_unit/state__n0055&lt;5&gt;1</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X34Y27.C3</td><td>net (fanout=33)</td><td align="right">1.754</td><td align="left">MIPSProcInst/alu_src_a&lt;0&gt;<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X34Y27.C</td><td>Tilo</td><td align="right">0.204</td><td align="left">MIPSProcInst/alu/Sh8<br>MIPSProcInst/alu_a_mux/Mmux_data_out301</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X34Y27.D1</td><td>net (fanout=12)</td><td align="right">1.285</td><td align="left">MIPSProcInst/alu_a_mux_out&lt;7&gt;<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X34Y27.D</td><td>Tilo</td><td align="right">0.203</td><td align="left">MIPSProcInst/alu/Sh8<br>MIPSProcInst/alu/Sh81</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X33Y19.B4</td><td>net (fanout=4)</td><td align="right">1.379</td><td align="left">MIPSProcInst/alu/Sh8<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X33Y19.B</td><td>Tilo</td><td align="right">0.259</td><td align="left">N108<br>MIPSProcInst/alu/Sh441</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X25Y24.A1</td><td>net (fanout=2)</td><td align="right">1.501</td><td align="left">MIPSProcInst/alu/Sh44<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X25Y24.A</td><td>Tilo</td><td align="right">0.259</td><td align="left">MIPSProcInst/alu_out/value_out&lt;13&gt;<br>MIPSProcInst/alu/Mmux_alu_result643</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X30Y22.C3</td><td>net (fanout=2)</td><td align="right">0.803</td><td align="left">MIPSProcInst/alu_result_out&lt;12&gt;<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X30Y22.C</td><td>Tilo</td><td align="right">0.204</td><td align="left">MIPSProcInst/alu_out/value_out&lt;0&gt;<br>MIPSProcInst/pc_write_enable5_SW0</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X30Y22.D5</td><td>net (fanout=1)</td><td align="right">0.195</td><td align="left">N53<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X30Y22.D</td><td>Tilo</td><td align="right">0.203</td><td align="left">MIPSProcInst/alu_out/value_out&lt;0&gt;<br>MIPSProcInst/pc_write_enable6</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X24Y22.B1</td><td>net (fanout=1)</td><td align="right">0.964</td><td align="left">MIPSProcInst/pc_write_enable6<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X24Y22.B</td><td>Tilo</td><td align="right">0.205</td><td align="left">MIPSProcInst/pc/pc_out&lt;29&gt;<br>MIPSProcInst/pc_write_enable9</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X36Y28.C4</td><td>net (fanout=32)</td><td align="right">1.435</td><td align="left">MIPSProcInst/pc_write_enable<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X36Y28.CLK</td><td>Tas</td><td align="right">0.341</td><td align="left">MIPSProcInst/pc/pc_out&lt;7&gt;<br>MIPSProcInst/pc/pc_out_6_rstpot<br>MIPSProcInst/pc/pc_out_6</td>
+</tr>
+<tr>
+<td></td><td align="right"><b>Total</b></td><td align="right">13.493ns</td><td>(2.545ns logic, 10.948ns route)<br>(18.9% logic, 81.1% route)</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a name="anchor9"></a>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr>
+<td>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr bgcolor="#DDDDDD">
+<td><b>Slack (setup path):</b>28.188ns  <b>(requirement - (data path - clock path skew + uncertainty))</b></td>
+</tr>
+<tr>
+<td>
+<table border="1" cellpadding="1">
+<tr>
+<td><b>Source: </b>MIPSProcInst/control_unit/state_FSM_FFd4_1 (FF)</td><td><b>clk: </b>clk_BUFGP rising at 0.000ns</td>
+</tr>
+<tr>
+<td><b>Destination: </b>MIPSProcInst/pc/pc_out_6 (FF)</td><td><b>clk: </b>clk_BUFGP rising at 41.666ns</td>
+</tr>
+</table>
+</td><td> </td>
+</tr>
+<tr>
+<td>
+<table border="1">
+<tr>
+<td align="center"><b>Requirement</b>
+<br>41.666ns</td><td align="center"><b>Data Path Delay</b>
+<br>13.453ns (Levels of Logic = 9)</td><td align="center"><b>Clock Path Skew:</b>
+<br>0.010ns (0.294 - 0.284)</td><td align="center"><b>Clock Uncertainty</b>
+<br>0.035ns</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<table border="1">
+<tr>
+<td colspan="2">Clock Uncertainty: 0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE</td>
+</tr>
+<tr>
+<td>Total System Jitter (TSJ):</td><td>0.070ns</td>
+</tr>
+<tr>
+<td>Total Input Jitter (TIJ):</td><td>0.000ns</td>
+</tr>
+<tr>
+<td>Discrete Jitter (DJ):</td><td>0.000ns</td>
+</tr>
+<tr>
+<td>Phase Error (PE):</td><td>0.000ns</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<table border="1">
+<tr>
+<td>Maximum Data Path at Slow Process Corner: MIPSProcInst/control_unit/state_FSM_FFd4_1 to MIPSProcInst/pc/pc_out_6</td>
+</tr>
+<tr>
+<td>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr valign="bottom" align="left">
+<td><b>Location</b></td><td><b>Delay type</b></td><td align="right"><b>Delay(ns)</b></td><td align="left"><b>Physical Resource <br>Logical Resource(s)</b></td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X28Y28.AQ</td><td>Tcko</td><td align="right">0.408</td><td align="left">MIPSProcInst/control_unit/state_FSM_FFd4_2<br>MIPSProcInst/control_unit/state_FSM_FFd4_1</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X31Y24.A1</td><td>net (fanout=6)</td><td align="right">1.632</td><td align="left">MIPSProcInst/control_unit/state_FSM_FFd4_1<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X31Y24.A</td><td>Tilo</td><td align="right">0.259</td><td align="left">MIPSProcInst/control_unit/state_FSM_FFd2_3<br>MIPSProcInst/control_unit/state__n0055&lt;5&gt;1</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X32Y21.B2</td><td>net (fanout=33)</td><td align="right">2.144</td><td align="left">MIPSProcInst/alu_src_a&lt;0&gt;<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X32Y21.B</td><td>Tilo</td><td align="right">0.205</td><td align="left">MIPSProcInst/alu_a_mux_out&lt;27&gt;<br>MIPSProcInst/alu_a_mux/Mmux_data_out201</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X28Y27.D1</td><td>net (fanout=12)</td><td align="right">1.335</td><td align="left">MIPSProcInst/alu_a_mux_out&lt;27&gt;<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X28Y27.D</td><td>Tilo</td><td align="right">0.205</td><td align="left">MIPSProcInst/alu/Sh121<br>MIPSProcInst/alu/Sh1211</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X29Y23.D3</td><td>net (fanout=4)</td><td align="right">1.156</td><td align="left">MIPSProcInst/alu/Sh121<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X29Y23.D</td><td>Tilo</td><td align="right">0.259</td><td align="left">MIPSProcInst/alu/Sh149<br>MIPSProcInst/alu/Sh1491</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X31Y27.C1</td><td>net (fanout=2)</td><td align="right">0.903</td><td align="left">MIPSProcInst/alu/Sh149<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X31Y27.C</td><td>Tilo</td><td align="right">0.259</td><td align="left">MIPSProcInst/alu_out/value_out&lt;21&gt;<br>MIPSProcInst/alu/Mmux_alu_result6147</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X33Y21.D1</td><td>net (fanout=2)</td><td align="right">1.300</td><td align="left">MIPSProcInst/alu_result_out&lt;21&gt;<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X33Y21.D</td><td>Tilo</td><td align="right">0.259</td><td align="left">MIPSProcInst/alu_out/value_out&lt;30&gt;<br>MIPSProcInst/pc_write_enable3</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X33Y21.C6</td><td>net (fanout=1)</td><td align="right">0.118</td><td align="left">MIPSProcInst/pc_write_enable3<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X33Y21.C</td><td>Tilo</td><td align="right">0.259</td><td align="left">MIPSProcInst/alu_out/value_out&lt;30&gt;<br>MIPSProcInst/pc_write_enable4_SW0</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X24Y22.B4</td><td>net (fanout=1)</td><td align="right">0.771</td><td align="left">N51<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X24Y22.B</td><td>Tilo</td><td align="right">0.205</td><td align="left">MIPSProcInst/pc/pc_out&lt;29&gt;<br>MIPSProcInst/pc_write_enable9</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X36Y28.C4</td><td>net (fanout=32)</td><td align="right">1.435</td><td align="left">MIPSProcInst/pc_write_enable<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X36Y28.CLK</td><td>Tas</td><td align="right">0.341</td><td align="left">MIPSProcInst/pc/pc_out&lt;7&gt;<br>MIPSProcInst/pc/pc_out_6_rstpot<br>MIPSProcInst/pc/pc_out_6</td>
+</tr>
+<tr>
+<td></td><td align="right"><b>Total</b></td><td align="right">13.453ns</td><td>(2.659ns logic, 10.794ns route)<br>(19.8% logic, 80.2% route)</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a name="anchor11"></a>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr>
+<td><b>Paths for end point MIPSProcInst/pc/pc_out_7 (SLICE_X36Y28.D4), 63312 paths
+</b></td>
+</tr>
+</table>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr>
+<td>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr bgcolor="#DDDDDD">
+<td><b>Slack (setup path):</b>28.180ns  <b>(requirement - (data path - clock path skew + uncertainty))</b></td>
+</tr>
+<tr>
+<td>
+<table border="1" cellpadding="1">
+<tr>
+<td><b>Source: </b>MIPSProcInst/control_unit/state_FSM_FFd1_1 (FF)</td><td><b>clk: </b>clk_BUFGP rising at 0.000ns</td>
+</tr>
+<tr>
+<td><b>Destination: </b>MIPSProcInst/pc/pc_out_7 (FF)</td><td><b>clk: </b>clk_BUFGP rising at 41.666ns</td>
+</tr>
+</table>
+</td><td> </td>
+</tr>
+<tr>
+<td>
+<table border="1">
+<tr>
+<td align="center"><b>Requirement</b>
+<br>41.666ns</td><td align="center"><b>Data Path Delay</b>
+<br>13.449ns (Levels of Logic = 10)</td><td align="center"><b>Clock Path Skew:</b>
+<br>-0.002ns (0.151 - 0.153)</td><td align="center"><b>Clock Uncertainty</b>
+<br>0.035ns</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<table border="1">
+<tr>
+<td colspan="2">Clock Uncertainty: 0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE</td>
+</tr>
+<tr>
+<td>Total System Jitter (TSJ):</td><td>0.070ns</td>
+</tr>
+<tr>
+<td>Total Input Jitter (TIJ):</td><td>0.000ns</td>
+</tr>
+<tr>
+<td>Discrete Jitter (DJ):</td><td>0.000ns</td>
+</tr>
+<tr>
+<td>Phase Error (PE):</td><td>0.000ns</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<table border="1">
+<tr>
+<td>Maximum Data Path at Slow Process Corner: MIPSProcInst/control_unit/state_FSM_FFd1_1 to MIPSProcInst/pc/pc_out_7</td>
+</tr>
+<tr>
+<td>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr valign="bottom" align="left">
+<td><b>Location</b></td><td><b>Delay type</b></td><td align="right"><b>Delay(ns)</b></td><td align="left"><b>Physical Resource <br>Logical Resource(s)</b></td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X36Y25.AQ</td><td>Tcko</td><td align="right">0.408</td><td align="left">MIPSProcInst/control_unit/state_FSM_FFd1_2<br>MIPSProcInst/control_unit/state_FSM_FFd1_1</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X27Y25.A3</td><td>net (fanout=6)</td><td align="right">1.120</td><td align="left">MIPSProcInst/control_unit/state_FSM_FFd1_1<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X27Y25.A</td><td>Tilo</td><td align="right">0.259</td><td align="left">HostCommInst/procResetSignal<br>MIPSProcInst/alu_a_mux/Mmux_data_out1021</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X36Y25.A4</td><td>net (fanout=17)</td><td align="right">2.015</td><td align="left">MIPSProcInst/N86<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X36Y25.A</td><td>Tilo</td><td align="right">0.205</td><td align="left">MIPSProcInst/control_unit/state_FSM_FFd1_2<br>MIPSProcInst/alu_a_mux/Mmux_data_out111</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X20Y22.B2</td><td>net (fanout=14)</td><td align="right">2.203</td><td align="left">MIPSProcInst/alu_a_mux_out&lt;19&gt;<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X20Y22.B</td><td>Tilo</td><td align="right">0.205</td><td align="left">MIPSProcInst/alu_b_mux_out&lt;4&gt;<br>MIPSProcInst/alu/Sh1121</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X20Y22.C4</td><td>net (fanout=3)</td><td align="right">0.350</td><td align="left">MIPSProcInst/alu/Sh112<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X20Y22.C</td><td>Tilo</td><td align="right">0.205</td><td align="left">MIPSProcInst/alu_b_mux_out&lt;4&gt;<br>MIPSProcInst/alu/Mmux_alu_result6272</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X35Y23.B1</td><td>net (fanout=1)</td><td align="right">1.272</td><td align="left">MIPSProcInst/alu/Mmux_alu_result6271<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X35Y23.B</td><td>Tilo</td><td align="right">0.259</td><td align="left">MIPSProcInst/alu_out/value_out&lt;5&gt;<br>MIPSProcInst/alu/Mmux_alu_result6273</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X35Y23.A5</td><td>net (fanout=1)</td><td align="right">0.187</td><td align="left">MIPSProcInst/alu/Mmux_alu_result6272<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X35Y23.A</td><td>Tilo</td><td align="right">0.259</td><td align="left">MIPSProcInst/alu_out/value_out&lt;5&gt;<br>MIPSProcInst/alu/Mmux_alu_result6275</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X30Y22.C1</td><td>net (fanout=2)</td><td align="right">1.072</td><td align="left">MIPSProcInst/alu_result_out&lt;4&gt;<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X30Y22.C</td><td>Tilo</td><td align="right">0.204</td><td align="left">MIPSProcInst/alu_out/value_out&lt;0&gt;<br>MIPSProcInst/pc_write_enable5_SW0</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X30Y22.D5</td><td>net (fanout=1)</td><td align="right">0.195</td><td align="left">N53<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X30Y22.D</td><td>Tilo</td><td align="right">0.203</td><td align="left">MIPSProcInst/alu_out/value_out&lt;0&gt;<br>MIPSProcInst/pc_write_enable6</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X24Y22.B1</td><td>net (fanout=1)</td><td align="right">0.964</td><td align="left">MIPSProcInst/pc_write_enable6<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X24Y22.B</td><td>Tilo</td><td align="right">0.205</td><td align="left">MIPSProcInst/pc/pc_out&lt;29&gt;<br>MIPSProcInst/pc_write_enable9</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X36Y28.D4</td><td>net (fanout=32)</td><td align="right">1.318</td><td align="left">MIPSProcInst/pc_write_enable<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X36Y28.CLK</td><td>Tas</td><td align="right">0.341</td><td align="left">MIPSProcInst/pc/pc_out&lt;7&gt;<br>MIPSProcInst/pc/pc_out_7_rstpot<br>MIPSProcInst/pc/pc_out_7</td>
+</tr>
+<tr>
+<td></td><td align="right"><b>Total</b></td><td align="right">13.449ns</td><td>(2.753ns logic, 10.696ns route)<br>(20.5% logic, 79.5% route)</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a name="anchor13"></a>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr>
+<td>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr bgcolor="#DDDDDD">
+<td><b>Slack (setup path):</b>28.265ns  <b>(requirement - (data path - clock path skew + uncertainty))</b></td>
+</tr>
+<tr>
+<td>
+<table border="1" cellpadding="1">
+<tr>
+<td><b>Source: </b>MIPSProcInst/control_unit/state_FSM_FFd4_1 (FF)</td><td><b>clk: </b>clk_BUFGP rising at 0.000ns</td>
+</tr>
+<tr>
+<td><b>Destination: </b>MIPSProcInst/pc/pc_out_7 (FF)</td><td><b>clk: </b>clk_BUFGP rising at 41.666ns</td>
+</tr>
+</table>
+</td><td> </td>
+</tr>
+<tr>
+<td>
+<table border="1">
+<tr>
+<td align="center"><b>Requirement</b>
+<br>41.666ns</td><td align="center"><b>Data Path Delay</b>
+<br>13.376ns (Levels of Logic = 9)</td><td align="center"><b>Clock Path Skew:</b>
+<br>0.010ns (0.294 - 0.284)</td><td align="center"><b>Clock Uncertainty</b>
+<br>0.035ns</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<table border="1">
+<tr>
+<td colspan="2">Clock Uncertainty: 0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE</td>
+</tr>
+<tr>
+<td>Total System Jitter (TSJ):</td><td>0.070ns</td>
+</tr>
+<tr>
+<td>Total Input Jitter (TIJ):</td><td>0.000ns</td>
+</tr>
+<tr>
+<td>Discrete Jitter (DJ):</td><td>0.000ns</td>
+</tr>
+<tr>
+<td>Phase Error (PE):</td><td>0.000ns</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<table border="1">
+<tr>
+<td>Maximum Data Path at Slow Process Corner: MIPSProcInst/control_unit/state_FSM_FFd4_1 to MIPSProcInst/pc/pc_out_7</td>
+</tr>
+<tr>
+<td>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr valign="bottom" align="left">
+<td><b>Location</b></td><td><b>Delay type</b></td><td align="right"><b>Delay(ns)</b></td><td align="left"><b>Physical Resource <br>Logical Resource(s)</b></td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X28Y28.AQ</td><td>Tcko</td><td align="right">0.408</td><td align="left">MIPSProcInst/control_unit/state_FSM_FFd4_2<br>MIPSProcInst/control_unit/state_FSM_FFd4_1</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X31Y24.A1</td><td>net (fanout=6)</td><td align="right">1.632</td><td align="left">MIPSProcInst/control_unit/state_FSM_FFd4_1<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X31Y24.A</td><td>Tilo</td><td align="right">0.259</td><td align="left">MIPSProcInst/control_unit/state_FSM_FFd2_3<br>MIPSProcInst/control_unit/state__n0055&lt;5&gt;1</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X34Y27.C3</td><td>net (fanout=33)</td><td align="right">1.754</td><td align="left">MIPSProcInst/alu_src_a&lt;0&gt;<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X34Y27.C</td><td>Tilo</td><td align="right">0.204</td><td align="left">MIPSProcInst/alu/Sh8<br>MIPSProcInst/alu_a_mux/Mmux_data_out301</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X34Y27.D1</td><td>net (fanout=12)</td><td align="right">1.285</td><td align="left">MIPSProcInst/alu_a_mux_out&lt;7&gt;<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X34Y27.D</td><td>Tilo</td><td align="right">0.203</td><td align="left">MIPSProcInst/alu/Sh8<br>MIPSProcInst/alu/Sh81</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X33Y19.B4</td><td>net (fanout=4)</td><td align="right">1.379</td><td align="left">MIPSProcInst/alu/Sh8<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X33Y19.B</td><td>Tilo</td><td align="right">0.259</td><td align="left">N108<br>MIPSProcInst/alu/Sh441</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X25Y24.A1</td><td>net (fanout=2)</td><td align="right">1.501</td><td align="left">MIPSProcInst/alu/Sh44<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X25Y24.A</td><td>Tilo</td><td align="right">0.259</td><td align="left">MIPSProcInst/alu_out/value_out&lt;13&gt;<br>MIPSProcInst/alu/Mmux_alu_result643</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X30Y22.C3</td><td>net (fanout=2)</td><td align="right">0.803</td><td align="left">MIPSProcInst/alu_result_out&lt;12&gt;<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X30Y22.C</td><td>Tilo</td><td align="right">0.204</td><td align="left">MIPSProcInst/alu_out/value_out&lt;0&gt;<br>MIPSProcInst/pc_write_enable5_SW0</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X30Y22.D5</td><td>net (fanout=1)</td><td align="right">0.195</td><td align="left">N53<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X30Y22.D</td><td>Tilo</td><td align="right">0.203</td><td align="left">MIPSProcInst/alu_out/value_out&lt;0&gt;<br>MIPSProcInst/pc_write_enable6</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X24Y22.B1</td><td>net (fanout=1)</td><td align="right">0.964</td><td align="left">MIPSProcInst/pc_write_enable6<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X24Y22.B</td><td>Tilo</td><td align="right">0.205</td><td align="left">MIPSProcInst/pc/pc_out&lt;29&gt;<br>MIPSProcInst/pc_write_enable9</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X36Y28.D4</td><td>net (fanout=32)</td><td align="right">1.318</td><td align="left">MIPSProcInst/pc_write_enable<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X36Y28.CLK</td><td>Tas</td><td align="right">0.341</td><td align="left">MIPSProcInst/pc/pc_out&lt;7&gt;<br>MIPSProcInst/pc/pc_out_7_rstpot<br>MIPSProcInst/pc/pc_out_7</td>
+</tr>
+<tr>
+<td></td><td align="right"><b>Total</b></td><td align="right">13.376ns</td><td>(2.545ns logic, 10.831ns route)<br>(19.0% logic, 81.0% route)</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a name="anchor15"></a>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr>
+<td>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr bgcolor="#DDDDDD">
+<td><b>Slack (setup path):</b>28.305ns  <b>(requirement - (data path - clock path skew + uncertainty))</b></td>
+</tr>
+<tr>
+<td>
+<table border="1" cellpadding="1">
+<tr>
+<td><b>Source: </b>MIPSProcInst/control_unit/state_FSM_FFd4_1 (FF)</td><td><b>clk: </b>clk_BUFGP rising at 0.000ns</td>
+</tr>
+<tr>
+<td><b>Destination: </b>MIPSProcInst/pc/pc_out_7 (FF)</td><td><b>clk: </b>clk_BUFGP rising at 41.666ns</td>
+</tr>
+</table>
+</td><td> </td>
+</tr>
+<tr>
+<td>
+<table border="1">
+<tr>
+<td align="center"><b>Requirement</b>
+<br>41.666ns</td><td align="center"><b>Data Path Delay</b>
+<br>13.336ns (Levels of Logic = 9)</td><td align="center"><b>Clock Path Skew:</b>
+<br>0.010ns (0.294 - 0.284)</td><td align="center"><b>Clock Uncertainty</b>
+<br>0.035ns</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<table border="1">
+<tr>
+<td colspan="2">Clock Uncertainty: 0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE</td>
+</tr>
+<tr>
+<td>Total System Jitter (TSJ):</td><td>0.070ns</td>
+</tr>
+<tr>
+<td>Total Input Jitter (TIJ):</td><td>0.000ns</td>
+</tr>
+<tr>
+<td>Discrete Jitter (DJ):</td><td>0.000ns</td>
+</tr>
+<tr>
+<td>Phase Error (PE):</td><td>0.000ns</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<table border="1">
+<tr>
+<td>Maximum Data Path at Slow Process Corner: MIPSProcInst/control_unit/state_FSM_FFd4_1 to MIPSProcInst/pc/pc_out_7</td>
+</tr>
+<tr>
+<td>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr valign="bottom" align="left">
+<td><b>Location</b></td><td><b>Delay type</b></td><td align="right"><b>Delay(ns)</b></td><td align="left"><b>Physical Resource <br>Logical Resource(s)</b></td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X28Y28.AQ</td><td>Tcko</td><td align="right">0.408</td><td align="left">MIPSProcInst/control_unit/state_FSM_FFd4_2<br>MIPSProcInst/control_unit/state_FSM_FFd4_1</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X31Y24.A1</td><td>net (fanout=6)</td><td align="right">1.632</td><td align="left">MIPSProcInst/control_unit/state_FSM_FFd4_1<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X31Y24.A</td><td>Tilo</td><td align="right">0.259</td><td align="left">MIPSProcInst/control_unit/state_FSM_FFd2_3<br>MIPSProcInst/control_unit/state__n0055&lt;5&gt;1</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X32Y21.B2</td><td>net (fanout=33)</td><td align="right">2.144</td><td align="left">MIPSProcInst/alu_src_a&lt;0&gt;<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X32Y21.B</td><td>Tilo</td><td align="right">0.205</td><td align="left">MIPSProcInst/alu_a_mux_out&lt;27&gt;<br>MIPSProcInst/alu_a_mux/Mmux_data_out201</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X28Y27.D1</td><td>net (fanout=12)</td><td align="right">1.335</td><td align="left">MIPSProcInst/alu_a_mux_out&lt;27&gt;<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X28Y27.D</td><td>Tilo</td><td align="right">0.205</td><td align="left">MIPSProcInst/alu/Sh121<br>MIPSProcInst/alu/Sh1211</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X29Y23.D3</td><td>net (fanout=4)</td><td align="right">1.156</td><td align="left">MIPSProcInst/alu/Sh121<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X29Y23.D</td><td>Tilo</td><td align="right">0.259</td><td align="left">MIPSProcInst/alu/Sh149<br>MIPSProcInst/alu/Sh1491</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X31Y27.C1</td><td>net (fanout=2)</td><td align="right">0.903</td><td align="left">MIPSProcInst/alu/Sh149<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X31Y27.C</td><td>Tilo</td><td align="right">0.259</td><td align="left">MIPSProcInst/alu_out/value_out&lt;21&gt;<br>MIPSProcInst/alu/Mmux_alu_result6147</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X33Y21.D1</td><td>net (fanout=2)</td><td align="right">1.300</td><td align="left">MIPSProcInst/alu_result_out&lt;21&gt;<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X33Y21.D</td><td>Tilo</td><td align="right">0.259</td><td align="left">MIPSProcInst/alu_out/value_out&lt;30&gt;<br>MIPSProcInst/pc_write_enable3</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X33Y21.C6</td><td>net (fanout=1)</td><td align="right">0.118</td><td align="left">MIPSProcInst/pc_write_enable3<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X33Y21.C</td><td>Tilo</td><td align="right">0.259</td><td align="left">MIPSProcInst/alu_out/value_out&lt;30&gt;<br>MIPSProcInst/pc_write_enable4_SW0</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X24Y22.B4</td><td>net (fanout=1)</td><td align="right">0.771</td><td align="left">N51<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X24Y22.B</td><td>Tilo</td><td align="right">0.205</td><td align="left">MIPSProcInst/pc/pc_out&lt;29&gt;<br>MIPSProcInst/pc_write_enable9</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X36Y28.D4</td><td>net (fanout=32)</td><td align="right">1.318</td><td align="left">MIPSProcInst/pc_write_enable<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X36Y28.CLK</td><td>Tas</td><td align="right">0.341</td><td align="left">MIPSProcInst/pc/pc_out&lt;7&gt;<br>MIPSProcInst/pc/pc_out_7_rstpot<br>MIPSProcInst/pc/pc_out_7</td>
+</tr>
+<tr>
+<td></td><td align="right"><b>Total</b></td><td align="right">13.336ns</td><td>(2.659ns logic, 10.677ns route)<br>(19.9% logic, 80.1% route)</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a name="anchor17"></a>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr>
+<td><b>Paths for end point MIPSProcInst/pc/pc_out_5 (SLICE_X36Y28.B5), 63312 paths
+</b></td>
+</tr>
+</table>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr>
+<td>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr bgcolor="#DDDDDD">
+<td><b>Slack (setup path):</b>28.218ns  <b>(requirement - (data path - clock path skew + uncertainty))</b></td>
+</tr>
+<tr>
+<td>
+<table border="1" cellpadding="1">
+<tr>
+<td><b>Source: </b>MIPSProcInst/control_unit/state_FSM_FFd1_1 (FF)</td><td><b>clk: </b>clk_BUFGP rising at 0.000ns</td>
+</tr>
+<tr>
+<td><b>Destination: </b>MIPSProcInst/pc/pc_out_5 (FF)</td><td><b>clk: </b>clk_BUFGP rising at 41.666ns</td>
+</tr>
+</table>
+</td><td> </td>
+</tr>
+<tr>
+<td>
+<table border="1">
+<tr>
+<td align="center"><b>Requirement</b>
+<br>41.666ns</td><td align="center"><b>Data Path Delay</b>
+<br>13.411ns (Levels of Logic = 10)</td><td align="center"><b>Clock Path Skew:</b>
+<br>-0.002ns (0.151 - 0.153)</td><td align="center"><b>Clock Uncertainty</b>
+<br>0.035ns</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<table border="1">
+<tr>
+<td colspan="2">Clock Uncertainty: 0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE</td>
+</tr>
+<tr>
+<td>Total System Jitter (TSJ):</td><td>0.070ns</td>
+</tr>
+<tr>
+<td>Total Input Jitter (TIJ):</td><td>0.000ns</td>
+</tr>
+<tr>
+<td>Discrete Jitter (DJ):</td><td>0.000ns</td>
+</tr>
+<tr>
+<td>Phase Error (PE):</td><td>0.000ns</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<table border="1">
+<tr>
+<td>Maximum Data Path at Slow Process Corner: MIPSProcInst/control_unit/state_FSM_FFd1_1 to MIPSProcInst/pc/pc_out_5</td>
+</tr>
+<tr>
+<td>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr valign="bottom" align="left">
+<td><b>Location</b></td><td><b>Delay type</b></td><td align="right"><b>Delay(ns)</b></td><td align="left"><b>Physical Resource <br>Logical Resource(s)</b></td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X36Y25.AQ</td><td>Tcko</td><td align="right">0.408</td><td align="left">MIPSProcInst/control_unit/state_FSM_FFd1_2<br>MIPSProcInst/control_unit/state_FSM_FFd1_1</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X27Y25.A3</td><td>net (fanout=6)</td><td align="right">1.120</td><td align="left">MIPSProcInst/control_unit/state_FSM_FFd1_1<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X27Y25.A</td><td>Tilo</td><td align="right">0.259</td><td align="left">HostCommInst/procResetSignal<br>MIPSProcInst/alu_a_mux/Mmux_data_out1021</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X36Y25.A4</td><td>net (fanout=17)</td><td align="right">2.015</td><td align="left">MIPSProcInst/N86<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X36Y25.A</td><td>Tilo</td><td align="right">0.205</td><td align="left">MIPSProcInst/control_unit/state_FSM_FFd1_2<br>MIPSProcInst/alu_a_mux/Mmux_data_out111</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X20Y22.B2</td><td>net (fanout=14)</td><td align="right">2.203</td><td align="left">MIPSProcInst/alu_a_mux_out&lt;19&gt;<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X20Y22.B</td><td>Tilo</td><td align="right">0.205</td><td align="left">MIPSProcInst/alu_b_mux_out&lt;4&gt;<br>MIPSProcInst/alu/Sh1121</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X20Y22.C4</td><td>net (fanout=3)</td><td align="right">0.350</td><td align="left">MIPSProcInst/alu/Sh112<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X20Y22.C</td><td>Tilo</td><td align="right">0.205</td><td align="left">MIPSProcInst/alu_b_mux_out&lt;4&gt;<br>MIPSProcInst/alu/Mmux_alu_result6272</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X35Y23.B1</td><td>net (fanout=1)</td><td align="right">1.272</td><td align="left">MIPSProcInst/alu/Mmux_alu_result6271<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X35Y23.B</td><td>Tilo</td><td align="right">0.259</td><td align="left">MIPSProcInst/alu_out/value_out&lt;5&gt;<br>MIPSProcInst/alu/Mmux_alu_result6273</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X35Y23.A5</td><td>net (fanout=1)</td><td align="right">0.187</td><td align="left">MIPSProcInst/alu/Mmux_alu_result6272<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X35Y23.A</td><td>Tilo</td><td align="right">0.259</td><td align="left">MIPSProcInst/alu_out/value_out&lt;5&gt;<br>MIPSProcInst/alu/Mmux_alu_result6275</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X30Y22.C1</td><td>net (fanout=2)</td><td align="right">1.072</td><td align="left">MIPSProcInst/alu_result_out&lt;4&gt;<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X30Y22.C</td><td>Tilo</td><td align="right">0.204</td><td align="left">MIPSProcInst/alu_out/value_out&lt;0&gt;<br>MIPSProcInst/pc_write_enable5_SW0</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X30Y22.D5</td><td>net (fanout=1)</td><td align="right">0.195</td><td align="left">N53<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X30Y22.D</td><td>Tilo</td><td align="right">0.203</td><td align="left">MIPSProcInst/alu_out/value_out&lt;0&gt;<br>MIPSProcInst/pc_write_enable6</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X24Y22.B1</td><td>net (fanout=1)</td><td align="right">0.964</td><td align="left">MIPSProcInst/pc_write_enable6<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X24Y22.B</td><td>Tilo</td><td align="right">0.205</td><td align="left">MIPSProcInst/pc/pc_out&lt;29&gt;<br>MIPSProcInst/pc_write_enable9</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X36Y28.B5</td><td>net (fanout=32)</td><td align="right">1.280</td><td align="left">MIPSProcInst/pc_write_enable<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X36Y28.CLK</td><td>Tas</td><td align="right">0.341</td><td align="left">MIPSProcInst/pc/pc_out&lt;7&gt;<br>MIPSProcInst/pc/pc_out_5_rstpot<br>MIPSProcInst/pc/pc_out_5</td>
+</tr>
+<tr>
+<td></td><td align="right"><b>Total</b></td><td align="right">13.411ns</td><td>(2.753ns logic, 10.658ns route)<br>(20.5% logic, 79.5% route)</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a name="anchor19"></a>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr>
+<td>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr bgcolor="#DDDDDD">
+<td><b>Slack (setup path):</b>28.303ns  <b>(requirement - (data path - clock path skew + uncertainty))</b></td>
+</tr>
+<tr>
+<td>
+<table border="1" cellpadding="1">
+<tr>
+<td><b>Source: </b>MIPSProcInst/control_unit/state_FSM_FFd4_1 (FF)</td><td><b>clk: </b>clk_BUFGP rising at 0.000ns</td>
+</tr>
+<tr>
+<td><b>Destination: </b>MIPSProcInst/pc/pc_out_5 (FF)</td><td><b>clk: </b>clk_BUFGP rising at 41.666ns</td>
+</tr>
+</table>
+</td><td> </td>
+</tr>
+<tr>
+<td>
+<table border="1">
+<tr>
+<td align="center"><b>Requirement</b>
+<br>41.666ns</td><td align="center"><b>Data Path Delay</b>
+<br>13.338ns (Levels of Logic = 9)</td><td align="center"><b>Clock Path Skew:</b>
+<br>0.010ns (0.294 - 0.284)</td><td align="center"><b>Clock Uncertainty</b>
+<br>0.035ns</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<table border="1">
+<tr>
+<td colspan="2">Clock Uncertainty: 0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE</td>
+</tr>
+<tr>
+<td>Total System Jitter (TSJ):</td><td>0.070ns</td>
+</tr>
+<tr>
+<td>Total Input Jitter (TIJ):</td><td>0.000ns</td>
+</tr>
+<tr>
+<td>Discrete Jitter (DJ):</td><td>0.000ns</td>
+</tr>
+<tr>
+<td>Phase Error (PE):</td><td>0.000ns</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<table border="1">
+<tr>
+<td>Maximum Data Path at Slow Process Corner: MIPSProcInst/control_unit/state_FSM_FFd4_1 to MIPSProcInst/pc/pc_out_5</td>
+</tr>
+<tr>
+<td>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr valign="bottom" align="left">
+<td><b>Location</b></td><td><b>Delay type</b></td><td align="right"><b>Delay(ns)</b></td><td align="left"><b>Physical Resource <br>Logical Resource(s)</b></td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X28Y28.AQ</td><td>Tcko</td><td align="right">0.408</td><td align="left">MIPSProcInst/control_unit/state_FSM_FFd4_2<br>MIPSProcInst/control_unit/state_FSM_FFd4_1</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X31Y24.A1</td><td>net (fanout=6)</td><td align="right">1.632</td><td align="left">MIPSProcInst/control_unit/state_FSM_FFd4_1<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X31Y24.A</td><td>Tilo</td><td align="right">0.259</td><td align="left">MIPSProcInst/control_unit/state_FSM_FFd2_3<br>MIPSProcInst/control_unit/state__n0055&lt;5&gt;1</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X34Y27.C3</td><td>net (fanout=33)</td><td align="right">1.754</td><td align="left">MIPSProcInst/alu_src_a&lt;0&gt;<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X34Y27.C</td><td>Tilo</td><td align="right">0.204</td><td align="left">MIPSProcInst/alu/Sh8<br>MIPSProcInst/alu_a_mux/Mmux_data_out301</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X34Y27.D1</td><td>net (fanout=12)</td><td align="right">1.285</td><td align="left">MIPSProcInst/alu_a_mux_out&lt;7&gt;<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X34Y27.D</td><td>Tilo</td><td align="right">0.203</td><td align="left">MIPSProcInst/alu/Sh8<br>MIPSProcInst/alu/Sh81</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X33Y19.B4</td><td>net (fanout=4)</td><td align="right">1.379</td><td align="left">MIPSProcInst/alu/Sh8<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X33Y19.B</td><td>Tilo</td><td align="right">0.259</td><td align="left">N108<br>MIPSProcInst/alu/Sh441</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X25Y24.A1</td><td>net (fanout=2)</td><td align="right">1.501</td><td align="left">MIPSProcInst/alu/Sh44<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X25Y24.A</td><td>Tilo</td><td align="right">0.259</td><td align="left">MIPSProcInst/alu_out/value_out&lt;13&gt;<br>MIPSProcInst/alu/Mmux_alu_result643</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X30Y22.C3</td><td>net (fanout=2)</td><td align="right">0.803</td><td align="left">MIPSProcInst/alu_result_out&lt;12&gt;<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X30Y22.C</td><td>Tilo</td><td align="right">0.204</td><td align="left">MIPSProcInst/alu_out/value_out&lt;0&gt;<br>MIPSProcInst/pc_write_enable5_SW0</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X30Y22.D5</td><td>net (fanout=1)</td><td align="right">0.195</td><td align="left">N53<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X30Y22.D</td><td>Tilo</td><td align="right">0.203</td><td align="left">MIPSProcInst/alu_out/value_out&lt;0&gt;<br>MIPSProcInst/pc_write_enable6</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X24Y22.B1</td><td>net (fanout=1)</td><td align="right">0.964</td><td align="left">MIPSProcInst/pc_write_enable6<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X24Y22.B</td><td>Tilo</td><td align="right">0.205</td><td align="left">MIPSProcInst/pc/pc_out&lt;29&gt;<br>MIPSProcInst/pc_write_enable9</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X36Y28.B5</td><td>net (fanout=32)</td><td align="right">1.280</td><td align="left">MIPSProcInst/pc_write_enable<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X36Y28.CLK</td><td>Tas</td><td align="right">0.341</td><td align="left">MIPSProcInst/pc/pc_out&lt;7&gt;<br>MIPSProcInst/pc/pc_out_5_rstpot<br>MIPSProcInst/pc/pc_out_5</td>
+</tr>
+<tr>
+<td></td><td align="right"><b>Total</b></td><td align="right">13.338ns</td><td>(2.545ns logic, 10.793ns route)<br>(19.1% logic, 80.9% route)</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a name="anchor21"></a>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr>
+<td>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr bgcolor="#DDDDDD">
+<td><b>Slack (setup path):</b>28.343ns  <b>(requirement - (data path - clock path skew + uncertainty))</b></td>
+</tr>
+<tr>
+<td>
+<table border="1" cellpadding="1">
+<tr>
+<td><b>Source: </b>MIPSProcInst/control_unit/state_FSM_FFd4_1 (FF)</td><td><b>clk: </b>clk_BUFGP rising at 0.000ns</td>
+</tr>
+<tr>
+<td><b>Destination: </b>MIPSProcInst/pc/pc_out_5 (FF)</td><td><b>clk: </b>clk_BUFGP rising at 41.666ns</td>
+</tr>
+</table>
+</td><td> </td>
+</tr>
+<tr>
+<td>
+<table border="1">
+<tr>
+<td align="center"><b>Requirement</b>
+<br>41.666ns</td><td align="center"><b>Data Path Delay</b>
+<br>13.298ns (Levels of Logic = 9)</td><td align="center"><b>Clock Path Skew:</b>
+<br>0.010ns (0.294 - 0.284)</td><td align="center"><b>Clock Uncertainty</b>
+<br>0.035ns</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<table border="1">
+<tr>
+<td colspan="2">Clock Uncertainty: 0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE</td>
+</tr>
+<tr>
+<td>Total System Jitter (TSJ):</td><td>0.070ns</td>
+</tr>
+<tr>
+<td>Total Input Jitter (TIJ):</td><td>0.000ns</td>
+</tr>
+<tr>
+<td>Discrete Jitter (DJ):</td><td>0.000ns</td>
+</tr>
+<tr>
+<td>Phase Error (PE):</td><td>0.000ns</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<table border="1">
+<tr>
+<td>Maximum Data Path at Slow Process Corner: MIPSProcInst/control_unit/state_FSM_FFd4_1 to MIPSProcInst/pc/pc_out_5</td>
+</tr>
+<tr>
+<td>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr valign="bottom" align="left">
+<td><b>Location</b></td><td><b>Delay type</b></td><td align="right"><b>Delay(ns)</b></td><td align="left"><b>Physical Resource <br>Logical Resource(s)</b></td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X28Y28.AQ</td><td>Tcko</td><td align="right">0.408</td><td align="left">MIPSProcInst/control_unit/state_FSM_FFd4_2<br>MIPSProcInst/control_unit/state_FSM_FFd4_1</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X31Y24.A1</td><td>net (fanout=6)</td><td align="right">1.632</td><td align="left">MIPSProcInst/control_unit/state_FSM_FFd4_1<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X31Y24.A</td><td>Tilo</td><td align="right">0.259</td><td align="left">MIPSProcInst/control_unit/state_FSM_FFd2_3<br>MIPSProcInst/control_unit/state__n0055&lt;5&gt;1</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X32Y21.B2</td><td>net (fanout=33)</td><td align="right">2.144</td><td align="left">MIPSProcInst/alu_src_a&lt;0&gt;<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X32Y21.B</td><td>Tilo</td><td align="right">0.205</td><td align="left">MIPSProcInst/alu_a_mux_out&lt;27&gt;<br>MIPSProcInst/alu_a_mux/Mmux_data_out201</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X28Y27.D1</td><td>net (fanout=12)</td><td align="right">1.335</td><td align="left">MIPSProcInst/alu_a_mux_out&lt;27&gt;<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X28Y27.D</td><td>Tilo</td><td align="right">0.205</td><td align="left">MIPSProcInst/alu/Sh121<br>MIPSProcInst/alu/Sh1211</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X29Y23.D3</td><td>net (fanout=4)</td><td align="right">1.156</td><td align="left">MIPSProcInst/alu/Sh121<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X29Y23.D</td><td>Tilo</td><td align="right">0.259</td><td align="left">MIPSProcInst/alu/Sh149<br>MIPSProcInst/alu/Sh1491</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X31Y27.C1</td><td>net (fanout=2)</td><td align="right">0.903</td><td align="left">MIPSProcInst/alu/Sh149<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X31Y27.C</td><td>Tilo</td><td align="right">0.259</td><td align="left">MIPSProcInst/alu_out/value_out&lt;21&gt;<br>MIPSProcInst/alu/Mmux_alu_result6147</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X33Y21.D1</td><td>net (fanout=2)</td><td align="right">1.300</td><td align="left">MIPSProcInst/alu_result_out&lt;21&gt;<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X33Y21.D</td><td>Tilo</td><td align="right">0.259</td><td align="left">MIPSProcInst/alu_out/value_out&lt;30&gt;<br>MIPSProcInst/pc_write_enable3</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X33Y21.C6</td><td>net (fanout=1)</td><td align="right">0.118</td><td align="left">MIPSProcInst/pc_write_enable3<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X33Y21.C</td><td>Tilo</td><td align="right">0.259</td><td align="left">MIPSProcInst/alu_out/value_out&lt;30&gt;<br>MIPSProcInst/pc_write_enable4_SW0</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X24Y22.B4</td><td>net (fanout=1)</td><td align="right">0.771</td><td align="left">N51<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X24Y22.B</td><td>Tilo</td><td align="right">0.205</td><td align="left">MIPSProcInst/pc/pc_out&lt;29&gt;<br>MIPSProcInst/pc_write_enable9</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X36Y28.B5</td><td>net (fanout=32)</td><td align="right">1.280</td><td align="left">MIPSProcInst/pc_write_enable<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X36Y28.CLK</td><td>Tas</td><td align="right">0.341</td><td align="left">MIPSProcInst/pc/pc_out&lt;7&gt;<br>MIPSProcInst/pc/pc_out_5_rstpot<br>MIPSProcInst/pc/pc_out_5</td>
+</tr>
+<tr>
+<td></td><td align="right"><b>Total</b></td><td align="right">13.298ns</td><td>(2.659ns logic, 10.639ns route)<br>(20.0% logic, 80.0% route)</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a name="anchor23"></a>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr>
+<td><b>Hold Paths: TS_sys_clk_pin = PERIOD TIMEGRP "sys_clk_pin" 24 MHz HIGH 50%;
+</b></td>
+</tr>
+</table>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr>
+<td><b>Paths for end point MIPSProcInst/registers/Mram_register_file1 (RAMB8_X1Y13.ADDRBRDADDR7), 1 path
+</b></td>
+</tr>
+</table>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr>
+<td>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr bgcolor="#DDDDDD">
+<td><b>Slack (hold path):</b>0.258ns  <b>(requirement - (clock path skew + uncertainty - data path))</b></td>
+</tr>
+<tr>
+<td>
+<table border="1" cellpadding="1">
+<tr>
+<td><b>Source: </b>MIPSProcInst/instruction_register/instruction_out_18 (FF)</td><td><b>clk: </b>clk_BUFGP rising at 0.000ns</td>
+</tr>
+<tr>
+<td><b>Destination: </b>MIPSProcInst/registers/Mram_register_file1 (RAM)</td><td><b>clk: </b>clk_BUFGP rising at 41.666ns</td>
+</tr>
+</table>
+</td><td> </td>
+</tr>
+<tr>
+<td>
+<table border="1">
+<tr>
+<td align="center"><b>Requirement</b>
+<br>0.000ns</td><td align="center"><b>Data Path Delay</b>
+<br>0.263ns (Levels of Logic = 0)</td><td align="center"><b>Clock Path Skew:</b>
+<br>0.005ns (0.119 - 0.114)</td><td align="center"><b>Clock Uncertainty</b>
+<br>0.000ns</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<table border="1">
+<tr>
+<td>Minimum Data Path at Fast Process Corner: MIPSProcInst/instruction_register/instruction_out_18 to MIPSProcInst/registers/Mram_register_file1</td>
+</tr>
+<tr>
+<td>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr valign="bottom" align="left">
+<td><b>Location</b></td><td><b>Delay type</b></td><td align="right"><b>Delay(ns)</b></td><td align="left"><b>Physical Resource <br>Logical Resource(s)</b></td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X33Y27.CQ</td><td>Tcko</td><td align="right">0.198</td><td align="left">MIPSProcInst/instruction_register/instruction_out&lt;19&gt;<br>MIPSProcInst/instruction_register/instruction_out_18</td>
+</tr>
+<tr valign="top" align="left">
+<td>RAMB8_X1Y13.ADDRBRDADDR7</td><td>net (fanout=3)</td><td align="right">0.131</td><td align="left">MIPSProcInst/instruction_register/instruction_out&lt;18&gt;<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>RAMB8_X1Y13.CLKBRDCLK</td><td>Trckc_ADDRB</td><td align="right">(-Th)&nbsp;&nbsp;0.066</td><td align="left">MIPSProcInst/registers/Mram_register_file1<br>MIPSProcInst/registers/Mram_register_file1</td>
+</tr>
+<tr>
+<td></td><td align="right"><b>Total</b></td><td align="right">0.263ns</td><td>(0.132ns logic, 0.131ns route)<br>(50.2% logic, 49.8% route)</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a name="anchor25"></a>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr>
+<td><b>Paths for end point MIPSProcInst/registers/Mram_register_file1 (RAMB8_X1Y13.ADDRBRDADDR5), 1 path
+</b></td>
+</tr>
+</table>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr>
+<td>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr bgcolor="#DDDDDD">
+<td><b>Slack (hold path):</b>0.324ns  <b>(requirement - (clock path skew + uncertainty - data path))</b></td>
+</tr>
+<tr>
+<td>
+<table border="1" cellpadding="1">
+<tr>
+<td><b>Source: </b>MIPSProcInst/instruction_register/instruction_out_16 (FF)</td><td><b>clk: </b>clk_BUFGP rising at 0.000ns</td>
+</tr>
+<tr>
+<td><b>Destination: </b>MIPSProcInst/registers/Mram_register_file1 (RAM)</td><td><b>clk: </b>clk_BUFGP rising at 41.666ns</td>
+</tr>
+</table>
+</td><td> </td>
+</tr>
+<tr>
+<td>
+<table border="1">
+<tr>
+<td align="center"><b>Requirement</b>
+<br>0.000ns</td><td align="center"><b>Data Path Delay</b>
+<br>0.329ns (Levels of Logic = 0)</td><td align="center"><b>Clock Path Skew:</b>
+<br>0.005ns (0.119 - 0.114)</td><td align="center"><b>Clock Uncertainty</b>
+<br>0.000ns</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<table border="1">
+<tr>
+<td>Minimum Data Path at Fast Process Corner: MIPSProcInst/instruction_register/instruction_out_16 to MIPSProcInst/registers/Mram_register_file1</td>
+</tr>
+<tr>
+<td>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr valign="bottom" align="left">
+<td><b>Location</b></td><td><b>Delay type</b></td><td align="right"><b>Delay(ns)</b></td><td align="left"><b>Physical Resource <br>Logical Resource(s)</b></td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X33Y27.AQ</td><td>Tcko</td><td align="right">0.198</td><td align="left">MIPSProcInst/instruction_register/instruction_out&lt;19&gt;<br>MIPSProcInst/instruction_register/instruction_out_16</td>
+</tr>
+<tr valign="top" align="left">
+<td>RAMB8_X1Y13.ADDRBRDADDR5</td><td>net (fanout=3)</td><td align="right">0.197</td><td align="left">MIPSProcInst/instruction_register/instruction_out&lt;16&gt;<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>RAMB8_X1Y13.CLKBRDCLK</td><td>Trckc_ADDRB</td><td align="right">(-Th)&nbsp;&nbsp;0.066</td><td align="left">MIPSProcInst/registers/Mram_register_file1<br>MIPSProcInst/registers/Mram_register_file1</td>
+</tr>
+<tr>
+<td></td><td align="right"><b>Total</b></td><td align="right">0.329ns</td><td>(0.132ns logic, 0.197ns route)<br>(40.1% logic, 59.9% route)</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a name="anchor27"></a>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr>
+<td><b>Paths for end point HostCommInst/UARTHandlerInst/up/readDataS_4 (SLICE_X26Y28.CE), 1 path
+</b></td>
+</tr>
+</table>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr>
+<td>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr bgcolor="#DDDDDD">
+<td><b>Slack (hold path):</b>0.357ns  <b>(requirement - (clock path skew + uncertainty - data path))</b></td>
+</tr>
+<tr>
+<td>
+<table border="1" cellpadding="1">
+<tr>
+<td><b>Source: </b>HostCommInst/UARTHandlerInst/up/readDone (FF)</td><td><b>clk: </b>clk_BUFGP rising at 0.000ns</td>
+</tr>
+<tr>
+<td><b>Destination: </b>HostCommInst/UARTHandlerInst/up/readDataS_4 (FF)</td><td><b>clk: </b>clk_BUFGP rising at 41.666ns</td>
+</tr>
+</table>
+</td><td> </td>
+</tr>
+<tr>
+<td>
+<table border="1">
+<tr>
+<td align="center"><b>Requirement</b>
+<br>0.000ns</td><td align="center"><b>Data Path Delay</b>
+<br>0.378ns (Levels of Logic = 0)</td><td align="center"><b>Clock Path Skew:</b>
+<br>0.021ns (0.098 - 0.077)</td><td align="center"><b>Clock Uncertainty</b>
+<br>0.000ns</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<table border="1">
+<tr>
+<td>Minimum Data Path at Fast Process Corner: HostCommInst/UARTHandlerInst/up/readDone to HostCommInst/UARTHandlerInst/up/readDataS_4</td>
+</tr>
+<tr>
+<td>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr valign="bottom" align="left">
+<td><b>Location</b></td><td><b>Delay type</b></td><td align="right"><b>Delay(ns)</b></td><td align="left"><b>Physical Resource <br>Logical Resource(s)</b></td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X20Y28.DQ</td><td>Tcko</td><td align="right">0.200</td><td align="left">HostCommInst/UARTHandlerInst/up/readDone<br>HostCommInst/UARTHandlerInst/up/readDone</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X26Y28.CE</td><td>net (fanout=5)</td><td align="right">0.282</td><td align="left">HostCommInst/UARTHandlerInst/up/readDone<br>
+</td>
+</tr>
+<tr valign="top" align="left">
+<td>SLICE_X26Y28.CLK</td><td>Tckce</td><td align="right">(-Th)&nbsp;&nbsp;0.104</td><td align="left">HostCommInst/UARTHandlerInst/up/readDataS&lt;4&gt;<br>HostCommInst/UARTHandlerInst/up/readDataS_4</td>
+</tr>
+<tr>
+<td></td><td align="right"><b>Total</b></td><td align="right">0.378ns</td><td>(0.096ns logic, 0.282ns route)<br>(25.4% logic, 74.6% route)</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<a name="anchor29"></a><b>Component Switching Limit Checks: TS_sys_clk_pin = PERIOD TIMEGRP "sys_clk_pin" 24 MHz HIGH 50%;</b>
+<br>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr bgcolor="#DDDDDD">
+<td><b>Slack: 38.542</b>ns<b> (period - min period limit)</b></td>
+</tr>
+</table>
+<table border="1" cellpadding="1" cellspacing="1">
+<tr>
+<td> Period: </td><td>41.666ns</td>
+</tr>
+<tr>
+<td>Min period limit:</td><td>3.124ns (320.102MHz) (Trper_CLKA(Fmax))</td>
+</tr>
+<tr>
+<td> Physical resource: </td><td>MIPSProcInst/registers/Mram_register_file/CLKAWRCLK</td>
+</tr>
+<tr>
+<td> Logical resource: </td><td>MIPSProcInst/registers/Mram_register_file/CLKAWRCLK</td>
+</tr>
+<tr>
+<td>  Location pin: </td><td>RAMB8_X1Y12.CLKAWRCLK</td>
+</tr>
+<tr>
+<td>  Clock network: </td><td>clk_BUFGP</td>
+</tr>
+</table>
+<a name="anchor31"></a>
+<br>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr bgcolor="#DDDDDD">
+<td><b>Slack: 38.542</b>ns<b> (period - min period limit)</b></td>
+</tr>
+</table>
+<table border="1" cellpadding="1" cellspacing="1">
+<tr>
+<td> Period: </td><td>41.666ns</td>
+</tr>
+<tr>
+<td>Min period limit:</td><td>3.124ns (320.102MHz) (Trper_CLKB(Fmax))</td>
+</tr>
+<tr>
+<td> Physical resource: </td><td>MIPSProcInst/registers/Mram_register_file/CLKBRDCLK</td>
+</tr>
+<tr>
+<td> Logical resource: </td><td>MIPSProcInst/registers/Mram_register_file/CLKBRDCLK</td>
+</tr>
+<tr>
+<td>  Location pin: </td><td>RAMB8_X1Y12.CLKBRDCLK</td>
+</tr>
+<tr>
+<td>  Clock network: </td><td>clk_BUFGP</td>
+</tr>
+</table>
+<a name="anchor32"></a>
+<br>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr bgcolor="#DDDDDD">
+<td><b>Slack: 38.542</b>ns<b> (period - min period limit)</b></td>
+</tr>
+</table>
+<table border="1" cellpadding="1" cellspacing="1">
+<tr>
+<td> Period: </td><td>41.666ns</td>
+</tr>
+<tr>
+<td>Min period limit:</td><td>3.124ns (320.102MHz) (Trper_CLKA(Fmax))</td>
+</tr>
+<tr>
+<td> Physical resource: </td><td>InstrMem/BU2/U0/blk_mem_generator/valid.cstr/ramloop[0].ram.r/s6_noinit.ram/TRUE_DP.PRIM18.ram/CLKA</td>
+</tr>
+<tr>
+<td> Logical resource: </td><td>InstrMem/BU2/U0/blk_mem_generator/valid.cstr/ramloop[0].ram.r/s6_noinit.ram/TRUE_DP.PRIM18.ram/CLKA</td>
+</tr>
+<tr>
+<td>  Location pin: </td><td>RAMB16_X1Y14.CLKA</td>
+</tr>
+<tr>
+<td>  Clock network: </td><td>clk_BUFGP</td>
+</tr>
+</table>
+<big><a name="anchor33"></a>All constraints were met.</big>
+<br>
+<a name="anchor34"></a>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr bgcolor="#DDDDDD">
+<td><big><b>Data Sheet report: All values displayed in nanoseconds (ns)</b></big></td>
+</tr>
+</table>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr bgcolor="#DDDDDD">
+<td><b>Clock to Setup on destination clock clk</b></td>
+</tr>
+<tr>
+<td>
+<table border="1" width="100%">
+<tr>
+<td align="left"><b> <br>Source Clock</b></td><td align="right"><b>Src:Rise<br>Dest:Rise</b></td><td align="right"><b>Src:Fall<br>Dest:Rise</b></td><td align="right"><b>Src:Rise<br>Dest:Fall</b></td><td align="right"><b>Src:Fall<br>Dest:Fall</b></td>
+</tr>
+<tr>
+<td align="left">clk</td><td align="right">13.603</td><td align="right">&nbsp;</td><td align="right">&nbsp;</td><td align="right">&nbsp;</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<br>
+<a name="anchor36"></a>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr bgcolor="#DDDDDD">
+<td><big><b>Timing summary:</b></big></td>
+</tr>
+<tr>
+<td><b>Timing errors: </b>0<b>  Score: </b>0<b>  (Setup/Max: </b>0<b>, Hold: </b>0<b>)</b></td><td></td>
+</tr>
+<tr>
+<td><b> Constraints cover </b>2160547<b> paths,  </b>0<b> nets, and  </b>4333<b> connections </b></td>
+</tr>
+<tr>
+<td><a name="anchor37"></a>
+<table border="1"><tr><td><b>Design statistics:</b></td></tr><tr><td>Minimum period:  13.603ns<sup>{1}</sup>(Maximum frequency:  73.513MHz)</td></tr></table>
+</td>
+</tr>
+</table>
+<br>
+<b>Footnotes</b>
+<br>
+<table border="1">
+<tr>
+<td>1</td><td>The minimum period statistic assumes all single cycle delays.</td>
+</tr>
+</table>
+<b>Analysis completed </b>Wed Oct 15 13:49:09 2014 <br>
+<br>
+<a name="anchor38"></a>
+<table border="0" cellpadding="1" cellspacing="1">
+<tr bgcolor="#DDDDDD">
+<td><b>Trace Settings:</b></td>
+</tr>
+<tr>
+<td><b>Trace Settings</b>  <pre>
+
+Peak Memory Usage: 138 MB
+</pre>
+</td>
+</tr>
+</table>
+</body>
