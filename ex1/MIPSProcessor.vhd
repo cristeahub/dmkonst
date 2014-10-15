@@ -39,7 +39,7 @@ architecture behavioral of MIPSProcessor is
   signal mem_to_reg : std_logic;
   signal alu_op : std_logic_vector(1 downto 0);
   signal mem_write : std_logic;
-  signal alu_src_a : std_logic_vector(1 downto 0);
+  signal alu_src_a : std_logic;
   signal alu_src_b : std_logic_vector(1 downto 0);
   signal reg_write : std_logic;
   signal reg_dst : std_logic;
@@ -49,6 +49,9 @@ architecture behavioral of MIPSProcessor is
   signal alu_result_out : std_logic_vector(31 downto 0);
 
   signal alu_control_out : alu_control_t;
+
+  -- alu control signals
+  signal alu_control_shamt_out : std_logic_vector (4 downto 0);
 
   -- register signals
   signal read_data_1_out : std_logic_vector (31 downto 0);
@@ -61,6 +64,7 @@ architecture behavioral of MIPSProcessor is
   alias instruction_rt : std_logic_vector(20 downto 16) is cached_instruction(20 downto 16);
   alias instruction_rd : std_logic_vector(15 downto 11) is cached_instruction(15 downto 11);
   alias instruction_address : std_logic_vector(15 downto 0) is cached_instruction(15 downto 0);
+  alias instruction_shamt : std_logic_vector(4 downto 0) is cached_instruction(10 downto 6);
   alias instruction_funct : std_logic_vector(5 downto 0) is cached_instruction(5 downto 0);
   alias instruction_jump_address : std_logic_vector(25 downto 0) is cached_instruction(25 downto 0);
 
@@ -101,12 +105,15 @@ begin
              operand_a_in => alu_a_mux_out,
              operand_b_in => alu_b_mux_out,
              alu_control_in => alu_control_out,
+             shamt_in => alu_control_shamt_out,
              zero_out => alu_result_zero,
              alu_result_out => alu_result_out);
 
   alu_control : entity work.alu_control
   port map (
              alu_function_in => instruction_funct,
+             shamt_in => instruction_shamt,
+             shamt_out => alu_control_shamt_out,
              control_alu_op => alu_op,
              alu_control_out => alu_control_out);
 
@@ -165,12 +172,10 @@ begin
              select_in => mem_to_reg,
              data_out => write_data_mux_out);
 
-  alu_a_mux : entity work.mux_4
+  alu_a_mux : entity work.mux
   Port map (
              a_in => pc_out,
              b_in => read_data_1_out,
-             c_in => sign_extend_a_out,
-             d_in => x"00000000", -- Unused mux slot. Fill with Ground.
              select_in => alu_src_a,
              data_out => alu_a_mux_out);
 
@@ -179,7 +184,7 @@ begin
              a_in => read_data_2_out,
              b_in => x"00000001", -- Used to increment PC by one.
              c_in => sign_extend_a_out,
-             d_in => x"00000010", -- Used for load upper immediate sll 16.
+             d_in => x"00000000", -- Unused mux slot. Fill with ground.
              select_in => alu_src_b,
              data_out => alu_b_mux_out);
 

@@ -16,7 +16,7 @@ entity control_unit is
          mem_to_reg : out  std_logic;
          alu_op : out  std_logic_vector (1 downto 0);
          mem_write : out  std_logic;
-         alu_src_a : out  std_logic_vector (1 downto 0);
+         alu_src_a : out  std_logic;
          alu_src_b : out  std_logic_vector (1 downto 0);
          reg_write : out  std_logic;
          reg_dst : out  std_logic);
@@ -27,7 +27,7 @@ architecture behavioral of control_unit is
 begin
   process (state) is
   begin
-    alu_src_a <= "00";
+    alu_src_a <= '0';
     ir_write <= '0';
     alu_src_b <= "00";
     alu_op <= "00";
@@ -52,19 +52,19 @@ begin
         pc_write <= '1';
         pc_source <= "10";
       when BRANCH_COMPLETION =>
-        alu_src_a <= "01";
+        alu_src_a <= '1';
         alu_src_b <= "00";
         alu_op <= "01";
         pc_write_cond <= '1';
         pc_source <= "01";
       when EXECUTION =>
-        alu_src_a <= "01";
+        alu_src_a <= '1';
         alu_op <= "10";
       when R_TYPE_COMPLETION =>
         reg_dst <= '1';
         reg_write <= '1';
       when MEMORY_ADDRESS_COMPUTATION =>
-        alu_src_a <= "01";
+        alu_src_a <= '1';
         alu_src_b <= "10";
       when WRITE_BACK =>
         reg_write <= '1';
@@ -72,8 +72,7 @@ begin
       when MEMORY_ACCESS_WRITE =>
         mem_write <= '1';
       when LOAD_UPPER_IMMEDIATE_COMPUTATION =>
-        alu_src_a <= "10";
-        alu_src_b <= "11";
+        alu_src_b <= "10";
         alu_op <= "11";
       when LOAD_UPPER_IMMEDIATE_COMPLETION =>
         reg_write <= '1';

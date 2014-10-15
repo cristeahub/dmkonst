@@ -5,6 +5,8 @@ use work.constants.all;
 entity alu_control is
     Port ( alu_function_in : in  STD_LOGIC_VECTOR (5 downto 0);
            control_alu_op : in  STD_LOGIC_VECTOR (1 downto 0);
+           shamt_in : in std_logic_vector (4 downto 0);
+           shamt_out : out std_logic_vector (4 downto 0);
            alu_control_out : out alu_control_t);
 end alu_control;
 
@@ -26,6 +28,10 @@ begin
                        ALU_CONTROL_SUBTRACT when "01",
                        ALU_CONTROL_SLL when "11",
                        r_type_alu_control when others;
+
+  with control_alu_op select
+    shamt_out <= "10000" when "11",
+                 shamt_in when others;
 
 end Behavioral;
 
