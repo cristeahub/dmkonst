@@ -40,7 +40,7 @@ package body test_utils is
     severity failure;
 
     test_i:=test_i+1;
-    report "Passed test [" & integer'image(test_i) & "]";
+    report "Passed test [" & integer'image(test_i) & "] (" & message & ")";
   end;
 
   procedure assert_equals(
@@ -53,6 +53,6 @@ package body test_utils is
     severity failure;
 
     test_i:=test_i+1;
-    report "Passed test [" & integer'image(test_i) & "]";
+    report "Passed test [" & integer'image(test_i) & "] (" & message & ")";
   end;
 end;
