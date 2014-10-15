@@ -1,13 +1,12 @@
 \section{Introduction}
 \label{sec:intro}
 
-``
-Introduction: introduces the task of the assignment and the challenges it brings.
-Also, it gives a brief introduction to how the task was approached and in which way the solution was reached.
-``
+This report presents a solution to exercise \#1 of TDT4255 at NTNU.
+The main requirement of the assignment is to make a multi cycle MIPS processor\cite[p.47]{compendium}.
+The design should be verified with VHDL testbenches, and finally tested by deploying it to the Xilinx Spartan-6 FPGA.
 
-This report presents a solution to Project \#1 of TDT4255 at NTNU.
-The main requirement of the assignment is to make a multi cycle MIPS processor\cite[p.47]{compendium}. The design should be verified with VHDL testbenches, and finally tested by deploying it to the Xilinx Spartan-6 FPGA.
+The suggested architecture for the project is provided in Figure 4.1 \cite[p.45]{compendium},
+but has been abandoned in favor of a design based on the basic multi cycle architecture presented in lecture 4.\cite{lecture-4}
 
 \subsection{Single- and multi cycle processors}
 
@@ -20,37 +19,17 @@ Instructions now require multiple cycles to finish, but simple instructions are 
 This design allows reuse of datapath elements during different execution stages, resulting in a smaller footprint.
 Clock speed also increases significantly, as the critical path is reduced to the longest register-separated datapath segment.
 
-\subsection{Requirements}
-\label{subsec:req}
-A suggested architecture was provided in Figure 4.1 \cite[p.45]{compendium}, but was abandoned in favor of the basic multi cycle architecture presented in lecture 4.\cite{lecture-4}
-
-The final processor design implements the following subset of the MIPS instruction set.
-
-\begin{itemize}
-    \item ALU instructions (ADD, SUB, SLT, AND, OR, SLL, SRL)
-    \item Conditional Branch (BEZ)
-    \item Jump Instruction (JMP)
-    \item LOAD, STORE, Load immediate (LW, SW, LDI)
-\end{itemize}
-
-Note: the {\bf LDI} (Load Immediate) instruction is not a part of the MIPS instruction set\footnote{Figure C.1 \cite[p.66]{compendium}}.
-The {\bf LUI} (Load Upper Immediate) is the closest match.
-This instruction loads the value into the upper 16 bits of the register.
-The support files handed out already used this instruction.
-
-The system is first tested and verified in software, before moving on to testing on hardware.
-The testing of the system both in software and in hardware is detailed in section%\vref{sec:testing}.
-
 \subsection{Challenges and procedure}
 
-The assignment provides several tasks that needs solving, these are detailed in section.% TODO: \vref{sec:tasks}.
-In addition to the requirements one goal was set for the assignment.
-This goal is to make sure all code complies with the standard set forth by the industry
-and Xilinx for the Spartan-6 FPGA.
-This is to ensure that the generated code will be as optimized as possible,
-which in turn will make the processor faster and better.
+The assignment provides several challenges that need solving, in addition to the design of the multi cycle processor itself.
 
-The assignment is solved by creating a top-level design for the processor which is then subdivided into different components which can be implemented separately.
-A testbench is then written for each component, to make sure it works as intended.
-These components are afterwards connected together and a new testbench is created to
-make sure the system as a whole works according to the specification.
+When writing in a HDL for FPGA synthesis, one has to remember that the FPGA is emulating the described hardware with a limited set of specialized hardware resources.
+One might for example choose to implement registers as block ram instead of multiplexers with latches, as FPGAs tend to struggle with large multiplexers.
+Finally, different synthesis tools have their own quirks and tricks one needs to know about, work with, or around.
+Xilinx ISE is no exception.
+
+The assignment is solved by creating a top-level RTL schematic for the processor, which is then subdivided into different components that can be implemented separately.
+A testbench is written for each component, to ensure correct functionality.
+These components are afterwards connected together and new testbenches are created to make sure the system as a whole works according to specification.
+
+After the system has been tested and verified in software, testing moves on to hardware.

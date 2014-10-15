@@ -39,6 +39,20 @@ Utgangspunkt, endringer, hvorfor, endelig resultat
 
 \subsubsection{MIPS subset}
 
+The final processor design implements the following subset of the MIPS instruction set.
+
+\begin{itemize}
+    \item ALU instructions (ADD, SUB, SLT, AND, OR, SLL, SRL)
+    \item Conditional Branch (BEZ)
+    \item Jump Instruction (JMP)
+    \item LOAD, STORE, Load immediate (LW, SW, LDI)
+\end{itemize}
+
+Note: the {\bf LDI} (Load Immediate) instruction is not a part of the MIPS instruction set\footnote{Figure C.1 \cite[p.66]{compendium}}.
+The {\bf LUI} (Load Upper Immediate) is the closest match.
+This instruction loads the value into the upper 16 bits of the register.
+The support files handed out already used this instruction.
+
 \subsubsection{State machine}
 
 A state diagram for the control unit can be seen in figure \ref{fig:state_machine}.
