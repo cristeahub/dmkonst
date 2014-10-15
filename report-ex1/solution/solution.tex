@@ -57,6 +57,24 @@ A state diagram for the control unit can be seen in figure \ref{fig:state_machin
 
 \subsubsection{Modularization}
 
+\begin{table}
+    \begin{tabular}{|l|l|l|l|l|l|l|}
+    \hline
+    Opcode & ALUOp & Operation           & Function & ALU Function        & ALU Control & Shamt   \\ \hline
+    lw     & 00    & load word           & XXXXXX   & add                 & ADD         & \\ \hline
+    sw     & 00    & store word          & XXXXXX   & add                 & ADD         & \\ \hline
+    beq    & 01    & branch equal        & XXXXXX   & subtract            & SUBTRACT    & \\ \hline
+    r-type & 10    & add                 & 100000   & add                 & ADD         & \\ \cline{3-7}
+           &       & subtract            & 100010   & subtract            & SUBTRACT    & \\ \cline{3-7}
+           &       & AND                 & 100100   & AND                 & AND         & \\ \cline{3-7}
+           &       & OR                  & 100101   & OR                  & OR          & \\ \cline{3-7}
+           &       & set-on-less-than    & 101010   & set-on-less-than    & SLT         & \\ \cline{3-7}
+           &       & shift-left-logical  & 000000   & shift-left-logical  & SLL         & \\ \cline{3-7}
+           &       & shift-right-logical & 000010   & shift-right-logical & SRL         & \\ \hline
+    lui    & 11    & lui                 & XXXXXX   & add                 & ADD         & 10000 \\ \hline
+    \end{tabular}
+\end{table}
+
 Bottom-up approach, unit tests, integration tests
 
 \subsection{Optimizing for FPGA}
