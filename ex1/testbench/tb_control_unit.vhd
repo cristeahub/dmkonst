@@ -15,16 +15,15 @@ ARCHITECTURE behavior OF tb_control_unit IS
          clk : IN  std_logic;
          reset : IN  std_logic;
          instruction_in : IN  std_logic_vector(31 downto 26);
+         processor_enable : in std_logic;
          ir_write : OUT  std_logic;
-         i_or_d : OUT  std_logic;
          pc_write : OUT  std_logic;
          pc_write_cond : OUT  std_logic;
          pc_source : OUT  std_logic_vector(1 downto 0);
-         mem_read : OUT  std_logic;
          mem_to_reg : OUT  std_logic;
          alu_op : OUT  std_logic_vector(1 downto 0);
          mem_write : OUT  std_logic;
-         alu_src_a : OUT  std_logic;
+         alu_src_a : OUT  std_logic_vector(1 downto 0);
          alu_src_b : OUT  std_logic_vector(1 downto 0);
          reg_write : OUT  std_logic;
          reg_dst : OUT  std_logic
@@ -36,18 +35,17 @@ ARCHITECTURE behavior OF tb_control_unit IS
    signal clk : std_logic := '0';
    signal reset : std_logic := '0';
    signal instruction_in : std_logic_vector(31 downto 26) := (others => '0');
+   signal processor_enable : std_logic;
 
  	--Outputs
    signal ir_write : std_logic;
-   signal i_or_d : std_logic;
    signal pc_write : std_logic;
    signal pc_write_cond : std_logic;
    signal pc_source : std_logic_vector(1 downto 0);
-   signal mem_read : std_logic;
    signal mem_to_reg : std_logic;
    signal alu_op : std_logic_vector(1 downto 0);
    signal mem_write : std_logic;
-   signal alu_src_a : std_logic;
+   signal alu_src_a : std_logic_vector(1 downto 0);
    signal alu_src_b : std_logic_vector(1 downto 0);
    signal reg_write : std_logic;
    signal reg_dst : std_logic;
@@ -62,12 +60,11 @@ BEGIN
           clk => clk,
           reset => reset,
           instruction_in => instruction_in,
+          processor_enable => processor_enable,
           ir_write => ir_write,
-          i_or_d => i_or_d,
           pc_write => pc_write,
           pc_write_cond => pc_write_cond,
           pc_source => pc_source,
-          mem_read => mem_read,
           mem_to_reg => mem_to_reg,
           alu_op => alu_op,
           mem_write => mem_write,
@@ -92,34 +89,42 @@ BEGIN
 	 
 			procedure check_state_instruction_fetch is
 			begin
-				assert_equals('0', i_or_d, "i_or_d should be 0");
-				assert_equals("01", alu_src_b, "alu_src_b should be 01");
-				assert_equals('1', ir_write, "IRWrite should be 1");
-				assert_equals('1', mem_read, "mem_read should be 1");
+				assert_equals("01", alu_src_b, "alu_src_b");
+				assert_equals('1', pc_write, "pc_write");
 			end procedure check_state_instruction_fetch;
 			
 			procedure check_state_instruction_decode is
 			begin
-				assert_equals("11", alu_src_b, "alu_src_b should be 11");
+				assert_equals("10", alu_src_b, "alu_src_b should be 10");
+        assert_equals('1', ir_write, "ir_write");
 			end procedure check_state_instruction_decode;
 			
 			procedure check_state_memory_address_computation is
 			begin
-				assert_equals('1', alu_src_a, "");
+				assert_equals("01", alu_src_a, "");
 				assert_equals("10", alu_src_b, "");
 				assert_equals("00", alu_op, "");
 			end procedure check_state_memory_address_computation;
 	 
    begin
+      processor_enable <= '0';
 			reset <= '1';
 			
 			-- Testing path R_TYPE
 
 			wait for clk_period;
+      
+      reset <= '0';
+      
+      wait for clk_period;
+      
+      assert_equals('0', pc_write, "Processor should not be enabled");
+      
+      processor_enable <= '1';
+      
+      wait for clk_period;
 			
 			check_state_instruction_fetch;
-			
-			reset <= '0';
 			
 			wait for clk_period;
 			
@@ -129,7 +134,7 @@ BEGIN
 			
 			wait for clk_period;
 			
-			assert_equals('1', alu_src_a, "alu_src_a should be 1");
+			assert_equals("01", alu_src_a, "alu_src_a should be 1");
 			assert_equals("00", alu_src_b, "alu_src_b should be 00");
 			assert_equals("10", alu_op, "alu_op should be 10");
 			
@@ -170,7 +175,7 @@ BEGIN
 			
 			wait for clk_period;
 			
-			assert_equals('1', alu_src_a, "");
+			assert_equals("01", alu_src_a, "");
 			assert_equals("00", alu_src_b, "");
 			assert_equals("01", alu_op, "");
 			assert_equals('1', pc_write_cond, "");
@@ -194,9 +199,7 @@ BEGIN
 			
 			wait for clk_period;
 			
-			assert_equals('1', mem_read, "");
 			assert_equals('0', mem_write, "");
-			assert_equals('1', i_or_d, "");
 			
 			wait for clk_period;
 			
@@ -223,14 +226,34 @@ BEGIN
 			wait for clk_period;
 			
 			assert_equals('1', mem_write, "");
-			assert_equals('0', mem_read, "");
-			assert_equals('1', i_or_d, "");
 			
 			wait for clk_period;
+      
+      -- Testing LUI
 			
 			check_state_instruction_fetch;
 			
 			wait for clk_period;
+      
+      check_state_instruction_decode;
+      
+      instruction_in <= LUI;
+      
+      wait for clk_period;
+      
+      assert_equals("10", alu_src_a, "alu_src_a");
+      assert_equals("11", alu_src_b, "alu_src_b");
+      assert_equals("11", alu_op, "alu_op");
+      
+      wait for clk_period;
+      
+      assert_equals('1', reg_write, "reg_write");
+      
+      wait for clk_period;
+      
+      -- Should return to instruction fetch
+      
+      check_state_instruction_fetch;
 			
 			report "Test passed";
 			

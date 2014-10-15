@@ -13,7 +13,6 @@ architecture behavior of tb_registers is
   component registers
     port(
           clk : in  std_logic;
-          reset : in  std_logic;
           read_register_1_in : in  std_logic_vector(4 downto 0);
           read_register_2_in : in  std_logic_vector(4 downto 0);
           write_register_in : in  std_logic_vector(4 downto 0);
@@ -46,7 +45,6 @@ begin
   -- instantiate the unit under test (uut)
   uut: registers port map (
                             clk => clk,
-                            reset => reset,
                             read_register_1_in => read_register_1_in,
                             read_register_2_in => read_register_2_in,
                             write_register_in => write_register_in,

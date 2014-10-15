@@ -13,7 +13,7 @@ ARCHITECTURE behavior OF tb_alu IS
     PORT(
           operand_a_in : IN  STD_LOGIC_VECTOR(31 downto 0);
           operand_b_in : IN  STD_LOGIC_VECTOR(31 downto 0);
-          alu_control_in : IN  STD_LOGIC_VECTOR(3 downto 0);
+          alu_control_in : IN  alu_control_t;
           zero_out : OUT  std_logic;
           alu_result_out : OUT  STD_LOGIC_VECTOR(31 downto 0)
         );
@@ -23,7 +23,7 @@ ARCHITECTURE behavior OF tb_alu IS
   --Inputs
   signal operand_a_in : std_logic_vector(31 downto 0) := (others => '0');
   signal operand_b_in : std_logic_vector(31 downto 0) := (others => '0');
-  signal alu_control_in : std_logic_vector(3 downto 0) := (others => '0');
+  signal alu_control_in : alu_control_t;
 
   --Outputs
   signal zero_out : std_logic;
