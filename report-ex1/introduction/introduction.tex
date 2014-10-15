@@ -47,8 +47,7 @@ and Xilinx for the Spartan-6 FPGA.
 This is to ensure that the generated code will be as optimized as possible,
 which in turn will make the processor faster and better.
 
-The assignment is solved by having a top-view of the full extend of the task,
-followed by a bottom-up approach to each subtask.
-Each component is made separately, with a following testbench to make sure it works correctly.
+The assignment is solved by creating a top-level design for the processor which is then subdivided into different components which can be implemented separately.
+A testbench is then written for each component, to make sure it works as intended.
 These components are afterwards connected together and a new testbench is created to
-make sure the system as a whole works.
+make sure the system as a whole works according to the specification.
