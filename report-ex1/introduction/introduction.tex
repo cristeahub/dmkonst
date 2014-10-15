@@ -40,10 +40,15 @@ The testing of the system both in software and in hardware is detailed in sectio
 
 \subsection{Challenges and procedure}
 
-The assignment provides several tasks that needs solving, these are detailed in section%\vref{sec:tasks}.
-One goal set for the assignment is making sure all code complies with the standard set forth by the toolmakers (need to reword toolmakers).
+The assignment provides several tasks that needs solving, these are detailed in section.% TODO: \vref{sec:tasks}.
+In addition to the requirements one goal was set for the assignment.
+This goal is to make sure all code complies with the standard set forth by the industry
+and Xilinx for the Spartan-6 FPGA.
+This is to ensure that the generated code will be as optimized as possible,
+which in turn will make the processor faster and better.
 
-The assignment is tackled on a bottom-up approach.
-After an initial top design each smaller part of the system is made.
-These smaller parts is tested to make sure they work.
-When all parts are working individually they are tested together.
+The assignment is solved by having a top-view of the full extend of the task,
+followed by a bottom-up approach to each subtask.
+Each component is made separately, with a following testbench to make sure it works correctly.
+These components are afterwards connected together and a new testbench is created to
+make sure the system as a whole works.
