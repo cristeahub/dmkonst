@@ -126,6 +126,8 @@ BEGIN
     wait for clk_period/2;
     assert_equals(std_logic_vector(to_unsigned(8, 32)), alu_result_out, "Alu should shift logical right");
 
+    report "Test complete";
+
     wait;
   end process;
 

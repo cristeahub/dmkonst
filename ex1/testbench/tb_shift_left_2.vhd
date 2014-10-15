@@ -52,6 +52,8 @@ BEGIN
 
       assert_equals(x"00000004", data_out, "Should shift left by 2");
 
+      report "Test complete";
+
       wait;
    end process;
 

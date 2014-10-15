@@ -80,6 +80,9 @@ BEGIN
 			wait for clk_period;
 			
 			assert_equals(x"778899aa", data_out, "Signal d should be selected");
+
+      report "Test complete";
+
       wait;
    end process;
 

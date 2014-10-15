@@ -7,18 +7,6 @@ ENTITY tb_instruction_register IS
 END tb_instruction_register;
  
 ARCHITECTURE behavior OF tb_instruction_register IS 
- 
-    -- Component Declaration for the Unit Under Test (UUT)
- 
-    COMPONENT instruction_register
-    PORT(
-         instruction_in : IN  std_logic_vector(31 downto 0);
-         control_instruction_write : IN  std_logic;
-         instruction_out : OUT  std_logic_vector(31 downto 0);
-         clk : IN  std_logic
-        );
-    END COMPONENT;
-    
 
    --Inputs
    signal instruction_in : std_logic_vector(31 downto 0) := (others => '0');
@@ -34,7 +22,7 @@ ARCHITECTURE behavior OF tb_instruction_register IS
 BEGIN
  
 	-- Instantiate the Unit Under Test (UUT)
-   uut: instruction_register PORT MAP (
+   uut: entity work.instruction_register PORT MAP (
           instruction_in => instruction_in,
           control_instruction_write => control_instruction_write,
           instruction_out => instruction_out,
@@ -75,6 +63,8 @@ BEGIN
 			wait for clk_period;
 			
 			assert_equals("000100", instruction_out(31 downto 26), "Opcode should maintain the old value");
+
+      report "Test complete";
 
       wait;
    end process;

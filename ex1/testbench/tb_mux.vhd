@@ -65,6 +65,8 @@ BEGIN
 			
 			assert_equals(x"aabbccdd", data_out, "Signal a should be selected");
 
+      report "Test complete";
+
       wait;
    end process;
 

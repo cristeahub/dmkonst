@@ -6,23 +6,7 @@ use work.test_utils.all;
 entity tb_registers is
 end tb_registers;
 
-architecture behavior of tb_registers is 
-
-  -- component declaration for the unit under test (uut)
-
-  component registers
-    port(
-          clk : in  std_logic;
-          read_register_1_in : in  std_logic_vector(4 downto 0);
-          read_register_2_in : in  std_logic_vector(4 downto 0);
-          write_register_in : in  std_logic_vector(4 downto 0);
-          write_data_in : in  std_logic_vector(31 downto 0);
-          reg_write_in : in  std_logic;
-          read_data_1_out : out  std_logic_vector(31 downto 0);
-          read_data_2_out : out  std_logic_vector(31 downto 0)
-        );
-  end component;
-
+architecture behavior of tb_registers is
 
   --inputs
   signal clk : std_logic := '0';
@@ -43,7 +27,7 @@ architecture behavior of tb_registers is
 begin
 
   -- instantiate the unit under test (uut)
-  uut: registers port map (
+  uut: entity work.registers port map (
                             clk => clk,
                             read_register_1_in => read_register_1_in,
                             read_register_2_in => read_register_2_in,
@@ -118,6 +102,8 @@ begin
 
     -- check that write did not happened
     assert_equals(read_data_1_out, x"abbababb", "Read data 1 out wasn't equal to data written");
+
+    report "Test complete";
 
     wait;
   end process;

@@ -7,29 +7,6 @@ ENTITY tb_control_unit IS
 END tb_control_unit;
  
 ARCHITECTURE behavior OF tb_control_unit IS 
- 
-    -- Component Declaration for the Unit Under Test (UUT)
- 
-    COMPONENT control_unit
-    PORT(
-         clk : IN  std_logic;
-         reset : IN  std_logic;
-         instruction_in : IN  std_logic_vector(31 downto 26);
-         processor_enable : in std_logic;
-         ir_write : OUT  std_logic;
-         pc_write : OUT  std_logic;
-         pc_write_cond : OUT  std_logic;
-         pc_source : OUT  std_logic_vector(1 downto 0);
-         mem_to_reg : OUT  std_logic;
-         alu_op : OUT  std_logic_vector(1 downto 0);
-         mem_write : OUT  std_logic;
-         alu_src_a : OUT  std_logic;
-         alu_src_b : OUT  std_logic_vector(1 downto 0);
-         reg_write : OUT  std_logic;
-         reg_dst : OUT  std_logic
-        );
-    END COMPONENT;
-    
 
    --Inputs
    signal clk : std_logic := '0';
@@ -56,7 +33,7 @@ ARCHITECTURE behavior OF tb_control_unit IS
 BEGIN
  
 	-- Instantiate the Unit Under Test (UUT)
-   uut: control_unit PORT MAP (
+   uut: entity work.control_unit PORT MAP (
           clk => clk,
           reset => reset,
           instruction_in => instruction_in,

@@ -49,8 +49,10 @@ BEGIN
       data_in <= x"FF00";
       
       wait for clk_period;
-      
+
       assert_equals(x"FFFFFF00", data_out, "Should sign extend negative numbers properly");
+
+      report "Test complete";
 
       wait;
    end process;
