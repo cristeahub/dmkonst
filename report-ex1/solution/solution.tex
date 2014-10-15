@@ -36,15 +36,16 @@ ghdl and gtkwave also proved useful, as it allowed us to work locally when only 
 
 \subsection{Architecture}
 
-The architecture is based on the architecture from the lecture slides 4.% TODO: \ref{slides}
-However it is not complete and needs to be extended to support all aspects of a multi cycle design.
+The architecture is based on the drawing from the lecture slides 4 \cite{lecture-4}.
+However because of the test environment and the lack of shift on immideate jump values,
+the design was altered to suit our needs.
 The final design is visible in the figure %\ref{fig:final-design} %TODO: skal vi ha fila her?
 
 One big change is the external memory which is not present in the suggested architecture.
 This difference made it so that the memory module is not needed.
-All interaction is done with the external memory directly.
+Because all interaction is done with the external memory directly.
 In changing the design the processor has gone from a von Neumann architecture to a full Hardvard architecture.
-An advantage of this is the lack of a need to abstract away two separate external memories when no advatage is gained.
+An advantage of this is the lack of a need to abstract away two separate external memories when no benfit is gained.
 
 \subsubsection{MIPS subset}
 
