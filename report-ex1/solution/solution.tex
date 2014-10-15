@@ -55,6 +55,11 @@ The support files handed out already used this instruction.
 
 \subsubsection{State machine}
 
+The control unit is based on the state machine from lecture 4. \cite{lecture-4}
+It has been modified to add support for the extra load upper immediate instruction.
+Output signals which were not needed in our architecture are also removed.
+Specifically, the i\_or\_d and mem\_read signals were not needed, because our processor has separate instruction and data memories.
+Because of the latency when reading from memory the ir\_write signal has been moved to the instruction\_decode state, when the correct instruction has been fetched.
 A state diagram for the control unit can be seen in figure \ref{fig:state_machine}.
 
 \begin{figure}[ht!]
