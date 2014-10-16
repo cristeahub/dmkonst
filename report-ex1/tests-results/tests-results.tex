@@ -15,3 +15,35 @@ How much power does it consume when running on the FPGA?
 \subsection{Testbenches}
 
 Each component has been tested and verified with a separate testbench written in VHDL and simulated in ISim.
+
+\begin{figure}[ht!]
+    \begin{center}
+    \includegraphics[width=\textwidth]{assets/isim/memory_read_cycle.png}
+    \caption{Snapshot of the top level testbench when executing a load instruction}
+    \label{fig:memory_read_cycle}
+    \end{center}
+\end{figure}
+
+\begin{figure}[ht!]
+    \begin{center}
+    \includegraphics[width=\textwidth]{assets/isim/branch_completion_cycle.png}
+    \caption{Snapshot of the top level testbench when running a branch instruction}
+    \label{fig:branch_completion_cycle}
+    \end{center}
+\end{figure}
+
+\begin{figure}[ht!]
+    \begin{center}
+    \includegraphics[width=\textwidth]{assets/isim/load_upper_cycle.png}
+    \caption{Execution of a load immediate, where the value 393216 is stored in register 3}
+    \label{fig:load_upper_cycle}
+    \end{center}
+\end{figure}
+
+\begin{figure}[ht!]
+    \begin{center}
+    \includegraphics[width=\textwidth]{assets/isim/r_type_cycle.png}
+    \caption{An r-type instruction with ALU op set to ADD}
+    \label{fig:r_type_cycle}
+    \end{center}
+\end{figure}
