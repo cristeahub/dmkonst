@@ -6,17 +6,42 @@
 
 % Here comes discussion. How did we do?
 
+%TODO:  ville ha en liten introduksjon så vi ikke starter et kapittel med å starte et underkapittel
+%       4. Discussion
+%       4.1 Req
+%       synes det er bedre om det er noe i mellom der
+The finished product itself is of a very satifying nature.
+All goals were met, which will be detailed in this section.
+There are four main categories which will be talked about;
+requirements, performance, energy efficiency and further work.
+
 \subsection{Requirements}
 All the requirements given in the exercise were met.
-The processor implements a basic subset of the MIPS instruction set\cite[p.64]{compendium} as specified.
+The processor implements a basic subset of the MIPS instruction set \cite[p.64]{compendium} as specified.
 It has been tested on a top-level and each component is also tested in separation.
-We have also successfully tested it on the FPGA using the hostcomm\cite{hostcomm} utility.
+The processor is also successfully tested it on the FPGA using the hostcomm \cite{hostcomm} utility.
 
 \subsection{Performance}
-Good.
+% TODO: det er en del ting som sies på nytt her, som ikke er så veldig bra, burde skrives om
+Because of all the precausions done with performance in mind, the final product has a very high performance.
+The maximum achieved clock speed is 78 MHz for the processor.
+This is significantly better than the limit of 24 MHz set by the testing framework for the FPGA.
+
+To make sure the performance is as good as possible, a lot of choices have been made during the development.
+Most importantly, the fact that Xilinx does a lot of work in the optimizing department has been taken into concideration.
+This means that the code is largely written to make sure Xilinx understands what the code is describing.
+One example of this is the elimination of self written state values.
+These are instead made as an enum which in terms make Xilinx change the values to whatever is best for the situation.
 
 \subsection{Energy Efficiency}
-Decent.
+There is not many ways to make the design very energy efficient.
+The communication with the external memory only takes one cycle, so the processor always have somthing to do.
+If, however, the communication took multiple cycles, the rest of the processor could sleep while waiting for the memory.
+
+Another way to make the design more energy efficient is to make sure all parts of the processor is used all the time.
+If one made sure every part of the processor is used at each clock cycle,
+the total amount of clock cycles is reduced and less power is consumed.
+This is known as a pipelining processor, which differes slightly from the design in this exercise.
 
 \subsection{Further work}
 
