@@ -117,7 +117,16 @@ This creates the illusion that the instruction register updates instantly.
 
 \subsubsection{Register file}
 
-Stores data.
+The register file is implemented as two pieces of block ram, each with a flip-flop to create one cycle hold of output values.
+Data writes to registers are mirrored between the two pieces of block ram, and data reads from line A and B go to each of the separate block rams.
+This presents the illusion of simultaneus double reads and single writes.
+The block ram chips can be turned off by setting the processor enable signal low, presenting minor energy savings.
+
+Finally, the register file could also be implemented as a set of flip-flops with muxes, but those fare less favorably on FPGAs.
+
+\subsubsection{ALU}
+
+std\_numeric
 
 \subsubsection{ALU Control}
 
