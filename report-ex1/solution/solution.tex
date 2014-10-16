@@ -88,6 +88,13 @@ This makes it a Moore machine.
 
 \subsection{Implementation}
 
+A modular approach was taken when implementing the system.
+An interface was defined for each component, defining which inputs and outputs it should have,
+and describing how it should perform.
+Their functionality were verified with separate testbenches, which meant that they could be developed independently of each other.
+This way, we were able to develop components in parallel.
+Different components are detailed below.
+
 \subsubsection{Instruction register}
 
 Caches instructions while their executed.
