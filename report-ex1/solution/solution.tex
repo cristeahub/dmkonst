@@ -45,6 +45,14 @@ As the external memory has one cycle response delay, some of the suggested datap
 Additional extensions to the architecture include support for the load upper immediate instruction, as well ass SLL and SRL functions.
 The RTL sketch of the final design can be seen in figure \ref{fig:top_level_rtl}.
 
+\begin{figure}[ht!]
+    \begin{center}
+    \includegraphics[width=1.2\textwidth]{assets/top_level_rtl.pdf}
+    \caption{Top level RTL schematic. Outgoing lines are connected to external memory}
+    \label{fig:top_level_rtl}
+    \end{center}
+\end{figure}
+
 \subsubsection{MIPS subset}
 
 The final processor design implements the following subset of the MIPS instruction set.
