@@ -12,7 +12,7 @@ Is it fast yet?
 
 How much power does it consume when running on the FPGA?
 
-\subsection{Testbenches}
+\subsection{VHDL Testbenches}
 
 % TODO: some parts of this might be better suited for solution or discussion?
 All tests are written in VHDL and simulated in ISim.
@@ -42,6 +42,13 @@ The results of the tests are shown in table \ref{tab:tests}.
     \caption{Tests being performed on the processor}
     \label{tab:tests}
 \end{table}
+
+\subsubsection{Top level testbench}
+
+A top-level testbench was provided, so that we could confirm that the processor worked as the exercise had intended.
+It consists of a test program which is loaded into instruction memory, as well as some initial data.
+Here follows several screenshots from the test simulation, showing how different instruction types are executed in the implemented processor.
+They show what state the processor is currently in, as well as the currently executing instruction.
 
 \begin{figure}[ht!]
     \begin{center}
