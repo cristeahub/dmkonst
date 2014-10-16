@@ -17,7 +17,7 @@ The obtained clock frequency is far above the required 24 MHz for the production
   \caption{Critical paths and clock frequencies}
 \end{table}
 
-The systems critical path currently goes from Instruction memory, through the alu, out through the zero bit, and into the PC write condition.
+The system's critical path currently goes from Instruction memory, through the alu, out through the zero bit, and into the PC write condition.
 If one wishes to attain a higher clock frequency, then the path has to be shortened.
 This can happen either through the introduction of more flip-flops and control unit states, or by simplifying logic to avoid the problem alltogether.
 It will be hard to remove this critical path in the design, so a much higher clock frequency might not be easily obtained.
