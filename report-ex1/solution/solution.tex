@@ -114,29 +114,25 @@ This makes it a Moore machine.
 
 Bottom-up approach, unit tests, integration tests
 
-\subsection{Optimizing for FPGA}
-
-
-Things to write about
+\subsection{Design optimization}
 
 \begin{enumerate}
   \item
-    Chip select on ram, power savings
+    The initial register file implementation used 1024 flip-flops with the Mother of All Muxes connecting them together. This can be a reasonable design choice given you're implementing your own IC, as large muxes can be expensive to implement on FPGAs. With a comparable boost in clock frequency, the choice may still be worthwile.
+    The design ended up using 2530 lookup tables (16\% of available LUTs on the LX-16), with Xilinx promptly advising that the usage of hardware resources such as block ram could be beneficial.
+
+    The final block ram register implementation ended up using 1022 fewer LUTs, along with increasing the maximum frequency of the processor from 60.562 MHz to 73.573 MHz.
 
   \item
-    The war on Xilinx ISE. Learning experiences etschetera
+    As one of the authours thought sub 100 MHz clock frequencies were indicators of flaws in the design, significant time was spent on reducing critical paths through the system.
+
+    One of the earlier architectures did not have an instruction register, instead caching the current instruction address, keeping it constant for the entire execution of each instruction.
+    This increased the critical path for all instruction cycles, as Xilinx ISE inferred that the longest combinatorial sequence included signals propagating through external instruction memory.
+    Re-adding the instruction register ended up relieveing this issue, as well as opening for the possibility of disabling external memory when unneeded.
+    Sadly, no chip-select interface was exposed to the MIPS Processor.
 
   \item
-    Block ram in Registers instead of flip-flops with gigantic muxes. The reason for this is that a hardware designer has to consider his platform, in this case the target was an FPGA, and not 'actual' hardware. FPGAs hate muxes , altho they might be better in real hardware. like -- insert explicitive here --. Mention the LUT savings here. Like 2445 to 750 luts!!!! wow such save.
-
-  \item
-    State machine is based on the multicycle mips architecture provided in lecture slides.
-
-  \item
-    Outsourcing ALU control values to vhdl ENUM as it is better than us to assign logic values!
-
-  \item
-    Reducing critical path to increase clock frequency. Worst path is instruction immediate -> alu latch B -> alu -> zero out -> PC write.
-
-
+    While implementing generic SLL and SRL instructions, the ALU control unit had to be extended with new funct code to alu control mappings.
+    Instead of us guessing which values would introduce as little as possible new combinatorial logic to the alu control unit, the task was outsourced to the compiler by using an VHDL enum.
+    This allows the VHDL compiler to choose enum values, with the goal of minimizing the needed combinatorial logic.
 \end{enumerate}
