@@ -14,7 +14,34 @@ How much power does it consume when running on the FPGA?
 
 \subsection{Testbenches}
 
-Each component has been tested and verified with a separate testbench written in VHDL and simulated in ISim.
+% TODO: some parts of this might be better suited for solution or discussion?
+All tests are written in VHDL and simulated in ISim.
+Each component has been tested and verified with a separate testbench.
+The system as a whole has also been tested with a separate testbech.
+The mindset for the testbenches is to not only provide valuable testing to see if the compontents work,
+but also make sure to give valueable feedback to the programmer.
+
+The results of the tests is shown in table \ref{tab:tests}.
+
+\begin{table}[ht+]
+    \centering
+    \begin{tabular}{|l|l|l|}
+        \hline
+        \textbf{Test name}            & \textbf{Pass?} & \textbf{Notes}            \\ \hline
+        tb\_MIPSProcessor.vhd         & Passed         & Integrated machinery test \\ \hline
+        tb\_alu.vhd                   & Passed         & Unit test                 \\ \hline
+        tb\_control\_unit.vhd         & Passed         & Unit test                 \\ \hline
+        tb\_instruction\_register.vhd & Passed         & Unit test                 \\ \hline
+        tb\_mux.vhd                   & Passed         & Unit test                 \\ \hline
+        tb\_mux\_4.vhd                & Passed         & Unit test                 \\ \hline
+        tb\_pc.vhd                    & Passed         & Unit test                 \\ \hline
+        tb\_registers.vhd             & Passed         & Unit test                 \\ \hline
+        tb\_shift\_left\_2.vhd        & Passed         & Unit test                 \\ \hline
+        tb\_sign\_extend.vhd          & Passed         & Unit test                 \\ \hline
+    \end{tabular}
+    \caption{Tests being performed on the processor}
+    \label{tab:tests}
+\end{table}
 
 \begin{figure}[ht!]
     \begin{center}
