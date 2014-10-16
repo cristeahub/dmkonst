@@ -43,6 +43,18 @@ If every part of the processor are being used every clock cycle,
 the total amount of clock cycles is reduced and less power is consumed.
 A common implementation of this is known as a pipelining processor, and will be looked at in the next exercise.
 
+\subsection{The work process}
+
+From the start, we focused on creating a minimal working processor which fulfilled all the basic requirements given.
+As the processor was naturally divided into multiple quite independent components with well-defined interfaces, we managed to parallelize the development to some extent.
+This gave us a fast development speed in the beginning.
+
+The biggest challenge was when all components were deemed ready (passing their testbenches), and were wired together in the toplevel processor.
+It turned out not everything worked as expected, and the toplevel design would have to be carefully inspected.
+
+When the toplevel testbench finally passed, we tackled the task of flashing the program to the FPGA.
+Except for some minor issues with project setup in Xilinx with regards to the DualPortMem module, hostcomm made this a quite simple task.
+
 \subsection{Further work}
 
 There is still room for optimization, to further increase the clock speed.
