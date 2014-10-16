@@ -163,12 +163,18 @@ This allows the compiler to assign values that will result in more optimized har
 
 The initial register file implementation used 1024 flip-flops with the Mother of All Muxes connecting them together.
 This can be a reasonable design choice given you're implementing your own IC, however large muxes can be expensive to implement on FPGAs.
+
 With a comparable boost in clock frequency, the choice may still be worthwile.
 This design ended up using 2530 lookup tables (16\% of available LUTs on the LX16), with Xilinx promptly advising that the usage of hardware resources such as block ram could be beneficial.
 The final block ram register implementation ended up using 1022 fewer LUTs, along with increasing the maximum frequency of the processor from 60.562 MHz to 73.573 MHz.
 
-As one of the authours thought sub 100 MHz clock frequencies were indicators of flaws in the design, significant time was spent on reducing critical paths through the system.
-One of the earlier architectures did not have an instruction register, instead caching the current instruction memory address, keeping it constant for the entire execution of each instruction.
-This increased the critical path for all instruction cycles, as Xilinx ISE inferred that the longest combinatorial sequence included signals propagating through external instruction memory.
+As one of the authours thought sub 100 MHz clock frequencies were indicators of flaws in the design,
+significant time was spent on reducing critical paths through the system.
+One of the earlier architectures did not have an instruction register,
+instead caching the current instruction memory address,
+keeping it constant for the entire execution of each instruction.
+
+This increased the critical path for all instruction cycles,
+as Xilinx ISE inferred that the longest combinatorial sequence included signals propagating through external instruction memory.
 Adding the instruction register ended up relieveing this issue, as well as opening for the possibility of disabling external memory when unneeded.
 Sadly, no chip-select interface was exposed to the MIPS Processor.
