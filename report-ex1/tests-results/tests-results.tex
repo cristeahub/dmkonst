@@ -6,11 +6,31 @@
 
 \subsection{Performance}
 
+Multiple 
 Is it fast yet?
 
 \subsection{Energy efficiency}
 
-How much power does it consume when running on the FPGA?
+The multi cycle MIPS processor presented here is more power efficient than its single cycle counterparts.
+Reuse of datapath elements during different parts of execution, as well as overlapping instruction executior provide area savings.
+A short average-instruction execution time, as well as high maximum clock frequency (73.573MHz) reduces time to program completion and active power consumption.
+The usage of dedicated FPGA resources such as block ram provides additional power savings over alternative implementations.
+
+Generating post-place-and-route power data in Xilinx ISE give us a rough idea of what actual power consumption could look like \ref{tab:power-estimates}.
+Xilinx considers these values inaccurate, but they can still be used to make ballpark estimates.
+With these values, we could potentially calculate MIPS instructions for 5 full hours on a single coin cell battery (150 mah).
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{llll}
+    & Total & Dynamic & Quiescent \\
+    Supply power (mW) & 29.60 & 5.58    & 24.02
+  \end{tabular}
+  \caption{Power estimates from Xilinx ISE}
+  \label{tab:power-estimates}
+\end{table}
+
+Power constumption on an actual FPGA with the deployed programming was not tested.
 
 \subsection{VHDL Testbenches}
 
