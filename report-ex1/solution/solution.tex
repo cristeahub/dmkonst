@@ -63,7 +63,7 @@ The {\bf LUI} (Load Upper Immediate) is the closest match.
 This instruction loads the value into the upper 16 bits of the register.
 The support files handed out already used this instruction.
 
-\subsubsection{State machine}
+\subsubsection{Control unit}
 
 The control unit is based on the state machine from lecture 4 \cite{lecture-4}.
 It has been modified to add support for the extra load upper immediate instruction.
@@ -72,6 +72,12 @@ Specifically, the i\_or\_d and mem\_read signals were not needed, because our pr
 Because of the latency when reading from memory the ir\_write signal has been moved to the instruction\_decode state, when the correct instruction has been fetched.
 This does not cause any latency issues, as the instruction register is designed to let the new instruction value through when ir\_write is high.
 A state diagram for the control unit can be seen in figure \ref{fig:state_machine}.
+
+The control unit takes two inputs, the current opcode (first 6 bits of the instruction) and a processor enable signal.
+When the processor is disabled, the state machine should stay in the idle state.
+
+The outputs from the state machine are dependent only on the current state.
+This makes it a Moore machine.
 
 \begin{figure}[ht!]
     \begin{center}
