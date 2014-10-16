@@ -5,7 +5,7 @@
 % The use of diagrams, figures, tables and similar is welcome as a support to your description.
 
 % TODO: Putt dette i introduksjonen? Eventuelt putt lista i et vedlegg
-\subsection{Development Process \& Tools}
+\subsection{Tools}
 
 Development was done on computers in the computer lab running Ubuntu 12.04.
 In addition, we used Microsoft Remote Desktop to be able to use Xilinx from other locations.
@@ -34,16 +34,16 @@ ghdl and gtkwave also proved useful, as it allowed us to work locally when only 
 
 \subsection{Architecture}
 
-The architecture is based on the drawing from the lecture slides 4 \cite{lecture-4}.
-However because of the test environment and the lack of shift on immediate jump values,
-the design was altered to suit our needs.
-The final design is visible in figure \ref{fig:top_level_rtl}.
+The suggested architecture for the project provided in Figure 4.1 [1, p.45] was abandoned in favor of a design based on the basic multi cycle architecture presented in lecture 4 [2].
 
-One big change is the way the memory unit is organized.
-As memory was provided to us divided into separate instruction and data memories – a Harvard architecture – we had to modify the way we interfaced memory.
-There's no central component for executing memory reads and writes.
-Instead, components responsible for computing memory address interface memory directly,
-while memory data buses are connected directly to the instruction register and data register.
+As the host environment was tailored towards the single cycle MIPS architecture, notably including separate instruction and data memory (harvard architecture) as well as byte addressable memory, the architecture received slight modifications.
+
+There's no dedicated component for executing memory reads and writes.
+Instead, components responsible for computing memory addresses interface with memory directly, and incoming memory data buses are connected directly to instruction- and other registers.
+As the external memory has one cycle response delay, some of the suggested datapath registers were removed.
+
+Additional extensions to the architecture include support for the load upper immediate instruction, as well ass SLL and SRL functions.
+The RTL sketch of the final design can be seen in figure \ref{fig:top_level_rtl}.
 
 \subsubsection{MIPS subset}
 
@@ -59,7 +59,7 @@ The final processor design implements the following subset of the MIPS instructi
 Note: the {\bf LDI} (Load Immediate) instruction is not a part of the MIPS instruction set\footnote{Figure C.1 \cite[p.66]{compendium}}.
 The {\bf LUI} (Load Upper Immediate) is the closest match.
 This instruction loads the value into the upper 16 bits of the register.
-The support files handed out already used this instruction.
+The support files handed out already use this instruction.
 
 \subsubsection{Control unit}
 
