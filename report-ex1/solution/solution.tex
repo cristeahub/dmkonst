@@ -42,7 +42,7 @@ ghdl and gtkwave also proved useful, as it allowed us to work locally when only 
 
 The suggested architecture for the project provided in Figure 4.1 [1, p.45] was abandoned in favor of a design based on the basic multi cycle architecture presented in lecture 4 [2].
 
-As the host environment was tailored towards the single cycle MIPS architecture, notably including separate instruction and data memory (harvard architecture) as well as byte addressable memory, the architecture received slight modifications.
+As the host environment was tailored towards the single cycle MIPS architecture, notably including separate instruction and data memory (Harvard architecture) as well as byte addressable memory, the architecture received slight modifications.
 
 There's no dedicated component for executing memory reads and writes.
 Instead, components responsible for computing memory addresses interface with memory directly, and incoming memory data buses are connected directly to instruction- and other registers.
