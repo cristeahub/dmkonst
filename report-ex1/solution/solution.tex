@@ -35,15 +35,16 @@ ghdl and gtkwave also proved useful, as it allowed us to work locally when only 
 \subsection{Architecture}
 
 The architecture is based on the drawing from the lecture slides 4 \cite{lecture-4}.
-However because of the test environment and the lack of shift on immideate jump values,
+However because of the test environment and the lack of shift on immediate jump values,
 the design was altered to suit our needs.
-The final design is visible in the figure \ref{fig:top_level_rtl}.
+The final design is visible in figure \ref{fig:top_level_rtl}.
 
-One big change is the external memory which is not present in the suggested architecture.
-This difference made it so that the memory module is not needed.
-Because all interaction is done with the external memory directly.
-In changing the design the processor has gone from a von Neumann architecture to a full Hardvard architecture.
-An advantage of this is the lack of a need to abstract away two separate external memories when no benfit is gained.
+One big change is the way the memory unit is organized.
+As memory was provided to us divided into separate instruction and data memories – a Harvard architecture – we had to modify the way we interfaced memory.
+There's no central component for executing memory reads and writes.
+Instead, components responsible for computing memory address interface memory directly,
+while memory data buses are connected directly to the instruction register and data register.
+
 
 \subsubsection{MIPS subset}
 
