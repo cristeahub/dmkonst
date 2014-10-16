@@ -23,7 +23,7 @@ The processor is also successfully tested on the FPGA using the hostcomm \cite{h
 \subsection{Performance}
 % TODO: det er en del ting som sies på nytt her, som ikke er så veldig bra, burde skrives om
 Because of all the precausions done with performance in mind, the final product has a very high performance.
-The maximum achieved clock speed is 78 MHz for the processor.
+The maximum achieved clock speed is 73.573MH for the processor.
 This is significantly better than the limit of 24 MHz set by the testing framework for the FPGA.
 
 To make sure the performance is as good as possible, a lot of choices have been made during the development.
@@ -50,6 +50,7 @@ This gave us a fast development speed in the beginning.
 
 The biggest challenge was when all components were deemed ready (passing their testbenches), and were wired together in the toplevel processor.
 It turned out not everything worked as expected, and the toplevel design would have to be carefully inspected.
+A way that this could have gone more smoothly was if there were more higher-level testbenches implemented by us, for example testing 3 or 4 components together.
 
 When the toplevel testbench finally passed, we tackled the task of flashing the program to the FPGA.
 Except for some minor issues with project setup in Xilinx with regards to the DualPortMem module, hostcomm made this a quite simple task.
