@@ -34,14 +34,14 @@ One example of this is the elimination of self written state values.
 These are instead made as an enum which in terms make Xilinx change the values to whatever is best for the situation.
 
 \subsection{Energy Efficiency}
-There is not many ways to make the design very energy efficient.
-The communication with the external memory only takes one cycle, so the processor always have somthing to do.
-If, however, the communication took multiple cycles, the rest of the processor could sleep while waiting for the memory.
+There aren't many ways to make the design very energy efficient.
+The communication with the external memory only takes one cycle, so the processor always has something to do.
+If, however, the communication would take multiple cycles, the rest of the processor could sleep while waiting for the memory.
 
-Another way to make the design more energy efficient is to make sure all parts of the processor is used all the time.
-If one made sure every part of the processor is used at each clock cycle,
+Another way to make the design more energy efficient is to make sure all parts of the processor are used all the time.
+If every part of the processor are being used every clock cycle,
 the total amount of clock cycles is reduced and less power is consumed.
-This is known as a pipelining processor, which differes slightly from the design in this exercise.
+This is known as a pipelining processor, and will be looked at in the next exercise.
 
 \subsection{Further work}
 
