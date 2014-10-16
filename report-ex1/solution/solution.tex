@@ -95,18 +95,18 @@ This makes it a Moore machine.
 \begin{table}[ht!]
     \begin{tabular}{|l|l|l|l|l|l|l|}
     \hline
-    Opcode & ALUOp & Operation           & Function & ALU Function        & ALU Control & Shamt   \\ \hline
-    lw     & 00    & load word           & XXXXXX   & add                 & ADD         & XXXXX \\ \hline
-    sw     & 00    & store word          & XXXXXX   & add                 & ADD         & XXXXX \\ \hline
-    beq    & 01    & branch equal        & XXXXXX   & subtract            & SUBTRACT    & XXXXX \\ \hline
-    r-type & 10    & add                 & 100000   & add                 & ADD         & XXXXX \\ \cline{3-7}
-           &       & subtract            & 100010   & subtract            & SUBTRACT    & XXXXX \\ \cline{3-7}
-           &       & AND                 & 100100   & AND                 & AND         & XXXXX \\ \cline{3-7}
-           &       & OR                  & 100101   & OR                  & OR          & XXXXX \\ \cline{3-7}
-           &       & set-on-less-than    & 101010   & set-on-less-than    & SLT         & XXXXX \\ \cline{3-7}
-           &       & shift-left-logical  & 000000   & shift-left-logical  & SLL         & Pass through \\ \cline{3-7}
-           &       & shift-right-logical & 000010   & shift-right-logical & SRL         & Pass through \\ \hline
-    lui    & 11    & lui                 & XXXXXX   & add                 & SLL         & 10000 \\ \hline
+    Opcode & ALUOp & Operation           & Function & ALU Control & Shamt   \\ \hline
+    lw     & 00    & load word           & XXXXXX   & ADD         & XXXXX \\ \hline
+    sw     & 00    & store word          & XXXXXX   & ADD         & XXXXX \\ \hline
+    beq    & 01    & branch equal        & XXXXXX   & SUBTRACT    & XXXXX \\ \hline
+    r-type & 10    & add                 & 100000   & ADD         & XXXXX \\ \cline{3-6}
+           &       & subtract            & 100010   & SUBTRACT    & XXXXX \\ \cline{3-6}
+           &       & AND                 & 100100   & AND         & XXXXX \\ \cline{3-6}
+           &       & OR                  & 100101   & OR          & XXXXX \\ \cline{3-6}
+           &       & set-on-less-than    & 101010   & SLT         & XXXXX \\ \cline{3-6}
+           &       & shift-left-logical  & 000000   & SLL         & Pass through \\ \cline{3-6}
+           &       & shift-right-logical & 000010   & SRL         & Pass through \\ \hline
+    lui    & 11    & lui                 & XXXXXX   & SLL         & 10000 \\ \hline
     \end{tabular}
     \caption{ALU control table}
     \label{tab:alu-control}
