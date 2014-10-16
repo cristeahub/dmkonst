@@ -135,7 +135,9 @@ Stores data.
 
 \subsection{Design optimization}
 
-The initial register file implementation used 1024 flip-flops with the Mother of All Muxes connecting them together. This can be a reasonable design choice given you're implementing your own IC, however large muxes can be expensive to implement on FPGAs. With a comparable boost in clock frequency, the choice may still be worthwile.
+The initial register file implementation used 1024 flip-flops with the Mother of All Muxes connecting them together.
+This can be a reasonable design choice given you're implementing your own IC, however large muxes can be expensive to implement on FPGAs.
+With a comparable boost in clock frequency, the choice may still be worthwile.
 This design ended up using 2530 lookup tables (16\% of available LUTs on the LX16), with Xilinx promptly advising that the usage of hardware resources such as block ram could be beneficial.
 The final block ram register implementation ended up using 1022 fewer LUTs, along with increasing the maximum frequency of the processor from 60.562 MHz to 73.573 MHz.
 
