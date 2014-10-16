@@ -1,13 +1,30 @@
 \section{Tests and Results}
 
-% Results: presents the results: what has been successfully completed and what did not work.
-% If any ways around it were found, provide them at this place. Every solution should be tested for its validity.
-% This is the place where you will describe what kind of testing you have performed and what the outcome of your tests was.
-
 \subsection{Performance}
 
-Multiple 
-Is it fast yet?
+The processor can theoretically get up to a comfortable 73.573 MHz, according to Xilinx ISEs most accurate simulations (Post place and route).
+Note that there is a 2ns difference in the minimum clock period between Post place and route and the XST - synthesize stage.
+This is not that big of a surprise, as the data available to ISE is more accurate after the design has been mapped, placed and routed.
+The obtained clock frequency is far above the required 24 MHz for the production simulation.
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{lll}
+    & Minimum period & Maximum frequency \\
+    XST - Synthesize & 11.533ns &  86.705MHz \\
+    Post place and route & 13.592ns &  73.573MHz \\
+  \end{tabular}
+  \caption{Critical paths and clock frequencies}
+\end{table}
+
+The systems critical path currently goes from Instruction memory, through the alu, out through the zero bit, and into the PC write condition.
+If one wishes to attain a higher clock frequency, then the path has to be shortened.
+This can happen either through the introduction of more flip-flops and control unit states, or by simplifying logic to avoid the problem alltogether.
+It will be hard to remove this critical path in the design, so a much higher clock frequency might not be easily obtained.
+
+Some alternate architectures were benchmarked, and one version with an additional fetch state between the current fetch and decode states was tested.
+That architecture was able to run at roughly ~7 MHz faster than the one presented in this report.
+Alas, 10\% clock frequency boost does not make up for the fact that all instructions would need an additional state (R-type instructions going from 4 to 5 states).
 
 \subsection{Energy efficiency}
 
