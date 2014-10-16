@@ -74,3 +74,56 @@ The results of the tests are shown in table \ref{tab:tests}.
     \label{fig:r_type_cycle}
     \end{center}
 \end{figure}
+
+\subsection{Testing on hardware}
+
+% TODO: a series of steps need to be taken?
+When testing on the actual hardware, a series of steps needs to be taken.
+These steps are illustrated in figure \ref{fig:testing_on_fpga}.
+
+Firstly a .bit file must be generated form Xilinx.
+This file is then uploaded to the FPGA via the hostcomm utility.
+Afterwards a simple program is made, or taken from the testbench for the processor.
+
+The endianness of the hostcomm utility \cite{hostcomm} is different from the testbench.
+Because of that a simple translator was written in python to change
+the endianness of the sample program \cite{endian-change}.
+This program made it possible to paste its output straight into hostcomm.
+
+With the program in the hostcomm utility, one can upload it to the fpga.
+A button in hostcomm runs the program and afterwards there is a possibility to read form the FPGA memory.
+
+The content of the FPGA memory is then verified against expected output manually.
+
+\begin{figure}[ht!]
+    \begin{center}
+        \subfigure[Generate .bit file from Xilinx]{%
+            \label{fig:generate_fpga}
+            \includegraphics[width=0.4\textwidth]{assets/testing_on_fpga/generate_programming_file.JPG}
+        }%
+        \subfigure[Upload .bit file to the FPGA]{%
+            \label{fig:processor_upload_fpga}
+            \includegraphics[width=0.4\textwidth]{assets/testing_on_fpga/uploaded_successfully.JPG}
+        }\\ %  ------- End of the first row ----------------------%
+        \subfigure[Change endianness]{%
+            \label{fig:endinanness_fpga}
+            \includegraphics[width=0.4\textwidth]{assets/testing_on_fpga/change_endianness.JPG}
+        }%
+        \subfigure[Upload program to FPGA]{%
+            \label{fig:program_upload_fpga}
+            \includegraphics[width=0.4\textwidth]{assets/testing_on_fpga/upload_program_to_fpga.JPG}
+        }\\ %%  ------- End of the second row ----------------------%
+        \subfigure[Run program on FPGA]{%
+            \label{fig:run_on_fpga}
+            \includegraphics[width=0.4\textwidth]{assets/testing_on_fpga/run_on_fpga.JPG}
+        }%
+        \subfigure[Read data from FPGA]{%
+            \label{fig:data_read_fpga}
+            \includegraphics[width=0.4\textwidth]{assets/testing_on_fpga/data_read_from_fpga.JPG}
+        }%
+    \end{center}
+    \caption{%
+    Testing design on the FPGA in six simple steps.
+    }%
+    \label{fig:testing_on_fpga}
+\end{figure}
