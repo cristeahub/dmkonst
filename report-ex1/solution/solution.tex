@@ -105,7 +105,14 @@ Different components are detailed below.
 
 \subsubsection{Instruction register}
 
-Caches instructions while their executed.
+The instruction register stores the instruction which is currently being executed.
+To avoid unnecessary delay, the instruction\_out signal must be updated immediately when the instruction register receives a new instruction.
+To achieve this, it includes a bypass function.
+It is implemented using a combination of a flip-flop and a mux.
+When the ir\_write signal from the control unit is high, the flip-flop updates it value,
+but at the same time, the mux routes the instruction\_in signal directly to the out signal.
+On the next cycle, when the ir\_write signal is low again, the flip-flop will have updated its value.
+This creates the illusion that the instruction register updates instantly.
 
 \subsubsection{Register file}
 
