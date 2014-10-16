@@ -66,7 +66,7 @@ The final processor design implements the following subset of the MIPS instructi
 
 Note: the {\bf LDI} (Load Immediate) instruction is not a part of the MIPS instruction set\footnote{Figure C.1 \cite[p.66]{compendium}}.
 The {\bf LUI} (Load Upper Immediate) is the closest match.
-This instruction loads the value into the upper 16 bits of the register.
+This instruction loads $ immediate\_value * 2 ^{16} $ into the register.
 The support files handed out already use this instruction.
 
 \subsubsection{Control unit}
@@ -119,6 +119,17 @@ This creates the illusion that the instruction register updates instantly.
 Stores data.
 
 \subsubsection{ALU Control}
+
+The behaviour of the ALU control unit is heavily based on the one described in lecture 4\cite{lecture-4}.
+It has been extended to support the shift instructions SLL and SRL, therefore requiring the shamt part of the current instruction as input.
+In case of an R-type instruction, the shamt value is forwarded straight to the ALU.
+In the case of an LUI instruction, the alu should shift its input by 16 to the left.
+Therefore "10000" is sent as shamt to the ALU, and ALU Control is set to SLL.
+This reuse of generic components is rather nice!
+
+Due to these extensions the hardware of the ALU Control has diverged from the simple design originally presented in the lecture slides.
+To remedy this, the alu control out values were changed from the provided constants to an VHDL enum.
+This allows the compiler to assign values that will result in more optimized hardware than the authors could design manually.
 
 \begin{table}[ht!]
     \begin{tabular}{|l|l|l|l|l|l|l|}
