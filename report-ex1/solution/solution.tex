@@ -45,7 +45,6 @@ There's no central component for executing memory reads and writes.
 Instead, components responsible for computing memory address interface memory directly,
 while memory data buses are connected directly to the instruction register and data register.
 
-
 \subsubsection{MIPS subset}
 
 The final processor design implements the following subset of the MIPS instruction set.
@@ -91,7 +90,15 @@ This makes it a Moore machine.
 
 \subsection{Implementation}
 
-\subsubsection{Modularization}
+\subsubsection{Instruction register}
+
+Caches instructions while their executed.
+
+\subsubsection{Register file}
+
+Stores data.
+
+\subsubsection{ALU Control}
 
 \begin{table}[ht!]
     \begin{tabular}{|l|l|l|l|l|l|l|}
@@ -112,8 +119,6 @@ This makes it a Moore machine.
     \caption{ALU control table}
     \label{tab:alu-control}
 \end{table}
-
-Bottom-up approach, unit tests, integration tests
 
 \subsection{Design optimization}
 
