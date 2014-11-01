@@ -84,9 +84,11 @@ architecture behavioral of MIPSProcessor is
   signal stage_ex_mem_alu_zero_out : std_logic;
   signal stage_ex_mem_alu_result_out : std_logic_vector(31 downto 0);
   signal stage_ex_mem_read_data_2_out : std_logic_vector(31 downto 0);
+  signal stage_ex_mem_write_register_out : std_logic_vector(31 downto 0);
   
   signal stage_mem_wb_read_data_out : std_logic_vector(31 downto 0);
   signal stage_mem_wb_alu_result_out : std_logic_vector(31 downto 0);
+  signal stage_mem_wb_write_register_out : std_logic_vector(31 downto 0);
   
   -- Instruction aliases
   alias instruction_opcode : std_logic_vector(31 downto 26) is stage_if_id_instruction_out(31 downto 26);
@@ -163,7 +165,7 @@ begin
              clk => clk,
              read_register_1_in => instruction_rs,
              read_register_2_in => instruction_rt,
-             write_register_in => write_register_mux_out,
+             write_register_in => stage_mem_wb_write_register_out,
              write_data_in => write_data_mux_out,
              reg_write_in => reg_write,
              read_data_1_out => registers_read_data_1_out,
@@ -245,17 +247,21 @@ begin
             alu_zero_in => alu_result_zero,
             alu_result_in => alu_result_out,
             read_data_2_in => stage_id_ex_read_data_2_out,
+            write_register_in => write_register_mux_out,
             new_pc_out => stage_ex_mem_pc_out,
             alu_zero_out => stage_ex_mem_alu_zero_out,
             alu_result_out => stage_ex_mem_alu_result_out,
-            read_data_2_out => stage_ex_mem_read_data_2_out);
+            read_data_2_out => stage_ex_mem_read_data_2_out,
+            write_register_out => stage_ex_mem_write_register_out);
 
   stage_mem_wb : entity work.stage_mem_wb
   port map (
             clk => clk, reset => reset,
             read_data_in => dmem_data_in,
             alu_result_in => stage_ex_mem_alu_result_out,
+            write_register_in => stage_ex_mem_write_register_out,
             read_data_out => stage_mem_wb_read_data_out,
-            alu_result_out => stage_mem_wb_alu_result_out);
+            alu_result_out => stage_mem_wb_alu_result_out,
+            write_register_out => stage_mem_wb_write_register_out);
 
 end behavioral;
