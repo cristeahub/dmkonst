@@ -68,6 +68,7 @@ architecture behavioral of MIPSProcessor is
   signal sign_extend_b_out : std_logic_vector (27 downto 0);
   signal sign_extended_b : std_logic_vector(31 downto 0);
   signal pc_write_enable : std_logic;
+  signal pc_branch_add_pc_out : std_logic_vector(31 downto 0);
   
   -- Stages
   signal stage_if_id_incremented_pc_out : std_logic_vector(31 downto 0);
@@ -213,6 +214,12 @@ begin
   port map (
              data_in => instruction_jump_address,
              data_out => sign_extend_b_out);
+  
+  pc_branch_add : entity work.pc_branch_add
+  port map (
+            old_pc_in => stage_id_ex_incremented_pc_out,
+            instruction_address_in => stage_id_ex_sign_extend_out,
+            pc_out => pc_branch_add_pc_out);
              
   -- Stages
   
@@ -243,7 +250,7 @@ begin
   stage_ex_mem : entity work.stage_ex_mem
   port map (
             clk => clk, reset => reset,
-            new_pc_in => stage_if_id_incremented_pc_out, -- This value should be passed through an adder first
+            new_pc_in => pc_branch_add_pc_out,
             alu_zero_in => alu_result_zero,
             alu_result_in => alu_result_out,
             read_data_2_in => stage_id_ex_read_data_2_out,
