@@ -60,8 +60,6 @@ architecture behavioral of MIPSProcessor is
 
   -- Misc
   signal sign_extend_a_out : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal sign_extend_b_out : std_logic_vector (27 downto 0);
-  signal sign_extended_b : std_logic_vector(31 downto 0);
   signal pc_write_enable : std_logic;
   signal pc_branch_add_pc_out : std_logic_vector(31 downto 0);
   
@@ -80,11 +78,11 @@ architecture behavioral of MIPSProcessor is
   signal stage_ex_mem_alu_zero_out : std_logic;
   signal stage_ex_mem_alu_result_out : std_logic_vector(31 downto 0);
   signal stage_ex_mem_read_data_2_out : std_logic_vector(31 downto 0);
-  signal stage_ex_mem_write_register_out : std_logic_vector(31 downto 0);
+  signal stage_ex_mem_write_register_out : std_logic_vector(4 downto 0);
   
   signal stage_mem_wb_read_data_out : std_logic_vector(31 downto 0);
   signal stage_mem_wb_alu_result_out : std_logic_vector(31 downto 0);
-  signal stage_mem_wb_write_register_out : std_logic_vector(31 downto 0);
+  signal stage_mem_wb_write_register_out : std_logic_vector(4 downto 0);
   
   -- Instruction aliases
   alias instruction_opcode : std_logic_vector(31 downto 26) is stage_if_id_instruction_out(31 downto 26);
@@ -123,7 +121,6 @@ begin
              control_alu_op => alu_op,
              alu_control_out => alu_control_out);
 
-  sign_extended_b <= pc_out(31 downto 28) & sign_extend_b_out;
   pc: entity work.pc
   port map (
              clk => clk,
@@ -145,7 +142,7 @@ begin
              alu_op_out => alu_op,
              alu_src_out => alu_src_out,
 
-             branch_out => branch,
+             branch_out => branch_out,
              mem_write_out => mem_write,
 
              reg_write_out => reg_write,
@@ -184,19 +181,13 @@ begin
   Port map (
              a_in => stage_id_ex_read_data_2_out,
              b_in => stage_id_ex_sign_extend_out,
-             select_in => alu_src_b(0),
+             select_in => alu_src_out,
              data_out => alu_b_mux_out);
 
   sign_extend_a : entity work.sign_extend
   port map (
              data_in => instruction_address,
              data_out => sign_extend_a_out);
-
-  sign_extend_b : entity work.sign_extend
-  generic map (DATA_IN_WIDTH => 26, DATA_OUT_WIDTH => 28)
-  port map (
-             data_in => instruction_jump_address,
-             data_out => sign_extend_b_out);
   
   pc_branch_add : entity work.pc_branch_add
   port map (
