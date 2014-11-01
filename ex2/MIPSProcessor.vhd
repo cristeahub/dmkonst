@@ -174,8 +174,8 @@ begin
   Generic map (
                 DATA_WIDTH => 5)
   Port map (
-             a_in => instruction_rt,
-             b_in => instruction_rd,
+             a_in => stage_id_ex_instruction_rt_out,
+             b_in => stage_id_ex_instruction_rd_out,
              select_in => reg_dst,
              data_out => write_register_mux_out);
 
