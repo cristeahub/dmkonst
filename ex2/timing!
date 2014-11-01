@@ -1,0 +1,7 @@
+with tweakz
+d:  14.465ns{1}   (Maximum frequency:  69.132MHz
+Minimum period:  14.465ns{1}   (Maximum frequency:  69.132MHz) 
+
+without tweakz
+Minimum period:  16.573ns{1}   (Maximum frequency:  60.339MHz)
+Minimum period:  16.573ns{1}   (Maximum frequency:  60.339MHz) 

@@ -1,0 +1,9 @@
+#-----------------------------------------------------------
+# PlanAhead v12.4
+# Build 108585 by hdbuild on Tue Nov  9 16:43:51 PST 2010
+# Start of session at: Wed Oct 15 14:01:49 2014
+# Process ID: 5925
+# Log file: /home/aleksanb/Projects/dmkonst/ex1/planAhead_run_1/planAhead.log
+# Journal file: /home/aleksanb/Projects/dmkonst/ex1/planAhead_run_1/planAhead.jou
+#-----------------------------------------------------------
+start_gui -source /home/aleksanb/Projects/dmkonst/ex1/pa.fromNcd.tcl

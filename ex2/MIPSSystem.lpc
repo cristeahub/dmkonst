@@ -1,0 +1,18 @@
+# MIPSSystem.lpc  
+#   The constraints in this file were created simply to be viewed.  
+#   If you wish to use these constraints, please copy them into your  
+#   project's constraint file. If you do not have a project constraints  
+#   file yet, please use the "Project->New Source" menu to create one.
+
+
+
+#pin2ucf - Wed Oct 15 14:01:05 2014
+#The following constraints were newly added
+NET "clk" LOC = K15;
+NET "leds<0>" LOC = J13;
+NET "leds<1>" LOC = K14;
+NET "leds<2>" LOC = U17;
+NET "leds<3>" LOC = U18;
+NET "reset" LOC = H18;
+NET "UART_Rx" LOC = H13;
+NET "UART_Tx" LOC = H14;
