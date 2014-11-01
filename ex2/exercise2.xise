@@ -172,6 +172,22 @@
       <association xil_pn:name="BehavioralSimulation"/>
       <association xil_pn:name="Implementation"/>
     </file>
+    <file xil_pn:name="stage_if_id.vhd" xil_pn:type="FILE_VHDL">
+        <association xil_pn:name="BehavioralSimulation"/>
+        <association xil_pn:name="Implementation"/>
+    </file>
+    <file xil_pn:name="stage_id_ex.vhd" xil_pn:type="FILE_VHDL">
+        <association xil_pn:name="BehavioralSimulation"/>
+        <association xil_pn:name="Implementation"/>
+    </file>
+    <file xil_pn:name="stage_ex_mem.vhd" xil_pn:type="FILE_VHDL">
+        <association xil_pn:name="BehavioralSimulation"/>
+        <association xil_pn:name="Implementation"/>
+    </file>
+    <file xil_pn:name="stage_mem_wb.vhd" xil_pn:type="FILE_VHDL">
+        <association xil_pn:name="BehavioralSimulation"/>
+        <association xil_pn:name="Implementation"/>
+    </file>
     <file xil_pn:name="DualPortMem.xise" xil_pn:type="FILE_COREGENISE">
       <association xil_pn:name="Implementation"/>
     </file>

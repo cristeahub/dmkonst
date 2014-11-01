@@ -54,55 +54,63 @@ architecture behavioral of MIPSProcessor is
   signal alu_control_shamt_out : std_logic_vector (4 downto 0);
 
   -- register signals
-  signal read_data_1_out : std_logic_vector (31 downto 0);
-  signal read_data_2_out : std_logic_vector (31 downto 0);
-
-  -- Instruction aliases
-  signal cached_instruction : std_logic_vector(31 downto 0);
-  alias instruction_opcode : std_logic_vector(31 downto 26) is cached_instruction(31 downto 26);
-  alias instruction_rs : std_logic_vector(25 downto 21) is cached_instruction(25 downto 21);
-  alias instruction_rt : std_logic_vector(20 downto 16) is cached_instruction(20 downto 16);
-  alias instruction_rd : std_logic_vector(15 downto 11) is cached_instruction(15 downto 11);
-  alias instruction_address : std_logic_vector(15 downto 0) is cached_instruction(15 downto 0);
-  alias instruction_shamt : std_logic_vector(4 downto 0) is cached_instruction(10 downto 6);
-  alias instruction_funct : std_logic_vector(5 downto 0) is cached_instruction(5 downto 0);
-  alias instruction_jump_address : std_logic_vector(25 downto 0) is cached_instruction(25 downto 0);
+  signal registers_read_data_1_out : std_logic_vector (31 downto 0);
+  signal registers_read_data_2_out : std_logic_vector (31 downto 0);
 
   -- MUX signals
-  signal alu_a_mux_out : std_logic_vector(31 downto 0);
   signal alu_b_mux_out : std_logic_vector(31 downto 0);
   signal pc_mux_out : std_logic_vector(31 downto 0);
   signal write_register_mux_out : std_logic_vector(4 downto 0);
   signal write_data_mux_out : std_logic_vector(31 downto 0);
-
-  -- Latches
-  signal latch_alu_out : std_logic_vector (DATA_WIDTH - 1 downto 0);
 
   -- Misc
   signal sign_extend_a_out : std_logic_vector (DATA_WIDTH - 1 downto 0);
   signal sign_extend_b_out : std_logic_vector (27 downto 0);
   signal sign_extended_b : std_logic_vector(31 downto 0);
   signal pc_write_enable : std_logic;
+  
+  -- Stages
+  signal stage_if_id_incremented_pc_out : std_logic_vector(31 downto 0);
+  signal stage_if_id_instruction_out : std_logic_vector(31 downto 0);
+  
+  signal stage_id_ex_incremented_pc_out : std_logic_vector(31 downto 0);
+  signal stage_id_ex_read_data_1_out : std_logic_vector(31 downto 0);
+  signal stage_id_ex_read_data_2_out : std_logic_vector(31 downto 0);
+  signal stage_id_ex_sign_extend_out : std_logic_vector(31 downto 0);
+  signal stage_id_ex_instruction_rt_out : std_logic_vector(20 downto 16);
+  signal stage_id_ex_instruction_rd_out : std_logic_vector(15 downto 11);
+  
+  signal stage_ex_mem_pc_out : std_logic_vector(31 downto 0);
+  signal stage_ex_mem_alu_zero_out : std_logic;
+  signal stage_ex_mem_alu_result_out : std_logic_vector(31 downto 0);
+  signal stage_ex_mem_read_data_2_out : std_logic_vector(31 downto 0);
+  
+  signal stage_mem_wb_read_data_out : std_logic_vector(31 downto 0);
+  signal stage_mem_wb_alu_result_out : std_logic_vector(31 downto 0);
+  
+  -- Instruction aliases
+  alias instruction_opcode : std_logic_vector(31 downto 26) is stage_if_id_instruction_out(31 downto 26);
+  alias instruction_rs : std_logic_vector(25 downto 21) is stage_if_id_instruction_out(25 downto 21);
+  alias instruction_rt : std_logic_vector(20 downto 16) is stage_if_id_instruction_out(20 downto 16);
+  alias instruction_rd : std_logic_vector(15 downto 11) is stage_if_id_instruction_out(15 downto 11);
+  alias instruction_address : std_logic_vector(15 downto 0) is stage_if_id_instruction_out(15 downto 0);
+  alias instruction_shamt : std_logic_vector(4 downto 0) is stage_if_id_instruction_out(10 downto 6);
+  alias instruction_funct : std_logic_vector(5 downto 0) is stage_id_ex_sign_extend_out(5 downto 0);
+  alias instruction_jump_address : std_logic_vector(25 downto 0) is stage_if_id_instruction_out(25 downto 0);
 
 begin
 
   -- Wire it up!
   dmem_write_enable <= mem_write;
-  dmem_data_out <= read_data_2_out;
-  dmem_address <= latch_alu_out(7 downto 0);
+  dmem_data_out <= stage_ex_mem_read_data_2_out;
+  dmem_address <= stage_ex_mem_alu_result_out(7 downto 0);
 
   imem_address <= pc_out(7 downto 0);
 
   -- Here be entity declarations
-  instruction_register : entity work.instruction_register
-  port map ( clk => clk,
-             instruction_in => imem_data_in,
-             control_instruction_write => ir_write,
-             instruction_out => cached_instruction );
-
   alu: entity work.alu
   port map (
-             operand_a_in => alu_a_mux_out,
+             operand_a_in => stage_id_ex_read_data_1_out,
              operand_b_in => alu_b_mux_out,
              alu_control_in => alu_control_out,
              shamt_in => alu_control_shamt_out,
@@ -158,8 +166,8 @@ begin
              write_register_in => write_register_mux_out,
              write_data_in => write_data_mux_out,
              reg_write_in => reg_write,
-             read_data_1_out => read_data_1_out,
-             read_data_2_out => read_data_2_out);
+             read_data_1_out => registers_read_data_1_out,
+             read_data_2_out => registers_read_data_2_out);
 
   -- Muxes
   write_register_mux : entity work.mux
@@ -173,33 +181,25 @@ begin
 
   write_data_mux : entity work.mux
   Port map (
-             a_in => latch_alu_out,
-             b_in => dmem_data_in,
+             a_in => stage_mem_wb_read_data_out,
+             b_in => stage_mem_wb_alu_result_out,
              select_in => mem_to_reg,
              data_out => write_data_mux_out);
 
-  alu_a_mux : entity work.mux
+  alu_b_mux : entity work.mux
   Port map (
-             a_in => pc_out,
-             b_in => read_data_1_out,
-             select_in => alu_src_a,
-             data_out => alu_a_mux_out);
-
-  alu_b_mux : entity work.mux_4
-  Port map (
-             a_in => read_data_2_out,
-             b_in => x"00000001", -- Used to increment PC by one.
-             c_in => sign_extend_a_out,
-             d_in => x"00000000", -- Unused mux slot. Fill with ground.
-             select_in => alu_src_b,
+             a_in => stage_id_ex_read_data_2_out,
+             b_in => stage_id_ex_sign_extend_out,
+             select_in => alu_src_b(0),
              data_out => alu_b_mux_out);
 
-  -- Flip-flops
-  alu_out : entity work.value_storage
-  Port map (
-             clk => clk,
-             value_in => alu_result_out,
-             value_out => latch_alu_out);
+  pc_mux_c_in <= pc_out(31 downto 28) & sign_extend_b_out;
+  pc_mux : entity work.mux
+  port map (
+             a_in => alu_result_out,
+             b_in => pc_mux_c_in,
+             select_in => pc_source(0), -- TODO: Obviously broken shit
+             data_out => pc_mux_out);
 
   sign_extend_a : entity work.sign_extend
   port map (
@@ -211,5 +211,51 @@ begin
   port map (
              data_in => instruction_jump_address,
              data_out => sign_extend_b_out);
+             
+  -- Stages
+  
+  stage_if_id : entity work.stage_if_id
+  port map (
+            clk => clk, reset => reset,
+            incremented_pc_in => pc_out,
+            instruction_in => imem_data_in,
+            incremented_pc_out => stage_if_id_incremented_pc_out,
+            instruction_out => stage_if_id_instruction_out);
+
+  stage_id_ex : entity work.stage_id_ex
+  port map (
+            clk => clk, reset => reset,
+            incremented_pc_in => stage_if_id_incremented_pc_out,
+            read_data_1_in => registers_read_data_1_out,
+            read_data_2_in => registers_read_data_2_out,
+            sign_extend_in => sign_extend_a_out,
+            instruction_rt_in => instruction_rt,
+            instruction_rd_in => instruction_rd,
+            incremented_pc_out => stage_id_ex_incremented_pc_out,
+            read_data_1_out => stage_id_ex_read_data_1_out,
+            read_data_2_out => stage_id_ex_read_data_2_out,
+            sign_extend_out => stage_id_ex_sign_extend_out,
+            instruction_rt_out => stage_id_ex_instruction_rt_out,
+            instruction_rd_out => stage_id_ex_instruction_rd_out);
+
+  stage_ex_mem : entity work.stage_ex_mem
+  port map (
+            clk => clk, reset => reset,
+            new_pc_in => stage_if_id_incremented_pc_out, -- This value should be passed through an adder first
+            alu_zero_in => alu_result_zero,
+            alu_result_in => alu_result_out,
+            read_data_2_in => stage_id_ex_read_data_2_out,
+            new_pc_out => stage_ex_mem_pc_out,
+            alu_zero_out => stage_ex_mem_alu_zero_out,
+            alu_result_out => stage_ex_mem_alu_result_out,
+            read_data_2_out => stage_ex_mem_read_data_2_out);
+
+  stage_mem_wb : entity work.stage_mem_wb
+  port map (
+            clk => clk, reset => reset,
+            read_data_in => dmem_data_in,
+            alu_result_in => stage_ex_mem_alu_result_out,
+            read_data_out => stage_mem_wb_read_data_out,
+            alu_result_out => stage_mem_wb_alu_result_out);
 
 end behavioral;
