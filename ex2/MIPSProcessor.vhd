@@ -29,12 +29,9 @@ architecture behavioral of MIPSProcessor is
 
   -- pc signals
   signal pc_out : std_logic_vector(31 downto 0);
-  signal write_enable_in : std_logic;
 
   -- control signals
-  signal control_pc_write_out : std_logic;
-  signal control_pc_write_cond_out : std_logic;
-  signal control_pc_source_out : std_logic_vector(1 downto 0);
+  signal control_pc_source_out : std_logic;
   signal control_mem_to_reg_out : std_logic;
   signal control_alu_op_out : std_logic_vector(1 downto 0);
   signal control_mem_write_out : std_logic;
@@ -63,9 +60,8 @@ architecture behavioral of MIPSProcessor is
 
   -- Misc
   signal sign_extend_a_out : std_logic_vector (DATA_WIDTH - 1 downto 0);
-  signal sign_extend_b_out : std_logic_vector (27 downto 0);
-  signal sign_extended_b : std_logic_vector(31 downto 0);
   signal pc_write_enable : std_logic;
+  signal pc_branch_add_pc_out : std_logic_vector(31 downto 0);
 
   -- Stages
   signal stage_if_id_incremented_pc_out : std_logic_vector(31 downto 0);
@@ -92,6 +88,7 @@ architecture behavioral of MIPSProcessor is
   signal stage_ex_mem_alu_zero_out : std_logic;
   signal stage_ex_mem_alu_result_out : std_logic_vector(31 downto 0);
   signal stage_ex_mem_read_data_2_out : std_logic_vector(31 downto 0);
+  signal stage_ex_mem_write_register_out : std_logic_vector(4 downto 0);
 
   signal stage_ex_mem_branch_out : std_logic;
   signal stage_ex_mem_mem_write_out : std_logic;
@@ -101,6 +98,7 @@ architecture behavioral of MIPSProcessor is
   -- Stage MEM/WB
   signal stage_mem_wb_read_data_out : std_logic_vector(31 downto 0);
   signal stage_mem_wb_alu_result_out : std_logic_vector(31 downto 0);
+  signal stage_mem_wb_write_register_out : std_logic_vector(4 downto 0);
 
   signal stage_mem_wb_reg_write_out : std_logic;
   signal stage_mem_wb_mem_to_reg_out : std_logic;
@@ -142,18 +140,14 @@ begin
              control_alu_op => stage_id_ex_alu_op_out,
              alu_control_out => alu_control_out);
 
-  sign_extended_b <= pc_out(31 downto 28) & sign_extend_b_out;
   pc: entity work.pc
   port map (
              clk => clk,
              reset => reset,
 
-             pc_branch_address_in => pc_branch_address_in,
+             new_pc_in => stage_ex_mem_pc_out,
              pc_source_in => pc_source,
 
-             alu_result_zero_in => alu_result_zero,
-             pc_write_cond_in => pc_write_cond,
-             pc_write_in => pc_write,
              pc_out => pc_out);
 
   control_unit: entity work.control_unit
@@ -182,7 +176,7 @@ begin
              clk => clk,
              read_register_1_in => instruction_rs,
              read_register_2_in => instruction_rt,
-             write_register_in => write_register_mux_out,
+             write_register_in => stage_mem_wb_write_register_out,
              write_data_in => write_data_mux_out,
              reg_write_in => stage_mem_wb_reg_write_out,
              read_data_1_out => registers_read_data_1_out,
@@ -193,8 +187,8 @@ begin
   Generic map (
                 DATA_WIDTH => 5)
   Port map (
-             a_in => instruction_rt,
-             b_in => instruction_rd,
+             a_in => stage_id_ex_instruction_rt_out,
+             b_in => stage_id_ex_instruction_rd_out,
              select_in => reg_dst,
              data_out => write_register_mux_out);
 
@@ -209,27 +203,19 @@ begin
   Port map (
              a_in => stage_id_ex_read_data_2_out,
              b_in => stage_id_ex_sign_extend_out,
-             select_in => alu_src_b(0),
+             select_in => alu_src_out,
              data_out => alu_b_mux_out);
-
-  pc_mux_c_in <= pc_out(31 downto 28) & sign_extend_b_out;
-  pc_mux : entity work.mux
-  port map (
-             a_in => alu_result_out,
-             b_in => pc_mux_c_in,
-             select_in => pc_source(0), -- TODO: Obviously broken shit
-             data_out => pc_mux_out);
 
   sign_extend_a : entity work.sign_extend
   port map (
              data_in => instruction_address,
              data_out => sign_extend_a_out);
-
-  sign_extend_b : entity work.sign_extend
-  generic map (DATA_IN_WIDTH => 26, DATA_OUT_WIDTH => 28)
+  
+  pc_branch_add : entity work.pc_branch_add
   port map (
-             data_in => instruction_jump_address,
-             data_out => sign_extend_b_out);
+            old_pc_in => stage_id_ex_incremented_pc_out,
+            instruction_address_in => stage_id_ex_sign_extend_out,
+            pc_out => pc_branch_add_pc_out);
              
   -- Stages
   
@@ -277,14 +263,16 @@ begin
   stage_ex_mem : entity work.stage_ex_mem
   port map (
             clk => clk, reset => reset,
-            new_pc_in => stage_if_id_incremented_pc_out, -- This value should be passed through an adder first
+            new_pc_in => pc_branch_add_pc_out,
             alu_zero_in => alu_result_zero,
             alu_result_in => alu_result_out,
             read_data_2_in => stage_id_ex_read_data_2_out,
+            write_register_in => write_register_mux_out,
             new_pc_out => stage_ex_mem_pc_out,
             alu_zero_out => stage_ex_mem_alu_zero_out,
             alu_result_out => stage_ex_mem_alu_result_out,
             read_data_2_out => stage_ex_mem_read_data_2_out,
+            write_register_out => stage_ex_mem_write_register_out,
 
             branch_in => stage_id_ex_branch_out,
             mem_write_in => stage_id_ex_mem_write_out,
@@ -302,8 +290,10 @@ begin
             clk => clk, reset => reset,
             read_data_in => dmem_data_in,
             alu_result_in => stage_ex_mem_alu_result_out,
+            write_register_in => stage_ex_mem_write_register_out,
             read_data_out => stage_mem_wb_read_data_out,
             alu_result_out => stage_mem_wb_alu_result_out,
+            write_register_out => stage_mem_wb_write_register_out,
 
             reg_write_in => stage_ex_mem_reg_write_out,
             mem_to_reg_in => stage_ex_mem_mem_to_reg_out,

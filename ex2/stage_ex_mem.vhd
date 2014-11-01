@@ -6,6 +6,7 @@ entity stage_ex_mem is
            alu_zero_in : in  STD_LOGIC;
            alu_result_in : in  STD_LOGIC_VECTOR (31 downto 0);
            read_data_2_in : in  STD_LOGIC_VECTOR (31 downto 0);
+           write_register_in : in  STD_LOGIC_VECTOR (4 downto 0);
 
            -- Memory access stage control lines
            branch_in : in std_logic;
@@ -27,7 +28,8 @@ entity stage_ex_mem is
            new_pc_out : out  STD_LOGIC_VECTOR (31 downto 0);
            alu_zero_out : out  STD_LOGIC;
            alu_result_out : out  STD_LOGIC_VECTOR (31 downto 0);
-           read_data_2_out : out  STD_LOGIC_VECTOR (31 downto 0));
+           read_data_2_out : out  STD_LOGIC_VECTOR (31 downto 0);
+           write_register_out : out  STD_LOGIC_VECTOR (4 downto 0));
 end stage_ex_mem;
 
 architecture Behavioral of stage_ex_mem is
@@ -46,6 +48,7 @@ begin
     alu_zero_out <= alu_zero_in;
     alu_result_out <= alu_result_in;
     read_data_2_out <= read_data_2_in;
+    write_register_out <= write_register_in;
 
     branch_out <= branch_in;
     mem_write_out <= mem_write_in;
