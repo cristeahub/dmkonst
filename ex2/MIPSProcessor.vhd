@@ -43,11 +43,11 @@ architecture behavioral of MIPSProcessor is
   signal alu_src_b : std_logic_vector(1 downto 0);
   signal reg_write : std_logic;
   signal reg_dst : std_logic;
+  signal branch_out : std_logic;
 
   -- alu signals
   signal alu_result_zero : std_logic;
   signal alu_result_out : std_logic_vector(31 downto 0);
-
   signal alu_control_out : alu_control_t;
 
   -- alu control signals
@@ -138,17 +138,17 @@ begin
              reset => reset,
              instruction_in => instruction_opcode,
              processor_enable => processor_enable,
-             ir_write => ir_write,
-             pc_write => pc_write,
-             pc_write_cond => pc_write_cond,
-             pc_source => pc_source,
-             mem_to_reg => mem_to_reg,
-             alu_op => alu_op,
-             mem_write => mem_write,
-             alu_src_a => alu_src_a,
-             alu_src_b => alu_src_b,
-             reg_write => reg_write,
-             reg_dst => reg_dst);
+
+             reg_dst_out => reg_dst,
+             alu_op_out => alu_op,
+             alu_src_out => alu_src_b,
+
+             branch_out => branch,
+             mem_write_out => mem_write,
+
+             reg_write_out => reg_write,
+             mem_to_reg_out => mem_to_reg
+            );
 
   registers : entity work.registers
   port map (
