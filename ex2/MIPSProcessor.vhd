@@ -32,18 +32,16 @@ architecture behavioral of MIPSProcessor is
   signal write_enable_in : std_logic;
 
   -- control signals
-  signal ir_write : std_logic;
-  signal pc_write : std_logic;
-  signal pc_write_cond : std_logic;
-  signal pc_source : std_logic_vector(1 downto 0);
-  signal mem_to_reg : std_logic;
-  signal alu_op : std_logic_vector(1 downto 0);
-  signal mem_write : std_logic;
-  signal alu_src_a : std_logic;
-  signal alu_src_b : std_logic_vector(1 downto 0);
-  signal reg_write : std_logic;
-  signal reg_dst : std_logic;
-  signal branch_out : std_logic;
+  signal control_pc_write_out : std_logic;
+  signal control_pc_write_cond_out : std_logic;
+  signal control_pc_source_out : std_logic_vector(1 downto 0);
+  signal control_mem_to_reg_out : std_logic;
+  signal control_alu_op_out : std_logic_vector(1 downto 0);
+  signal control_mem_write_out : std_logic;
+  signal control_alu_src_out : std_logic;
+  signal control_reg_write_out : std_logic;
+  signal control_reg_dst_out : std_logic;
+  signal control_branch_out : std_logic;
 
   -- alu signals
   signal alu_result_zero : std_logic;
@@ -68,26 +66,45 @@ architecture behavioral of MIPSProcessor is
   signal sign_extend_b_out : std_logic_vector (27 downto 0);
   signal sign_extended_b : std_logic_vector(31 downto 0);
   signal pc_write_enable : std_logic;
-  
+
   -- Stages
   signal stage_if_id_incremented_pc_out : std_logic_vector(31 downto 0);
   signal stage_if_id_instruction_out : std_logic_vector(31 downto 0);
-  
+
+  -- Stage ID/EX
   signal stage_id_ex_incremented_pc_out : std_logic_vector(31 downto 0);
   signal stage_id_ex_read_data_1_out : std_logic_vector(31 downto 0);
   signal stage_id_ex_read_data_2_out : std_logic_vector(31 downto 0);
   signal stage_id_ex_sign_extend_out : std_logic_vector(31 downto 0);
   signal stage_id_ex_instruction_rt_out : std_logic_vector(20 downto 16);
   signal stage_id_ex_instruction_rd_out : std_logic_vector(15 downto 11);
-  
+
+  signal stage_id_ex_reg_dst_out : std_logic;
+  signal stage_id_ex_alu_op_out : std_logic_vector(1 downto 0);
+  signal stage_id_ex_alu_src_out : std_logic;
+  signal stage_id_ex_branch_out : std_logic;
+  signal stage_id_ex_mem_write_out : std_logic;
+  signal stage_id_ex_reg_write_out : std_logic;
+  signal stage_id_ex_mem_to_reg_out : std_logic;
+
+  -- Stage EX/MEM
   signal stage_ex_mem_pc_out : std_logic_vector(31 downto 0);
   signal stage_ex_mem_alu_zero_out : std_logic;
   signal stage_ex_mem_alu_result_out : std_logic_vector(31 downto 0);
   signal stage_ex_mem_read_data_2_out : std_logic_vector(31 downto 0);
-  
+
+  signal stage_ex_mem_branch_out : std_logic;
+  signal stage_ex_mem_mem_write_out : std_logic;
+  signal stage_ex_mem_reg_write_out : std_logic;
+  signal stage_ex_mem_mem_to_reg_out : std_logic;
+
+  -- Stage MEM/WB
   signal stage_mem_wb_read_data_out : std_logic_vector(31 downto 0);
   signal stage_mem_wb_alu_result_out : std_logic_vector(31 downto 0);
-  
+
+  signal stage_mem_wb_reg_write_out : std_logic;
+  signal stage_mem_wb_mem_to_reg_out : std_logic;
+
   -- Instruction aliases
   alias instruction_opcode : std_logic_vector(31 downto 26) is stage_if_id_instruction_out(31 downto 26);
   alias instruction_rs : std_logic_vector(25 downto 21) is stage_if_id_instruction_out(25 downto 21);
@@ -101,7 +118,7 @@ architecture behavioral of MIPSProcessor is
 begin
 
   -- Wire it up!
-  dmem_write_enable <= mem_write;
+  dmem_write_enable <= stage_ex_mem_mem_write_out;
   dmem_data_out <= stage_ex_mem_read_data_2_out;
   dmem_address <= stage_ex_mem_alu_result_out(7 downto 0);
 
@@ -122,7 +139,7 @@ begin
              alu_function_in => instruction_funct,
              shamt_in => instruction_shamt,
              shamt_out => alu_control_shamt_out,
-             control_alu_op => alu_op,
+             control_alu_op => stage_id_ex_alu_op_out,
              alu_control_out => alu_control_out);
 
   sign_extended_b <= pc_out(31 downto 28) & sign_extend_b_out;
@@ -131,8 +148,7 @@ begin
              clk => clk,
              reset => reset,
 
-             latch_alu_in => latch_alu_out,
-             sign_extended_b_in => sign_extended_b,
+             pc_branch_address_in => pc_branch_address_in,
              pc_source_in => pc_source,
 
              alu_result_zero_in => alu_result_zero,
@@ -147,15 +163,18 @@ begin
              instruction_in => instruction_opcode,
              processor_enable => processor_enable,
 
-             reg_dst_out => reg_dst,
-             alu_op_out => alu_op,
-             alu_src_out => alu_src_b,
+             -- Execution / adress calculation stage control lines
+             reg_dst_out => control_reg_dst_out,
+             alu_op_out => control_alu_op_out,
+             alu_src_out => control_alu_src_out,
 
-             branch_out => branch,
-             mem_write_out => mem_write,
+             -- Memory access stage control lines
+             branch_out => control_branch_out,
+             mem_write_out => control_mem_write_out,
 
-             reg_write_out => reg_write,
-             mem_to_reg_out => mem_to_reg
+             -- Write-back stage control lines
+             reg_write_out => control_reg_write_out,
+             mem_to_reg_out => control_mem_to_reg_out
             );
 
   registers : entity work.registers
@@ -165,7 +184,7 @@ begin
              read_register_2_in => instruction_rt,
              write_register_in => write_register_mux_out,
              write_data_in => write_data_mux_out,
-             reg_write_in => reg_write,
+             reg_write_in => stage_mem_wb_reg_write_out,
              read_data_1_out => registers_read_data_1_out,
              read_data_2_out => registers_read_data_2_out);
 
@@ -236,7 +255,24 @@ begin
             read_data_2_out => stage_id_ex_read_data_2_out,
             sign_extend_out => stage_id_ex_sign_extend_out,
             instruction_rt_out => stage_id_ex_instruction_rt_out,
-            instruction_rd_out => stage_id_ex_instruction_rd_out);
+            instruction_rd_out => stage_id_ex_instruction_rd_out,
+
+            reg_dst_in => control_reg_dst_out,
+            alu_op_in => control_alu_op_out,
+            alu_src_in => control_alu_src_out,
+            branch_in => control_branch_out,
+            mem_write_in => control_mem_write_out,
+            reg_write_in => control_reg_write_out,
+            mem_to_reg_in => control_mem_to_reg_out,
+
+            reg_dst_out => stage_id_ex_reg_dst_out,
+            alu_op_out => stage_id_ex_alu_op_out,
+            alu_src_out => stage_id_ex_alu_src_out,
+            branch_out => stage_id_ex_branch_out,
+            mem_write_out => stage_id_ex_mem_write_out,
+            reg_write_out => stage_id_ex_reg_write_out,
+            mem_to_reg_out => stage_id_ex_mem_to_reg_out
+           );
 
   stage_ex_mem : entity work.stage_ex_mem
   port map (
@@ -248,7 +284,18 @@ begin
             new_pc_out => stage_ex_mem_pc_out,
             alu_zero_out => stage_ex_mem_alu_zero_out,
             alu_result_out => stage_ex_mem_alu_result_out,
-            read_data_2_out => stage_ex_mem_read_data_2_out);
+            read_data_2_out => stage_ex_mem_read_data_2_out,
+
+            branch_in => stage_id_ex_branch_out,
+            mem_write_in => stage_id_ex_mem_write_out,
+            reg_write_in => stage_id_ex_reg_write_out,
+            mem_to_reg_in => stage_id_ex_mem_to_reg_out,
+
+            branch_out => stage_ex_mem_branch_out,
+            mem_write_out => stage_ex_mem_mem_write_out,
+            reg_write_out => stage_ex_mem_reg_write_out,
+            mem_to_reg_out => stage_ex_mem_mem_to_reg_out
+          );
 
   stage_mem_wb : entity work.stage_mem_wb
   port map (
@@ -256,6 +303,13 @@ begin
             read_data_in => dmem_data_in,
             alu_result_in => stage_ex_mem_alu_result_out,
             read_data_out => stage_mem_wb_read_data_out,
-            alu_result_out => stage_mem_wb_alu_result_out);
+            alu_result_out => stage_mem_wb_alu_result_out,
+
+            reg_write_in => stage_ex_mem_reg_write_out,
+            mem_to_reg_in => stage_ex_mem_mem_to_reg_out,
+
+            reg_write_out => stage_mem_wb_reg_write_out,
+            mem_to_reg_out => stage_mem_wb_mem_to_reg_out
+          );
 
 end behavioral;

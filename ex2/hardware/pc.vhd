@@ -6,9 +6,8 @@ entity pc is
   Port ( clk : in  std_logic;
          reset : in  std_logic;
 
-         latch_alu_in : in std_logic_vector(31 downto 0);
-         sign_extended_b_in : in std_logic_vector(31 downto 0);
-         pc_source_in : in std_logic_vector(1 downto 0);
+         pc_branch_address_in : in std_logic_vector(31 downto 0);
+         pc_source_in : in std_logic;
 
          alu_result_zero_in : in std_logic;
          pc_write_cond_in : in std_logic;
@@ -22,9 +21,8 @@ architecture Behavioral of pc is
 begin
 
   with pc_source_in select
-    pc_in <= std_logic_vector(unsigned(pc_out_tmp) + 1) when "00",
-             latch_alu_in when "01",
-             sign_extended_b_in when others;
+    pc_in <= pc_branch_address_in when '1',
+             std_logic_vector(unsigned(pc_out_tmp) + 1) when others;
 
   PC : process ( clk, reset )
   begin
