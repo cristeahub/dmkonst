@@ -29,18 +29,13 @@ architecture behavioral of MIPSProcessor is
 
   -- pc signals
   signal pc_out : std_logic_vector(31 downto 0);
-  signal write_enable_in : std_logic;
 
   -- control signals
-  signal ir_write : std_logic;
-  signal pc_write : std_logic;
-  signal pc_write_cond : std_logic;
-  signal pc_source : std_logic_vector(1 downto 0);
+  signal pc_source : std_logic;
   signal mem_to_reg : std_logic;
   signal alu_op : std_logic_vector(1 downto 0);
   signal mem_write : std_logic;
-  signal alu_src_a : std_logic;
-  signal alu_src_b : std_logic_vector(1 downto 0);
+  signal alu_src_out : std_logic;
   signal reg_write : std_logic;
   signal reg_dst : std_logic;
   signal branch_out : std_logic;
@@ -134,13 +129,9 @@ begin
              clk => clk,
              reset => reset,
 
-             latch_alu_in => latch_alu_out,
-             sign_extended_b_in => sign_extended_b,
+             new_pc_in => stage_ex_mem_pc_out,
              pc_source_in => pc_source,
 
-             alu_result_zero_in => alu_result_zero,
-             pc_write_cond_in => pc_write_cond,
-             pc_write_in => pc_write,
              pc_out => pc_out);
 
   control_unit: entity work.control_unit
@@ -152,7 +143,7 @@ begin
 
              reg_dst_out => reg_dst,
              alu_op_out => alu_op,
-             alu_src_out => alu_src_b,
+             alu_src_out => alu_src_out,
 
              branch_out => branch,
              mem_write_out => mem_write,
@@ -195,14 +186,6 @@ begin
              b_in => stage_id_ex_sign_extend_out,
              select_in => alu_src_b(0),
              data_out => alu_b_mux_out);
-
-  pc_mux_c_in <= pc_out(31 downto 28) & sign_extend_b_out;
-  pc_mux : entity work.mux
-  port map (
-             a_in => alu_result_out,
-             b_in => pc_mux_c_in,
-             select_in => pc_source(0), -- TODO: Obviously broken shit
-             data_out => pc_mux_out);
 
   sign_extend_a : entity work.sign_extend
   port map (
