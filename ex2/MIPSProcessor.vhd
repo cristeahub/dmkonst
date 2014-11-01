@@ -81,7 +81,7 @@ architecture behavioral of MIPSProcessor is
   -- Misc
   signal sign_extend_a_out : std_logic_vector (DATA_WIDTH - 1 downto 0);
   signal sign_extend_b_out : std_logic_vector (27 downto 0);
-  signal pc_mux_c_in : std_logic_vector(31 downto 0);
+  signal sign_extended_b : std_logic_vector(31 downto 0);
   signal pc_write_enable : std_logic;
 
 begin
@@ -117,13 +117,19 @@ begin
              control_alu_op => alu_op,
              alu_control_out => alu_control_out);
 
-  pc_write_enable <= (alu_result_zero and pc_write_cond) or pc_write;
+  sign_extended_b <= pc_out(31 downto 28) & sign_extend_b_out;
   pc: entity work.pc
   port map (
              clk => clk,
              reset => reset,
-             write_enable_in => pc_write_enable,
-             pc_in => pc_mux_out,
+
+             latch_alu_in => latch_alu_out,
+             sign_extended_b_in => sign_extended_b,
+             pc_source_in => pc_source,
+
+             alu_result_zero_in => alu_result_zero,
+             pc_write_cond_in => pc_write_cond,
+             pc_write_in => pc_write,
              pc_out => pc_out);
 
   control_unit: entity work.control_unit
@@ -187,16 +193,6 @@ begin
              d_in => x"00000000", -- Unused mux slot. Fill with ground.
              select_in => alu_src_b,
              data_out => alu_b_mux_out);
-
-  pc_mux_c_in <= pc_out(31 downto 28) & sign_extend_b_out;
-  pc_mux : entity work.mux_4
-  port map (
-             a_in => alu_result_out,
-             b_in => latch_alu_out,
-             c_in => pc_mux_c_in,
-             d_in => x"00000000", -- Unused mux slot. Fill with ground.
-             select_in => pc_source,
-             data_out => pc_mux_out);
 
   -- Flip-flops
   alu_out : entity work.value_storage
