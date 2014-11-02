@@ -143,9 +143,6 @@ begin
   generic map(
                ADDR_WIDTH => ADDR_WIDTH)
   port map (
-             clk => clk,
-             reset => reset,
-
              new_pc_in => stage_ex_mem_pc_out,
              pc_source_in => control_pc_source_out,
 

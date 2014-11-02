@@ -4,8 +4,6 @@ use work.constants.all;
 
 entity control_unit is
   port (
-         clk : in std_logic;
-         reset : in std_logic;
          instruction_in : in  std_logic_vector (31 downto 26);
          processor_enable : in std_logic;
 
