@@ -140,6 +140,7 @@ begin
              control_alu_op => stage_id_ex_alu_op_out,
              alu_control_out => alu_control_out);
 
+  control_pc_source_out <= stage_ex_mem_alu_zero_out and stage_ex_mem_branch_out;
   pc: entity work.pc
   port map (
              clk => clk,
