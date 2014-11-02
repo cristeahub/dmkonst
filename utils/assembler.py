@@ -4,10 +4,11 @@ opcodes = {
     'lw': 0x23,
     'sw': 0x2b,
     'beq': 0x4,
+    'lui': 0xf,
 }
 instruction_formats = {
     'r': ['add', 'sub'],
-    'i': ['lw', 'sw', 'beq'],
+    'i': ['lw', 'sw', 'beq', 'lui'],
     'j': ['j'],
     'nop': ['nop'],
 }
@@ -41,16 +42,26 @@ def parse_i_type(instruction_tokens):
 
     rt = int(instruction_tokens[1][1:])
 
-    imm, rs = instruction_tokens[2].split('($')
-
-    imm = int(imm)
-    rs = int(rs[:-1])
+    if instruction == 'lw' or instruction == 'sw':
+        imm, rs = instruction_tokens[2].split('($')
+        imm = int(imm)
+        rs = int(rs[:-1])
+    elif instruction == 'lui':
+        rs = 0
+        imm = int(instruction_tokens[2])
+    elif instruction == 'beq':
+        rt = int(instruction_tokens[2][1:])
+        rs = int(instruction_tokens[1][1:])
+        imm = int(instruction_tokens[3])
 
     return (opcode << 26) + (rs << 21) + (rt << 16) + imm
 
 
 def parse_j_type(instruction_tokens):
-    pass
+    opcode = 2
+    address = int(instruction_tokens[1])
+
+    return (opcode << 26) + address
 
 
 program = []
@@ -65,15 +76,13 @@ for raw_instruction in stdin:
             instruction_format = key
             break
 
-    encoded_instruction = 0
+    encoded_instruction = 0  # Default to nop
     if instruction_format == 'r':
         encoded_instruction = parse_r_type(instruction_tokens)
     if instruction_format == 'i':
         encoded_instruction = parse_i_type(instruction_tokens)
     if instruction_format == 'j':
         encoded_instruction = parse_j_type(instruction_tokens)
-    if instruction_format == 'nop':
-        encoded_instruction = parse_r_type(['sll', '$0', '$0', '$0'])
 
     program.append('X"{:08x}", -- {}'.format(encoded_instruction, raw_instruction))
 
