@@ -7,7 +7,7 @@ opcodes = {
     'lui': 0xf,
 }
 instruction_formats = {
-    'r': ['add', 'sub'],
+    'r': ['add', 'sub', 'and', 'or', 'slt', 'sll', 'slr'],
     'i': ['lw', 'sw', 'beq', 'lui'],
     'j': ['j'],
     'nop': ['nop'],
@@ -29,7 +29,7 @@ def parse_r_type(instruction_tokens):
 
     alu_function = funct_codes[instruction]
 
-    rd, rt, rs = map(lambda e: int(e[1:]), instruction_tokens[1:])
+    rd, rs, rt = map(lambda e: int(e[1:]), instruction_tokens[1:])
 
     shamt = 0
 
