@@ -48,7 +48,7 @@ begin
       case instruction_in is
         when R_TYPE =>
           reg_dst_out <= '1';
-          alu_op_out <= "00";
+          alu_op_out <= "10";
           reg_write_out <= '1';
         when LW =>
           alu_src_out <= '1';
