@@ -193,7 +193,7 @@ begin
   Port map (
              a_in => stage_mem_wb_read_data_out,
              b_in => stage_mem_wb_alu_result_out,
-             select_in => control_mem_to_reg_out,
+             select_in => stage_mem_wb_mem_to_reg_out,
              data_out => write_data_mux_out);
 
   alu_b_mux : entity work.mux
