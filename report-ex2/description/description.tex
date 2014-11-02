@@ -1,3 +1,15 @@
 \section{Description}
 
 Some description
+
+Søndag:
+
+\begin{enumerate}
+  \item Our methodology: Rewrite system from Ex1 to use barriers, and combinatorial state.
+  \item Extend RTL sketch from book with support for 2-cycle jumps.
+  \item Test that the entire program works, simulating a multicycle architecture with the pipelined version by filling pipeline with nops after each 'real' instruction.
+  \item Everything now works in the ghettoPipeline. Many issues were had with the assembler, as no testing suite was developed. Bugs had to be ironed out manually.
+\end{enumerate}
+
+Optimization: Move branch one step earlier. Might introduce longer critical path.
+Delays: 4 nops on data dependencies. 3 nops on branch. 1 nop on jump.
