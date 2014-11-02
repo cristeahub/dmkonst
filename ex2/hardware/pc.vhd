@@ -27,7 +27,7 @@ begin
   PC : process ( clk, reset, processor_enable )
   begin
     if reset = '1' then
-      pc_out_tmp <= x"00";
+      pc_out_tmp <= x"FF";
     elsif rising_edge(clk) and processor_enable = '1' then
       pc_out_tmp <= pc_in;
     end if;
