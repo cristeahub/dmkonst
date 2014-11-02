@@ -2,7 +2,9 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 entity stage_id_ex is
-    Port ( incremented_pc_in : in  STD_LOGIC_VECTOR (31 downto 0);
+    Generic (
+              ADDR_WIDTH : integer := 8);
+    Port ( incremented_pc_in : in  STD_LOGIC_VECTOR (ADDR_WIDTH - 1 downto 0);
            read_data_1_in : in  STD_LOGIC_VECTOR (31 downto 0);
            read_data_2_in : in  STD_LOGIC_VECTOR (31 downto 0);
            sign_extend_in : in  STD_LOGIC_VECTOR (31 downto 0);
@@ -34,7 +36,7 @@ entity stage_id_ex is
            reg_write_out : out std_logic;
            mem_to_reg_out : out std_logic;
 
-           incremented_pc_out : out  STD_LOGIC_VECTOR (31 downto 0);
+           incremented_pc_out : out  STD_LOGIC_VECTOR (ADDR_WIDTH - 1 downto 0);
            read_data_1_out : out  STD_LOGIC_VECTOR (31 downto 0);
            read_data_2_out : out  STD_LOGIC_VECTOR (31 downto 0);
            sign_extend_out : out  STD_LOGIC_VECTOR (31 downto 0);

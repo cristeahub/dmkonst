@@ -2,7 +2,9 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 entity stage_ex_mem is
-    Port ( new_pc_in : in  STD_LOGIC_VECTOR (31 downto 0);
+    Generic (
+              ADDR_WIDTH : integer := 8);
+    Port ( new_pc_in : in  STD_LOGIC_VECTOR (ADDR_WIDTH - 1 downto 0);
            alu_zero_in : in  STD_LOGIC;
            alu_result_in : in  STD_LOGIC_VECTOR (31 downto 0);
            read_data_2_in : in  STD_LOGIC_VECTOR (31 downto 0);
@@ -25,7 +27,7 @@ entity stage_ex_mem is
            reg_write_out : out std_logic;
            mem_to_reg_out : out std_logic;
 
-           new_pc_out : out  STD_LOGIC_VECTOR (31 downto 0);
+           new_pc_out : out  STD_LOGIC_VECTOR (ADDR_WIDTH - 1 downto 0);
            alu_zero_out : out  STD_LOGIC;
            alu_result_out : out  STD_LOGIC_VECTOR (31 downto 0);
            read_data_2_out : out  STD_LOGIC_VECTOR (31 downto 0);
