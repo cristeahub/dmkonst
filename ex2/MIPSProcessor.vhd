@@ -186,7 +186,7 @@ begin
   Port map (
              a_in => stage_id_ex_instruction_rt_out,
              b_in => stage_id_ex_instruction_rd_out,
-             select_in => control_reg_dst_out,
+             select_in => stage_id_ex_reg_dst_out,
              data_out => write_register_mux_out);
 
   write_data_mux : entity work.mux
@@ -200,7 +200,7 @@ begin
   Port map (
              a_in => stage_id_ex_read_data_2_out,
              b_in => stage_id_ex_sign_extend_out,
-             select_in => control_alu_src_out,
+             select_in => stage_id_ex_alu_src_out,
              data_out => alu_b_mux_out);
 
   sign_extend_a : entity work.sign_extend
