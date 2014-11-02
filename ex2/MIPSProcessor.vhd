@@ -39,6 +39,7 @@ architecture behavioral of MIPSProcessor is
   signal control_reg_write_out : std_logic;
   signal control_reg_dst_out : std_logic;
   signal control_branch_out : std_logic;
+  signal control_pc_jump_override_out : std_logic;
 
   -- alu signals
   signal alu_result_zero : std_logic;
@@ -110,7 +111,7 @@ architecture behavioral of MIPSProcessor is
   alias instruction_address : std_logic_vector(15 downto 0) is stage_if_id_instruction_out(15 downto 0);
   alias instruction_shamt : std_logic_vector(4 downto 0) is stage_if_id_instruction_out(10 downto 6);
   alias instruction_funct : std_logic_vector(5 downto 0) is stage_id_ex_sign_extend_out(5 downto 0);
-  alias instruction_jump_address : std_logic_vector(25 downto 0) is stage_if_id_instruction_out(25 downto 0);
+  alias instruction_jump_address : std_logic_vector(ADDR_WIDTH - 1 downto 0) is stage_if_id_instruction_out(ADDR_WIDTH -1 downto 0);
 
 begin
 
@@ -147,6 +148,8 @@ begin
              processor_enable => processor_enable,
              new_pc_in => stage_ex_mem_pc_out,
              pc_source_in => control_pc_source_out,
+             pc_jump_override_in => control_pc_jump_override_out,
+             pc_jump_address => instruction_jump_address,
 
              pc_out => pc_out);
 
@@ -166,7 +169,10 @@ begin
 
              -- Write-back stage control lines
              reg_write_out => control_reg_write_out,
-             mem_to_reg_out => control_mem_to_reg_out
+             mem_to_reg_out => control_mem_to_reg_out,
+             
+             -- Jump
+             pc_jump_override_out => control_pc_jump_override_out
             );
 
   registers : entity work.registers

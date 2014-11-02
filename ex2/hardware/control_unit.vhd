@@ -19,7 +19,9 @@ entity control_unit is
 
          -- Write-back stage control lines
          reg_write_out : out  std_logic;
-         mem_to_reg_out : out  std_logic
+         mem_to_reg_out : out  std_logic;
+         
+         pc_jump_override_out : out  std_logic
        );
 end control_unit;
 
@@ -41,6 +43,9 @@ begin
     -- Write-back stage control lines
     reg_write_out <= '0';
     mem_to_reg_out <= '0';
+    
+    -- Jump
+    pc_jump_override_out <= '0';
 
     if processor_enable = '1' then
       case instruction_in is
@@ -56,11 +61,15 @@ begin
         when SW =>
           alu_src_out <= '1';
           mem_write_out <= '1';
-        --when LUI =>
-        --state <= LOAD_UPPER_IMMEDIATE_COMPUTATION;
+        when LUI =>
+          alu_op_out <= "11";
+          reg_write_out <= '1';
+          alu_src_out <= '1';
         when BRANCH =>
           alu_op_out <= "01";
           branch_out <= '1';
+        when JUMP =>
+          pc_jump_override_out <= '1';
         when others =>
       -- yo
       end case;

@@ -11,18 +11,26 @@ entity pc is
 
          new_pc_in : in std_logic_vector(ADDR_WIDTH - 1 downto 0);
          pc_source_in : in std_logic;
+         
+         pc_jump_override_in : in  std_logic;
+         pc_jump_address : in  std_logic_vector(ADDR_WIDTH - 1 downto 0);
 
          pc_out : out  std_logic_vector(ADDR_WIDTH - 1 downto 0));
 end pc;
 
 architecture Behavioral of pc is
   signal pc_in : std_logic_vector(ADDR_WIDTH - 1 downto 0);
+  signal pc_between_muxes : std_logic_vector(ADDR_WIDTH - 1 downto 0);
   signal pc_out_tmp : std_logic_vector(ADDR_WIDTH - 1 downto 0);
 begin
 
   with pc_source_in select
-    pc_in <= new_pc_in when '1',
-             std_logic_vector(unsigned(pc_out_tmp) + 1) when others;
+    pc_between_muxes <= new_pc_in when '1',
+                        std_logic_vector(unsigned(pc_out_tmp) + 1) when others;
+
+  with pc_jump_override_in select
+    pc_in <= pc_jump_address when '1',
+             pc_between_muxes when others;
 
   PC : process ( clk, reset, processor_enable )
   begin
