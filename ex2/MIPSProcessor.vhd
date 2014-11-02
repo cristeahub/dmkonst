@@ -146,7 +146,7 @@ begin
              reset => reset,
 
              new_pc_in => stage_ex_mem_pc_out,
-             pc_source_in => pc_source,
+             pc_source_in => control_pc_source_out,
 
              pc_out => pc_out);
 
@@ -189,21 +189,21 @@ begin
   Port map (
              a_in => stage_id_ex_instruction_rt_out,
              b_in => stage_id_ex_instruction_rd_out,
-             select_in => reg_dst,
+             select_in => control_reg_dst_out,
              data_out => write_register_mux_out);
 
   write_data_mux : entity work.mux
   Port map (
              a_in => stage_mem_wb_read_data_out,
              b_in => stage_mem_wb_alu_result_out,
-             select_in => mem_to_reg,
+             select_in => control_mem_to_reg_out,
              data_out => write_data_mux_out);
 
   alu_b_mux : entity work.mux
   Port map (
              a_in => stage_id_ex_read_data_2_out,
              b_in => stage_id_ex_sign_extend_out,
-             select_in => alu_src_out,
+             select_in => control_alu_src_out,
              data_out => alu_b_mux_out);
 
   sign_extend_a : entity work.sign_extend
@@ -221,7 +221,7 @@ begin
   
   stage_if_id : entity work.stage_if_id
   port map (
-            clk => clk, reset => reset,
+            clk => clk,
             incremented_pc_in => pc_out,
             instruction_in => imem_data_in,
             incremented_pc_out => stage_if_id_incremented_pc_out,
