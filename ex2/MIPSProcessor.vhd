@@ -144,6 +144,7 @@ begin
                ADDR_WIDTH => ADDR_WIDTH)
   port map (
              clk => clk, reset => reset,
+             processor_enable => processor_enable,
              new_pc_in => stage_ex_mem_pc_out,
              pc_source_in => control_pc_source_out,
 
@@ -191,8 +192,8 @@ begin
 
   write_data_mux : entity work.mux
   Port map (
-             a_in => stage_mem_wb_read_data_out,
-             b_in => stage_mem_wb_alu_result_out,
+             a_in => stage_mem_wb_alu_result_out,
+             b_in => stage_mem_wb_read_data_out,
              select_in => stage_mem_wb_mem_to_reg_out,
              data_out => write_data_mux_out);
 

@@ -7,6 +7,7 @@ entity pc is
             ADDR_WIDTH : integer := 8);
   Port ( clk : in  std_logic;
          reset : in  std_logic;
+         processor_enable : in  std_logic;
 
          new_pc_in : in std_logic_vector(ADDR_WIDTH - 1 downto 0);
          pc_source_in : in std_logic;
@@ -23,11 +24,11 @@ begin
     pc_in <= new_pc_in when '1',
              std_logic_vector(unsigned(pc_out_tmp) + 1) when others;
 
-  PC : process ( clk, reset )
+  PC : process ( clk, reset, processor_enable )
   begin
     if reset = '1' then
       pc_out_tmp <= x"00";
-    elsif rising_edge(clk) then
+    elsif rising_edge(clk) and processor_enable = '1' then
       pc_out_tmp <= pc_in;
     end if;
   end process; -- PC
