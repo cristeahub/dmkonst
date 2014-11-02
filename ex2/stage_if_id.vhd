@@ -13,11 +13,12 @@ architecture Behavioral of stage_if_id is
 
 begin
 
+instruction_out <= instruction_in;
+
 process (clk) is
 begin
   if rising_edge(clk) then
     incremented_pc_out <= incremented_pc_in;
-    instruction_out <= instruction_in;
   end if;
 end process;
 

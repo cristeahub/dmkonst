@@ -26,13 +26,14 @@ architecture Behavioral of stage_mem_wb is
 
 begin
 
+read_data_out <= read_data_in;
+
 process (clk, reset) is
 begin
   if reset = '1' then
     reg_write_out <= '0';
     mem_to_reg_out <= '0';
   elsif rising_edge(clk) then
-    read_data_out <= read_data_in;
     alu_result_out <= alu_result_in;
     write_register_out <= write_register_in;
 
@@ -41,6 +42,4 @@ begin
   end if;
 end process;
 
-
 end Behavioral;
-
