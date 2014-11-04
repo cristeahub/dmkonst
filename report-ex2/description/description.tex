@@ -13,3 +13,29 @@ Søndag:
 
 Optimization: Move branch one step earlier. Might introduce longer critical path.
 Delays: 4 nops on data dependencies. 3 nops on branch. 1 nop on jump.
+
+
+Mandag - Christoffer:
+Gikk igjennom hele RTL-en sakte og sikkert
+\begin{enumerate}
+    \item - Why does the shamt from IF/ID go straight to ALU\_CTRL in the RTL? Shouldn't it go to the ID/EX mem?
+    \item - The RTL I started with looked a lot like the one in the compendium, but JMP isn't included there.
+    A small intro to what parts make up the JMP would be awesome.
+\end{enumerate}
+
+Forwarding unit is a relatively easy component.
+It's suppose to make a hotwire connection between a calculated value and where that value is needed.
+Because it avoids writing to registers, up to several cycles can be saved.
+
+The way this works is to have a unit that checks if the current calculated value's address in memory
+is equal to that of the RD or RT of the next instruction.
+If it is, a mux connecting the newly calculated value is changed to let the newly calculated value thru.
+
+The forwarding unit recieved addresses as input, as well as a write signal from both
+the EX/MEM and MEM/WB registers.
+It releases control signals to the muxes that switch the input to the ALU.
+These muxes are now extended to also get the immidiate value from both EX/MEM and MEM/WB.
+
+After recieving the values the forwarding unit checks if the values just made should be used for the next
+caclucations.
+If yes, it gives the apropriate signals to the mux.
