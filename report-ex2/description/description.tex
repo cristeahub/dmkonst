@@ -39,3 +39,26 @@ These muxes are now extended to also get the immidiate value from both EX/MEM an
 After recieving the values the forwarding unit checks if the values just made should be used for the next
 caclucations.
 If yes, it gives the apropriate signals to the mux.
+
+
+TODO: on the forwarding unit.
+
+Add muxes to the input for the ALU.
+These are muxes with 3 inputs and 1 control signal.
+The control signals shall come from the forwarding unit, namely `forward\_rd\_out` and `forward\_rt\_out`.
+The three values from the muxes are wires from the following places:
+- read\_data\_X\_out which already goes to the ALU
+- write\_data\_mux\_out from the mux after storage mem/wb
+- alu\_result\_out from storage ex/mem
+
+Connect the following wires to the forwarding unit:
+- write\_register\_out from storage ex/mem
+- wb signal from storage ex/mem
+- write\_register\_out from storage mem/wb
+- wb signal from mem/wb
+- read\_register\_1\_in which goes to the register.vhd file needs to be saved to IF/EX storage
+and then given to the forwarding unit
+- read\_register\_2\_in which goes to the register.vhd file needs to be saved to IF/EX storage
+and then given to the forwarding unit
+
+That should be it :)
