@@ -16,7 +16,29 @@ end forwarding_unit;
 architecture Behavioral of forwarding_unit is
 
 begin
+	process(inst_rs_in, inst_rt_in, addr_ex_mem_in, addr_mem_wb_in,
+			  control_ex_mem_in, control_mem_wb_in) is
+	begin
 
+	-- default
+	forward_rs_out <= "00";
+	forward_rt_out <= "00";
+
+	-- mem/wb
+	if control_mem_wb_in = '1' and
+			addr_mem_wb_in = inst_rt_in then
+		forward_rs_out <= "10";
+		forward_rt_out <= "10";
+	end if;
+
+	-- ex/mem precedence
+	if control_ex_mem_in = '1' and
+			addr_ex_mem_in = inst_rs_in then
+		forward_rs_out <= "01";
+		forward_rt_out <= "01";
+	end if;
+
+	end process;
 
 end Behavioral;
 

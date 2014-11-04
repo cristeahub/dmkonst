@@ -64,6 +64,7 @@ BEGIN
 		-- if yes, this means a value will be written, but hasn't time to do so
 		-- so it forwards the value by hotwireing.
 		-- same for rt. values from ex/mem has presedence over values from mem/wb
+		-- please verify this
 
 		inst_rs_in <= "00000";
 		inst_rt_in <= "00000";
