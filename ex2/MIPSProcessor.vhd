@@ -54,6 +54,8 @@ architecture behavioral of MIPSProcessor is
   signal registers_read_data_2_out : std_logic_vector (31 downto 0);
 
   -- MUX signals
+  signal alu_a_forwarding_mux_out : std_logic_vector(31 downto 0);
+  signal alu_b_forwarding_mux_out : std_logic_vector(31 downto 0);
   signal alu_b_mux_out : std_logic_vector(31 downto 0);
   signal pc_mux_out : std_logic_vector(ADDR_WIDTH - 1 downto 0);
   signal write_register_mux_out : std_logic_vector(4 downto 0);
@@ -63,6 +65,11 @@ architecture behavioral of MIPSProcessor is
   signal sign_extend_a_out : std_logic_vector (DATA_WIDTH - 1 downto 0);
   signal pc_write_enable : std_logic;
   signal pc_branch_add_pc_out : std_logic_vector(ADDR_WIDTH - 1 downto 0);
+  
+  -- Forwarding unit
+  signal forwarding_unit_rs_out : std_logic_vector(1 downto 0);
+  signal forwarding_unit_rt_out : std_logic_vector(1 downto 0);
+  
   -- Stages
   signal stage_if_id_incremented_pc_out : std_logic_vector(ADDR_WIDTH -1 downto 0);
   signal stage_if_id_instruction_out : std_logic_vector(31 downto 0);
@@ -72,6 +79,7 @@ architecture behavioral of MIPSProcessor is
   signal stage_id_ex_read_data_1_out : std_logic_vector(31 downto 0);
   signal stage_id_ex_read_data_2_out : std_logic_vector(31 downto 0);
   signal stage_id_ex_sign_extend_out : std_logic_vector(31 downto 0);
+  signal stage_id_ex_instruction_rs_out : std_logic_vector(25 downto 21);
   signal stage_id_ex_instruction_rt_out : std_logic_vector(20 downto 16);
   signal stage_id_ex_instruction_rd_out : std_logic_vector(15 downto 11);
 
@@ -124,7 +132,7 @@ begin
   -- Here be entity declarations
   alu: entity work.alu
   port map (
-             operand_a_in => stage_id_ex_read_data_1_out,
+             operand_a_in => alu_a_forwarding_mux_out,
              operand_b_in => alu_b_mux_out,
              alu_control_in => alu_control_out,
              shamt_in => alu_control_shamt_out,
@@ -203,9 +211,26 @@ begin
              select_in => stage_mem_wb_mem_to_reg_out,
              data_out => write_data_mux_out);
 
-  alu_b_mux : entity work.mux
+  alu_a_forwarding_mux : entity work.mux_4
+  Port map (
+             a_in => stage_id_ex_read_data_1_out,
+             b_in => write_data_mux_out,
+             c_in => stage_ex_mem_alu_result_out,
+             d_in => x"00000000",
+             select_in => forwarding_unit_rs_out,
+             data_out => alu_a_forwarding_mux_out);
+
+  alu_b_forwarding_mux : entity work.mux_4
   Port map (
              a_in => stage_id_ex_read_data_2_out,
+             b_in => write_data_mux_out,
+             c_in => stage_ex_mem_alu_result_out,
+             d_in => x"00000000",
+             select_in => forwarding_unit_rt_out,
+             data_out => alu_b_forwarding_mux_out);
+  alu_b_mux : entity work.mux
+  Port map (
+             a_in => alu_b_forwarding_mux_out,
              b_in => stage_id_ex_sign_extend_out,
              select_in => stage_id_ex_alu_src_out,
              data_out => alu_b_mux_out);
@@ -222,6 +247,16 @@ begin
             old_pc_in => stage_id_ex_incremented_pc_out,
             instruction_immediate_in => stage_id_ex_sign_extend_out(ADDR_WIDTH - 1 downto 0),
             pc_out => pc_branch_add_pc_out);
+            
+  forwarding_unit : entity work.forwarding_unit
+  port map ( inst_rs_in => stage_id_ex_instruction_rs_out,
+             inst_rt_in => stage_id_ex_instruction_rt_out,
+             addr_ex_mem_in => stage_ex_mem_write_register_out,
+             addr_mem_wb_in => stage_mem_wb_write_register_out,
+             control_ex_mem_in => stage_ex_mem_reg_write_out,
+             control_mem_wb_in => stage_mem_wb_reg_write_out,
+             forward_rs_out => forwarding_unit_rs_out,
+             forward_rt_out => forwarding_unit_rt_out);
              
   -- Stages
   
@@ -244,12 +279,14 @@ begin
             read_data_1_in => registers_read_data_1_out,
             read_data_2_in => registers_read_data_2_out,
             sign_extend_in => sign_extend_a_out,
+            instruction_rs_in => instruction_rs,
             instruction_rt_in => instruction_rt,
             instruction_rd_in => instruction_rd,
             incremented_pc_out => stage_id_ex_incremented_pc_out,
             read_data_1_out => stage_id_ex_read_data_1_out,
             read_data_2_out => stage_id_ex_read_data_2_out,
             sign_extend_out => stage_id_ex_sign_extend_out,
+            instruction_rs_out => stage_id_ex_instruction_rs_out,
             instruction_rt_out => stage_id_ex_instruction_rt_out,
             instruction_rd_out => stage_id_ex_instruction_rd_out,
 
