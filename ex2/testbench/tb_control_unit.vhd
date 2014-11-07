@@ -1,6 +1,8 @@
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
+USE work.test_utils.ALL;
+USE work.constants.ALL;
 
 USE ieee.numeric_std.ALL;
  
