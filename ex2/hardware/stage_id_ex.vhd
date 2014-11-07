@@ -8,6 +8,7 @@ entity stage_id_ex is
            read_data_1_in : in  STD_LOGIC_VECTOR (31 downto 0);
            read_data_2_in : in  STD_LOGIC_VECTOR (31 downto 0);
            sign_extend_in : in  STD_LOGIC_VECTOR (31 downto 0);
+           instruction_rs_in : in  STD_LOGIC_VECTOR (25 downto 21);
            instruction_rt_in : in  STD_LOGIC_VECTOR (20 downto 16);
            instruction_rd_in : in  STD_LOGIC_VECTOR (15 downto 11);
            
@@ -40,6 +41,7 @@ entity stage_id_ex is
            read_data_1_out : out  STD_LOGIC_VECTOR (31 downto 0);
            read_data_2_out : out  STD_LOGIC_VECTOR (31 downto 0);
            sign_extend_out : out  STD_LOGIC_VECTOR (31 downto 0);
+           instruction_rs_out : out  STD_LOGIC_VECTOR (25 downto 21);
            instruction_rt_out : out  STD_LOGIC_VECTOR (20 downto 16);
            instruction_rd_out : out  STD_LOGIC_VECTOR (15 downto 11)
           );
@@ -65,6 +67,7 @@ begin
     read_data_1_out <= read_data_1_in;
     read_data_2_out <= read_data_2_in;
     sign_extend_out <= sign_extend_in;
+    instruction_rs_out <= instruction_rs_in;
     instruction_rt_out <= instruction_rt_in;
     instruction_rd_out <= instruction_rd_in;
 
