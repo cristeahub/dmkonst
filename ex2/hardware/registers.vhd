@@ -19,13 +19,16 @@ end registers;
 architecture Behavioral of registers is
 
   type register_file_t is array(size - 1 downto 0) of std_logic_vector(31 downto 0);
-
   signal register_file : register_file_t := (others => (others => '0'));
 
 begin
 
-  read_data_1_out <= register_file(to_integer(unsigned(read_register_1_in)));
-  read_data_2_out <= register_file(to_integer(unsigned(read_register_2_in)));
+  -- Forward write data
+  read_data_1_out <= write_data_in when reg_write_in = '1' and write_register_in = read_register_1_in
+                     else register_file(to_integer(unsigned(read_register_1_in)));
+
+  read_data_2_out <= write_data_in when reg_write_in = '1' and write_register_in = read_register_2_in
+                     else register_file(to_integer(unsigned(read_register_2_in)));
 
   registers: process (clk) is
   begin
