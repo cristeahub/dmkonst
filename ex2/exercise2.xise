@@ -198,6 +198,9 @@
       <association xil_pn:name="PostRouteSimulation"/>
       <association xil_pn:name="PostTranslateSimulation"/>
     </file>
+    <file xil_pn:name="hardware/two_bit_predictor.vhd" xil_pn:type="FILE_VHDL">
+      <association xil_pn:name="Implementation"/>
+    </file>
     <file xil_pn:name="DualPortMem.xise" xil_pn:type="FILE_COREGENISE">
       <association xil_pn:name="Implementation"/>
     </file>
