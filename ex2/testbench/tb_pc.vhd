@@ -99,8 +99,8 @@ BEGIN
     -- should be empty when enable is off (?)
 		processor_enable <= '0';
 
-		pc_jump_address <= "99999999";
-		new_pc_in <= "88888888";
+		pc_jump_address <= "11110000";
+		new_pc_in <= "00001111";
 
 		pc_jump_override_in <= '1';
 		pc_source_in <= '0';
