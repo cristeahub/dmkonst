@@ -194,6 +194,7 @@ DataMem:			entity work.DualPortMem port map (
 		begin
 			wait until processor_enable = '0';
 			-- expected data memory contents, derived from program behavior
+			CheckDataWord(x"00000002", 1);
 			CheckDataWord(x"0000000C", 5);
 			CheckDataWord(x"0000000C", 6);
 			CheckDataWord(x"0000000C", 7);
@@ -203,6 +204,7 @@ DataMem:			entity work.DualPortMem port map (
 			CheckDataWord(x"0005FFEE", 13);
 			CheckDataWord(x"00000008", 15);
 			CheckDataWord(x"0000000E", 16);
+			CheckDataWord(x"00000000", 18);
 		end CheckDataMemory;
 		
    begin

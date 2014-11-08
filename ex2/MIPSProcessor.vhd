@@ -256,7 +256,7 @@ begin
   port map (
              a_in => stage_ex_mem_read_data_2_out,
              b_in => write_data_mux_out,
-             select_in => forward_store_out,
+             select_in => forwarding_unit_store_out,
              data_out => store_data_mux_out);
 
   sign_extend_a : entity work.sign_extend
