@@ -64,6 +64,14 @@ def parse_j_type(instruction_tokens):
     return (opcode << 26) + address
 
 
+def change_endianness(inst):
+    out = ""
+    pairs = map(lambda x,y: y+x, inst[0:][::2], inst[1:][::2])
+    out += "".join(pairs)[::-1]
+
+    return out
+
+
 program = []
 
 for raw_instruction in stdin:
@@ -84,7 +92,9 @@ for raw_instruction in stdin:
     if instruction_format == 'j':
         encoded_instruction = parse_j_type(instruction_tokens)
 
-    program.append('X"{:08x}", -- {}'.format(encoded_instruction, raw_instruction))
+    endian_correct_instruction = change_endianness("{:08x}".format(encoded_instruction))
+
+    program.append('X"{}", -- {}'.format(endian_correct_instruction, raw_instruction))
 
 
 program[-1] = program[-1].replace(',', '', 1)
