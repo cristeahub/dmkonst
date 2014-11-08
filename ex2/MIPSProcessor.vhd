@@ -315,7 +315,7 @@ begin
             new_pc_in => pc_branch_add_pc_out,
             alu_zero_in => alu_result_zero,
             alu_result_in => alu_result_out,
-            read_data_2_in => stage_id_ex_read_data_2_out,
+            read_data_2_in => alu_b_forwarding_mux_out,
             write_register_in => write_register_mux_out,
             new_pc_out => stage_ex_mem_pc_out,
             alu_zero_out => stage_ex_mem_alu_zero_out,
