@@ -19,6 +19,7 @@ ARCHITECTURE behavior OF tb_forwarding_unit IS
   --Outputs
   signal forward_rs_out : std_logic_vector(1 downto 0);
   signal forward_rt_out : std_logic_vector(1 downto 0);
+  signal forward_store_out : std_logic;
 
   constant clk_period : time := 10 ns;
 
@@ -33,7 +34,8 @@ BEGIN
                                   control_ex_mem_in => control_ex_mem_in,
                                   control_mem_wb_in => control_mem_wb_in,
                                   forward_rs_out => forward_rs_out,
-                                  forward_rt_out => forward_rt_out
+                                  forward_rt_out => forward_rt_out,
+                                  forward_store_out => forward_store_out
                                 );
 
 
@@ -63,8 +65,9 @@ BEGIN
 
     assert_equals("00", forward_rs_out, "Forwarding no values");
     assert_equals("00", forward_rt_out, "Forwarding no values");
+    assert_equals('0', forward_store_out, "Forwarding no store values");
 
-    wait for clk_period;
+    -- Don't forward when address doesn't match
 
     inst_rs_in <= "00001";
     inst_rt_in <= "00001";
@@ -76,7 +79,7 @@ BEGIN
     assert_equals("00", forward_rs_out, "Forwarding no values");
     assert_equals("00", forward_rt_out, "Forwarding no values");
 
-    wait for clk_period;
+    -- Forward from ex/mem
 
     addr_ex_mem_in <= "00001";
     addr_mem_wb_in <= "00001";
@@ -89,7 +92,7 @@ BEGIN
     assert_equals("10", forward_rs_out, "Forwarding values from exmem");
     assert_equals("10", forward_rt_out, "Forwarding values from exmem");
 
-    wait for clk_period;
+    -- Forward from mem/wb when ex/mem has no reg_write
 
     control_ex_mem_in <= '0';
     control_mem_wb_in <= '1';
@@ -99,7 +102,7 @@ BEGIN
     assert_equals("01", forward_rs_out, "Forwarding values from memwb");
     assert_equals("01", forward_rt_out, "Forwarding values from memwb");
 
-    wait for clk_period;
+    -- Prioritize forwarding from ex/mem
 
     control_ex_mem_in <= '1';
     control_mem_wb_in <= '1';
@@ -109,7 +112,7 @@ BEGIN
     assert_equals("10", forward_rs_out, "Forwarding values from exmem");
     assert_equals("10", forward_rt_out, "Forwarding values from exmem");
 
-    wait for clk_period;
+    -- Don't forward when control signals are low
 
     control_ex_mem_in <= '0';
     control_mem_wb_in <= '0';
@@ -118,8 +121,8 @@ BEGIN
 
     assert_equals("00", forward_rs_out, "Forwarding no values");
     assert_equals("00", forward_rt_out, "Forwarding no values");
-
-    wait for clk_period;
+    
+    -- Should not write to zero address
 
     addr_ex_mem_in <= "00000";
     addr_mem_wb_in <= "00000";
@@ -131,11 +134,10 @@ BEGIN
     assert_equals("00", forward_rs_out, "Forwarding no values");
     assert_equals("00", forward_rt_out, "Forwarding no values");
 
-    wait for clk_period;
-
     -- rs and rt should be independent
 
     addr_ex_mem_in <= "00001";
+    addr_mem_wb_in <= "00000";
 
     inst_rs_in <= "00001";
     inst_rt_in <= "00011";
@@ -144,8 +146,21 @@ BEGIN
 
     assert_equals("10", forward_rs_out, "Forwarding value for rs");
     assert_equals("00", forward_rt_out, "Forwarding no value for rt");
-
+    assert_equals('0', forward_store_out, "Not forwarding value to store unit");
+    
+    --
+    
+    addr_ex_mem_in <= "00010";
+    addr_mem_wb_in <= "00010";
+    
+    control_mem_wb_in <= '1';
+    control_ex_mem_in <= '0';
+    
     wait for clk_period;
+    
+    assert_equals('1', forward_store_out, "Forwarding loaded value to store unit");
+    
+    --
 
     report "Test complete";
     wait;
