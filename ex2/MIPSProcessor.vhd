@@ -60,6 +60,7 @@ architecture behavioral of MIPSProcessor is
   signal pc_mux_out : std_logic_vector(ADDR_WIDTH - 1 downto 0);
   signal write_register_mux_out : std_logic_vector(4 downto 0);
   signal write_data_mux_out : std_logic_vector(31 downto 0);
+  signal store_data_mux_out : std_logic_vector(31 downto 0);
 
   -- Misc
   signal sign_extend_a_out : std_logic_vector (DATA_WIDTH - 1 downto 0);
@@ -69,6 +70,7 @@ architecture behavioral of MIPSProcessor is
   -- Forwarding unit
   signal forwarding_unit_rs_out : std_logic_vector(1 downto 0);
   signal forwarding_unit_rt_out : std_logic_vector(1 downto 0);
+  signal forwarding_unit_store_out : std_logic;
   
   -- Stages
   signal stage_if_id_incremented_pc_out : std_logic_vector(ADDR_WIDTH -1 downto 0);
@@ -125,7 +127,7 @@ begin
 
   -- Wire it up!
   dmem_write_enable <= stage_ex_mem_mem_write_out;
-  dmem_data_out <= stage_ex_mem_read_data_2_out;
+  dmem_data_out <= store_data_mux_out;
   dmem_address <= stage_ex_mem_alu_result_out(7 downto 0);
   imem_address <= pc_out;
 
@@ -234,6 +236,13 @@ begin
              b_in => stage_id_ex_sign_extend_out,
              select_in => stage_id_ex_alu_src_out,
              data_out => alu_b_mux_out);
+  
+  store_data_mux : entity work.mux
+  port map (
+             a_in => stage_ex_mem_read_data_2_out,
+             b_in => write_data_mux_out,
+             select_in => forward_store_out,
+             data_out => store_data_mux_out);
 
   sign_extend_a : entity work.sign_extend
   port map (
@@ -256,7 +265,8 @@ begin
              control_ex_mem_in => stage_ex_mem_reg_write_out,
              control_mem_wb_in => stage_mem_wb_reg_write_out,
              forward_rs_out => forwarding_unit_rs_out,
-             forward_rt_out => forwarding_unit_rt_out);
+             forward_rt_out => forwarding_unit_rt_out,
+             forward_store_out => forwarding_unit_store_out);
              
   -- Stages
   
@@ -317,6 +327,7 @@ begin
             alu_result_in => alu_result_out,
             read_data_2_in => alu_b_forwarding_mux_out,
             write_register_in => write_register_mux_out,
+
             new_pc_out => stage_ex_mem_pc_out,
             alu_zero_out => stage_ex_mem_alu_zero_out,
             alu_result_out => stage_ex_mem_alu_result_out,
