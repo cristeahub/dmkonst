@@ -9,29 +9,17 @@ END tb_pc;
 
 ARCHITECTURE behavior OF tb_pc IS
 
-    -- Component Declaration for the Unit Under Test (UUT)
-
-    COMPONENT pc
-    PORT(
-         clk : IN  std_logic;
-         reset : IN  std_logic;
-         processor_enable : IN  std_logic;
-         new_pc_in : IN  std_logic_vector(7 downto 0);
-         pc_source_in : IN  std_logic;
-         pc_jump_override_in : IN  std_logic;
-         pc_jump_address : IN  std_logic_vector(7 downto 0);
-         pc_out : OUT  std_logic_vector(7 downto 0)
-        );
-    END COMPONENT;
-
    --Inputs
    signal clk : std_logic := '0';
    signal reset : std_logic := '0';
-   signal processor_enable : std_logic := '0';
-   signal new_pc_in : std_logic_vector(7 downto 0) := (others => '0');
-   signal pc_source_in : std_logic := '0';
+   signal processor_enable_in : std_logic := '0';
+   signal pc_write_enable_in : std_logic := '1';
+
+   signal pc_branch_override_in : std_logic := '0';
+   signal pc_branch_address_in : std_logic_vector(7 downto 0) := (others => '0');
+
    signal pc_jump_override_in : std_logic := '0';
-   signal pc_jump_address : std_logic_vector(7 downto 0) := (others => '0');
+   signal pc_jump_address_in : std_logic_vector(7 downto 0) := (others => '0');
 
  	--Outputs
    signal pc_out : std_logic_vector(7 downto 0);
@@ -46,6 +34,7 @@ BEGIN
           clk => clk,
           reset => reset,
           processor_enable => processor_enable,
+          pc_write_enable_in => pc_write_enable_in,
           new_pc_in => new_pc_in,
           pc_source_in => pc_source_in,
           pc_jump_override_in => pc_jump_override_in,
@@ -115,13 +104,17 @@ BEGIN
 		wait for clk_period;
 
 		assert_equals("10000001", pc_out, "PC should pause");
+    
+    --
 
 		pc_jump_override_in <= '1';
 		pc_source_in <= '1';
-
-		wait for clk_period;
+    
+    wait for clk_period;
 
 		assert_equals("10000001", pc_out, "PC should pause");
+    
+    wait;
 
   end process;
 END;
