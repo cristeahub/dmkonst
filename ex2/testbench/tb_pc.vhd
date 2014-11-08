@@ -94,9 +94,9 @@ BEGIN
 
 		wait for clk_period;
 
-		assert_equals("10000000", pc_out, "PC out should not have changed");
+		assert_equals("10000001", pc_out, "PC should increment");
 
-    -- should be empty when enable is off (?)
+    -- should pause system
 		processor_enable <= '0';
 
 		pc_jump_address <= "11110000";
@@ -107,21 +107,21 @@ BEGIN
 
 		wait for clk_period;
 
-		assert_equals("00000000", pc_out, "PC out should be empty");
+		assert_equals("10000001", pc_out, "PC should pause");
 
 		pc_jump_override_in <= '0';
 		pc_source_in <= '1';
 
 		wait for clk_period;
 
-		assert_equals("00000000", pc_out, "PC out should be empty");
+		assert_equals("10000001", pc_out, "PC should pause");
 
 		pc_jump_override_in <= '1';
 		pc_source_in <= '1';
 
 		wait for clk_period;
 
-		assert_equals("00000000", pc_out, "PC out should be empty");
+		assert_equals("10000001", pc_out, "PC should pause");
 
   end process;
 END;
