@@ -14,7 +14,7 @@ entity control_unit is
 
          -- Memory access stage control lines
          branch_out : out std_logic;
-         --mem_read_out : out std_logic;
+         mem_read_out : out std_logic;
          mem_write_out : out  std_logic;
 
          -- Write-back stage control lines
@@ -37,7 +37,7 @@ begin
 
     -- Memory access stage control lines
     branch_out <= '0';
-    --mem_read_out <= '0'; -- Our architecture does not have this one
+    mem_read_out <= '0';
     mem_write_out <= '0';
 
     -- Write-back stage control lines
@@ -55,7 +55,7 @@ begin
           reg_write_out <= '1';
         when LW =>
           alu_src_out <= '1';
-          --mem_read_out <= '1';
+          mem_read_out <= '1';
           reg_write_out <= '1';
           mem_to_reg_out <= '1';
         when SW =>

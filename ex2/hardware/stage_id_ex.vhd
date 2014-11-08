@@ -19,6 +19,7 @@ entity stage_id_ex is
            -- Memory access stage control lines
            branch_in : in std_logic;
            mem_write_in : in std_logic;
+           mem_read_in : in std_logic;
            -- Write-back stage control lines
            reg_write_in : in std_logic;
            mem_to_reg_in : in std_logic;
@@ -33,6 +34,7 @@ entity stage_id_ex is
            -- Memory access stage control lines
            branch_out : out std_logic;
            mem_write_out : out std_logic;
+           mem_read_out : out std_logic;
            -- Write-back stage control lines
            reg_write_out : out std_logic;
            mem_to_reg_out : out std_logic;
@@ -77,6 +79,7 @@ begin
     
     branch_out <= branch_in;
     mem_write_out <= mem_write_in;
+    mem_read_out <= mem_read_in;
     
     reg_write_out <= reg_write_in;
     mem_to_reg_out <= mem_to_reg_in;
