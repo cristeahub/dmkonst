@@ -31,7 +31,6 @@ architecture behavioral of MIPSProcessor is
   signal pc_out : std_logic_vector(ADDR_WIDTH -1 downto 0);
 
   -- control signals
-  signal control_pc_source_out : std_logic;
   signal control_mem_to_reg_out : std_logic;
   signal control_alu_op_out : std_logic_vector(1 downto 0);
   signal control_mem_write_out : std_logic;
@@ -64,7 +63,7 @@ architecture behavioral of MIPSProcessor is
   signal store_data_mux_out : std_logic_vector(31 downto 0);
 
   -- Misc
-  signal sign_extend_a_out : std_logic_vector (DATA_WIDTH - 1 downto 0);
+  signal sign_extend_out : std_logic_vector (DATA_WIDTH - 1 downto 0);
   signal pc_write_enable : std_logic;
   signal pc_branch_add_pc_out : std_logic_vector(ADDR_WIDTH - 1 downto 0);
 
@@ -78,13 +77,17 @@ architecture behavioral of MIPSProcessor is
   signal hazard_detection_pc_write_out : std_logic;
   signal hazard_detection_if_id_write_out : std_logic;
 
-  signal stall_mux_control_mem_read_out : std_logic;
-  signal stall_mux_control_mem_write_out : std_logic;
-  signal stall_mux_control_reg_write_out : std_logic;
+  signal flush_barrier_id_ex : std_logic;
+  signal flush_barrier_ex_mem : std_logic;
 
-  -- Stages
+  ------------------------------
+  ------ Pipeline barriers -----
+  ------------------------------
+
+  -- Stage IF/ID
   signal stage_if_id_incremented_pc_out : std_logic_vector(ADDR_WIDTH -1 downto 0);
   signal stage_if_id_instruction_out : std_logic_vector(31 downto 0);
+
 
   -- Stage ID/EX
   signal stage_id_ex_incremented_pc_out : std_logic_vector(ADDR_WIDTH -1 downto 0);
@@ -98,23 +101,30 @@ architecture behavioral of MIPSProcessor is
   signal stage_id_ex_reg_dst_out : std_logic;
   signal stage_id_ex_alu_op_out : std_logic_vector(1 downto 0);
   signal stage_id_ex_alu_src_out : std_logic;
-  signal stage_id_ex_branch_out : std_logic;
   signal stage_id_ex_mem_write_out : std_logic;
   signal stage_id_ex_mem_read_out : std_logic;
   signal stage_id_ex_reg_write_out : std_logic;
   signal stage_id_ex_mem_to_reg_out : std_logic;
 
+  signal stage_id_ex_branch_taken_out : std_logic;
+  signal stage_id_ex_should_branch_out : std_logic;
+  signal stage_id_ex_branch_pc_not_taken_out : std_logic_vector(ADDR_WIDTH - 1 downto 0);
+
+
   -- Stage EX/MEM
-  signal stage_ex_mem_pc_out : std_logic_vector(ADDR_WIDTH -1 downto 0);
   signal stage_ex_mem_alu_zero_out : std_logic;
   signal stage_ex_mem_alu_result_out : std_logic_vector(31 downto 0);
   signal stage_ex_mem_read_data_2_out : std_logic_vector(31 downto 0);
   signal stage_ex_mem_write_register_out : std_logic_vector(4 downto 0);
 
-  signal stage_ex_mem_branch_out : std_logic;
   signal stage_ex_mem_mem_write_out : std_logic;
   signal stage_ex_mem_reg_write_out : std_logic;
   signal stage_ex_mem_mem_to_reg_out : std_logic;
+
+  signal stage_ex_mem_branch_taken_out : std_logic;
+  signal stage_ex_mem_should_branch_out : std_logic;
+  signal stage_ex_mem_branch_pc_not_taken_out : std_logic_vector(ADDR_WIDTH -1 downto 0);
+
 
   -- Stage MEM/WB
   signal stage_mem_wb_read_data_out : std_logic_vector(31 downto 0);
@@ -123,6 +133,7 @@ architecture behavioral of MIPSProcessor is
 
   signal stage_mem_wb_reg_write_out : std_logic;
   signal stage_mem_wb_mem_to_reg_out : std_logic;
+
 
   -- Instruction aliases
   alias instruction_opcode : std_logic_vector(31 downto 26) is stage_if_id_instruction_out(31 downto 26);
@@ -134,6 +145,12 @@ architecture behavioral of MIPSProcessor is
   alias instruction_funct : std_logic_vector(5 downto 0) is stage_id_ex_sign_extend_out(5 downto 0);
   alias instruction_jump_address : std_logic_vector(ADDR_WIDTH - 1 downto 0) is stage_if_id_instruction_out(ADDR_WIDTH -1 downto 0);
 
+  -- Branch prediction signals
+  signal branch_predictor_branch_taken_out : std_logic := '0';
+  signal branch_taken : std_logic;
+  signal branch_guessed_wrong : std_logic;
+  signal branch_pc_not_taken : std_logic_vector(ADDR_WIDTH - 1 downto 0);
+
 begin
 
   -- Wire it up!
@@ -141,6 +158,15 @@ begin
   dmem_data_out <= store_data_mux_out;
   dmem_address <= stage_ex_mem_alu_result_out(7 downto 0);
   imem_address <= pc_out;
+
+  -- Branch prediction wires
+  branch_taken <= control_branch_out and branch_predictor_branch_taken_out;
+  branch_guessed_wrong <= stage_ex_mem_should_branch_out and (stage_ex_mem_alu_zero_out xor stage_ex_mem_branch_taken_out);
+
+  -- We forward the not selected pc for correction further down the line
+  with branch_taken select
+    branch_pc_not_taken <= stage_if_id_incremented_pc_out when '1',
+                           pc_branch_add_pc_out when others;
 
   -- Here be entity declarations
   alu: entity work.alu
@@ -160,7 +186,6 @@ begin
              control_alu_op => stage_id_ex_alu_op_out,
              alu_control_out => alu_control_out);
 
-  control_pc_source_out <= stage_ex_mem_alu_zero_out and stage_ex_mem_branch_out;
   pc: entity work.pc
   generic map(
                ADDR_WIDTH => ADDR_WIDTH)
@@ -169,8 +194,11 @@ begin
              processor_enable_in => processor_enable,
              pc_write_enable_in => hazard_detection_pc_write_out,
 
-             pc_branch_override_in => control_pc_source_out,
-             pc_branch_address_in => stage_ex_mem_pc_out,
+             pc_branch_override_in => branch_taken,
+             pc_branch_address_in => pc_branch_add_pc_out,
+
+             pc_branch_correction_address_in => stage_ex_mem_branch_pc_not_taken_out,
+             pc_branch_correction_override_in => branch_guessed_wrong,
 
              pc_jump_override_in => control_pc_jump_override_out,
              pc_jump_address_in => instruction_jump_address,
@@ -259,17 +287,17 @@ begin
              select_in => forwarding_unit_store_out,
              data_out => store_data_mux_out);
 
-  sign_extend_a : entity work.sign_extend
+  sign_extend_immediate : entity work.sign_extend
   port map (
              data_in => instruction_address,
-             data_out => sign_extend_a_out);
+             data_out => sign_extend_out);
 
   pc_branch_add : entity work.pc_branch_add
   generic map(
                ADDR_WIDTH => ADDR_WIDTH)
   port map (
-             old_pc_in => stage_id_ex_incremented_pc_out,
-             instruction_immediate_in => stage_id_ex_sign_extend_out(ADDR_WIDTH - 1 downto 0),
+             old_pc_in => stage_if_id_incremented_pc_out,
+             instruction_immediate_in => stage_if_id_instruction_out(ADDR_WIDTH - 1 downto 0),
              pc_out => pc_branch_add_pc_out);
 
   forwarding_unit : entity work.forwarding_unit
@@ -294,19 +322,6 @@ begin
              pc_write_out => hazard_detection_pc_write_out,
              stage_if_id_write_out => hazard_detection_if_id_write_out);
 
-  stall_mux : entity work.mux
-  generic map (
-                DATA_WIDTH => 3)
-  port map (
-  a_in(2) => control_mem_read_out,
-  a_in(1) => control_mem_write_out,
-  a_in(0) => control_reg_write_out,
-  b_in => "000",
-  select_in => hazard_detection_stall_out,
-  data_out(2) => stall_mux_control_mem_read_out,
-  data_out(1) => stall_mux_control_mem_write_out,
-  data_out(0) => stall_mux_control_reg_write_out);
-
   -- Stages
 
   stage_if_id : entity work.stage_if_id
@@ -321,19 +336,19 @@ begin
              incremented_pc_out => stage_if_id_incremented_pc_out,
              instruction_out => stage_if_id_instruction_out);
 
+  flush_barrier_id_ex <= hazard_detection_stall_out or branch_guessed_wrong or reset;
   stage_id_ex : entity work.stage_id_ex
   generic map(
                ADDR_WIDTH => ADDR_WIDTH)
   port map (
-             clk => clk, reset => reset,
-             incremented_pc_in => stage_if_id_incremented_pc_out,
+             clk => clk, reset => flush_barrier_id_ex,
              read_data_1_in => registers_read_data_1_out,
              read_data_2_in => registers_read_data_2_out,
-             sign_extend_in => sign_extend_a_out,
+             sign_extend_in => sign_extend_out,
              instruction_rs_in => instruction_rs,
              instruction_rt_in => instruction_rt,
              instruction_rd_in => instruction_rd,
-             incremented_pc_out => stage_id_ex_incremented_pc_out,
+
              read_data_1_out => stage_id_ex_read_data_1_out,
              read_data_2_out => stage_id_ex_read_data_2_out,
              sign_extend_out => stage_id_ex_sign_extend_out,
@@ -344,48 +359,61 @@ begin
              reg_dst_in => control_reg_dst_out,
              alu_op_in => control_alu_op_out,
              alu_src_in => control_alu_src_out,
-             branch_in => control_branch_out,
-             mem_write_in => stall_mux_control_mem_write_out,
-             mem_read_in => stall_mux_control_mem_read_out,
-             reg_write_in => stall_mux_control_reg_write_out,
+             mem_write_in => control_mem_write_out,
+             mem_read_in => control_mem_read_out,
+             reg_write_in => control_reg_write_out,
              mem_to_reg_in => control_mem_to_reg_out,
 
              reg_dst_out => stage_id_ex_reg_dst_out,
              alu_op_out => stage_id_ex_alu_op_out,
              alu_src_out => stage_id_ex_alu_src_out,
-             branch_out => stage_id_ex_branch_out,
              mem_write_out => stage_id_ex_mem_write_out,
              mem_read_out => stage_id_ex_mem_read_out,
              reg_write_out => stage_id_ex_reg_write_out,
-             mem_to_reg_out => stage_id_ex_mem_to_reg_out
+             mem_to_reg_out => stage_id_ex_mem_to_reg_out,
+
+             -- Begin branch cables
+             branch_pc_not_taken_in => branch_pc_not_taken,
+             branch_taken_in => branch_taken,
+             should_branch_in => control_branch_out,
+
+             branch_pc_not_taken_out => stage_id_ex_branch_pc_not_taken_out,
+             branch_taken_out => stage_id_ex_branch_taken_out,
+             should_branch_out => stage_id_ex_should_branch_out
            );
 
+  flush_barrier_ex_mem <= branch_guessed_wrong or reset;
   stage_ex_mem : entity work.stage_ex_mem
   generic map(
                ADDR_WIDTH => ADDR_WIDTH)
   port map (
-             clk => clk, reset => reset,
-             new_pc_in => pc_branch_add_pc_out,
+             clk => clk, reset => flush_barrier_ex_mem,
              alu_zero_in => alu_result_zero,
              alu_result_in => alu_result_out,
              read_data_2_in => alu_b_forwarding_mux_out,
              write_register_in => write_register_mux_out,
 
-             new_pc_out => stage_ex_mem_pc_out,
              alu_zero_out => stage_ex_mem_alu_zero_out,
              alu_result_out => stage_ex_mem_alu_result_out,
              read_data_2_out => stage_ex_mem_read_data_2_out,
              write_register_out => stage_ex_mem_write_register_out,
 
-             branch_in => stage_id_ex_branch_out,
              mem_write_in => stage_id_ex_mem_write_out,
              reg_write_in => stage_id_ex_reg_write_out,
              mem_to_reg_in => stage_id_ex_mem_to_reg_out,
 
-             branch_out => stage_ex_mem_branch_out,
              mem_write_out => stage_ex_mem_mem_write_out,
              reg_write_out => stage_ex_mem_reg_write_out,
-             mem_to_reg_out => stage_ex_mem_mem_to_reg_out
+             mem_to_reg_out => stage_ex_mem_mem_to_reg_out,
+
+             -- Begin branch cables
+             branch_pc_not_taken_in => stage_id_ex_branch_pc_not_taken_out,
+             branch_taken_in => stage_id_ex_branch_taken_out,
+             should_branch_in => stage_id_ex_should_branch_out,
+
+             branch_pc_not_taken_out => stage_ex_mem_branch_pc_not_taken_out,
+             branch_taken_out => stage_ex_mem_branch_taken_out,
+             should_branch_out => stage_ex_mem_should_branch_out
            );
 
   stage_mem_wb : entity work.stage_mem_wb
