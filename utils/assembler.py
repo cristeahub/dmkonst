@@ -39,7 +39,7 @@ def parse_r_type(instruction_tokens):
         shamt = eval(instruction_tokens[3])
         rs = 0
 
-    return (opcode << 26) + (rs << 21) + (rt << 16) + (rd << 11) + (shamt << 6) + alu_function
+    return "{:08X}".format((opcode << 26) + (rs << 21) + (rt << 16) + (rd << 11) + (shamt << 6) + alu_function)
 
 
 def parse_i_type(instruction_tokens):
@@ -60,14 +60,16 @@ def parse_i_type(instruction_tokens):
         rs = int(instruction_tokens[1][1:])
         imm = int(instruction_tokens[3])
 
-    return (opcode << 26) + (rs << 21) + (rt << 16) + imm
+    # return (opcode << 26) + (rs << 21) + (rt << 16) + imm
+
+    return "{:04X}{:04X}".format((opcode << 10) + (rs << 5) + rt, imm)
 
 
 def parse_j_type(instruction_tokens):
     opcode = 2
     address = int(instruction_tokens[1])
 
-    return (opcode << 26) + address
+    return "{:08X}".format((opcode << 26) + address)
 
 
 program = []
@@ -82,7 +84,7 @@ for raw_instruction in stdin:
             instruction_format = key
             break
 
-    encoded_instruction = 0  # Default to nop
+    encoded_instruction = "00000000"  # Default to nop
     if instruction_format == 'r':
         encoded_instruction = parse_r_type(instruction_tokens)
     if instruction_format == 'i':
@@ -90,7 +92,7 @@ for raw_instruction in stdin:
     if instruction_format == 'j':
         encoded_instruction = parse_j_type(instruction_tokens)
 
-    program.append('X"{:08x}", -- {}'.format(encoded_instruction, raw_instruction))
+    program.append('X"{}", -- {}'.format(encoded_instruction, raw_instruction))
 
 
 program[-1] = program[-1].replace(',', '', 1)
