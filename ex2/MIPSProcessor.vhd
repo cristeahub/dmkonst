@@ -146,7 +146,7 @@ architecture behavioral of MIPSProcessor is
   alias instruction_jump_address : std_logic_vector(ADDR_WIDTH - 1 downto 0) is stage_if_id_instruction_out(ADDR_WIDTH -1 downto 0);
 
   -- Branch prediction signals
-  signal branch_predictor_branch_taken_out : std_logic := '0';
+  signal branch_predictor_branch_taken_out : std_logic;
   signal branch_taken : std_logic;
   signal branch_guessed_wrong : std_logic;
   signal branch_pc_not_taken : std_logic_vector(ADDR_WIDTH - 1 downto 0);
@@ -167,6 +167,14 @@ begin
   with branch_taken select
     branch_pc_not_taken <= stage_if_id_incremented_pc_out when '1',
                            pc_branch_add_pc_out when others;
+
+  branch_predictor: entity work.two_bit_predictor
+  port map (
+             clk => clk,
+             branch_taken_in => stage_ex_mem_alu_zero_out,
+             update_prediction_in => stage_ex_mem_should_branch_out,
+
+             branch_taken_out => branch_predictor_branch_taken_out);
 
   -- Here be entity declarations
   alu: entity work.alu
