@@ -1,4 +1,5 @@
 from sys import stdin
+from sys import argv as ARGV
 
 opcodes = {
     'lw': 0x23,
@@ -70,29 +71,47 @@ def parse_j_type(instruction_tokens):
     return (opcode << 26) + address
 
 
-program = []
+def change_endianness(inst):
+    out = ""
+    pairs = map(lambda x,y: y+x, inst[0:][::2], inst[1:][::2])
+    out += "".join(pairs)[::-1]
 
-for raw_instruction in stdin:
-    instruction_tokens = raw_instruction.strip().replace(',', '').split(' ')
-    instruction = instruction_tokens[0]
-
-    instruction_format = ''
-    for key, value in instruction_formats.iteritems():
-        if instruction in value:
-            instruction_format = key
-            break
-
-    encoded_instruction = 0  # Default to nop
-    if instruction_format == 'r':
-        encoded_instruction = parse_r_type(instruction_tokens)
-    if instruction_format == 'i':
-        encoded_instruction = parse_i_type(instruction_tokens)
-    if instruction_format == 'j':
-        encoded_instruction = parse_j_type(instruction_tokens)
-
-    program.append('X"{:08x}", -- {}'.format(encoded_instruction, raw_instruction))
+    return out
 
 
-program[-1] = program[-1].replace(',', '', 1)
+if __name__ == '__main__':
 
-print ''.join(program)
+    for_tb = False
+    if '--tb=true' in ARGV:
+        for_tb = True
+
+    program = []
+
+    for raw_instruction in stdin:
+        instruction_tokens = raw_instruction.strip().replace(',', '').split(' ')
+        instruction = instruction_tokens[0]
+
+        instruction_format = ''
+        for key, value in instruction_formats.iteritems():
+            if instruction in value:
+                instruction_format = key
+                break
+
+        encoded_instruction = 0  # Default to nop
+        if instruction_format == 'r':
+            encoded_instruction = parse_r_type(instruction_tokens)
+        if instruction_format == 'i':
+            encoded_instruction = parse_i_type(instruction_tokens)
+        if instruction_format == 'j':
+            encoded_instruction = parse_j_type(instruction_tokens)
+
+        if for_tb:
+            program.append('X"{:08x}", -- {}'.format(encoded_instruction, raw_instruction))
+        else:
+            endian_correct_instruction = change_endianness("{:08x}".format(encoded_instruction))
+            program.append('X"{}", -- {}'.format(endian_correct_instruction, raw_instruction))
+
+
+    program[-1] = program[-1].replace(',', '', 1)
+
+    print ''.join(program)
