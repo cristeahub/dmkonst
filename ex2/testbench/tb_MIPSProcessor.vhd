@@ -15,7 +15,7 @@ USE ieee.numeric_std.ALL;
 use work.constants.all;
 
 ENTITY tb_MIPSProcessor IS
-  END tb_MIPSProcessor;
+END tb_MIPSProcessor;
 
 ARCHITECTURE behavior OF tb_MIPSProcessor IS
   constant ADDR_WIDTH : integer := 8;
@@ -50,37 +50,42 @@ ARCHITECTURE behavior OF tb_MIPSProcessor IS
 
   -- Clock period definitions
   constant clk_period : time := 10 ns; 
+  
+  type instruction_array_t is array (natural range <>) of std_logic_vector(DATA_WIDTH-1 downto 0);
 BEGIN
   -- Instantiate the processor
-  Processor: entity work.MIPSProcessor(Behavioral) port map (
-                                       clk => clk,	reset => reset,
-                                       processor_enable => processor_enable,
-                                       imem_data_in => imem_data_in,
-                                       imem_address => proc_imem_address,
-                                       dmem_data_in => dmem_data_in,
-                                       dmem_address => proc_dmem_address,
-                                       dmem_data_out => proc_dmem_data_out,
-                                       dmem_write_enable => proc_dmem_write_enable(0)
-                                     );
+  Processor: entity work.MIPSProcessor(Behavioral)
+  port map (
+             clk => clk,	reset => reset,
+             processor_enable => processor_enable,
+             imem_data_in => imem_data_in,
+             imem_address => proc_imem_address,
+             dmem_data_in => dmem_data_in,
+             dmem_address => proc_dmem_address,
+             dmem_data_out => proc_dmem_data_out,
+             dmem_write_enable => proc_dmem_write_enable(0)
+           );
 
   -- instantiate the instruction memory
-  InstrMem:		entity work.DualPortMem port map (
-                                                clka => clk, clkb => clk,
-                                                wea => imem_write_enable, 
-                                                dina => imem_data_out,
-                                                addra => imem_address, douta => imem_data_in,
+  InstrMem: entity work.DualPortMem
+  port map (
+             clka => clk, clkb => clk,
+             wea => imem_write_enable, 
+             dina => imem_data_out,
+             addra => imem_address, douta => imem_data_in,
                                                 -- plug unused memory port
-                                                web => "0", dinb => x"00", addrb => "0000000000"
-                                              );
+             web => "0", dinb => x"00", addrb => "0000000000"
+           );
 
   -- instantiate the data memory
-  DataMem:			entity work.DualPortMem port map (
-                                                clka => clk, clkb => clk,
-                                                wea => dmem_write_enable, dina => dmem_data_out,
-                                                addra => dmem_address, douta => dmem_data_in,
+  DataMem: entity work.DualPortMem
+  port map (
+             clka => clk, clkb => clk,
+             wea => dmem_write_enable, dina => dmem_data_out,
+             addra => dmem_address, douta => dmem_data_in,
                                                 -- plug unused memory port
-                                                web => "0", dinb => x"00", addrb => "0000000000"
-                                              );		  
+             web => "0", dinb => x"00", addrb => "0000000000"
+           );
 
   -- Clock process definitions
   clk_process: process
@@ -101,33 +106,41 @@ BEGIN
   stim_proc: process
     -- helper procedures for filling instruction memory
     procedure WriteInstructionWord(
-    instruction : in std_logic_vector(DATA_WIDTH-1 downto 0);
-    address : in unsigned(ADDR_WIDTH-1 downto 0)) is
-  begin
-    tb_imem_address <= std_logic_vector(address);
-    imem_data_out <= instruction;
-    imem_write_enable <= "1";
-    wait until rising_edge(clk);
-    imem_write_enable <= "0";
-  end WriteInstructionWord;
+                                    instruction : in std_logic_vector(DATA_WIDTH-1 downto 0);
+                                    address : in unsigned(ADDR_WIDTH-1 downto 0)) is
+    begin
+      tb_imem_address <= std_logic_vector(address);
+      imem_data_out <= instruction;
+      imem_write_enable <= "1";
+      wait until rising_edge(clk);
+      imem_write_enable <= "0";
+    end WriteInstructionWord;
+
+    -- Helper to fill instruciton memory from an array
+    procedure fill_instruction_memory(instruction_data : in instruction_array_t) is
+    begin
+      for i in 0 to instruction_data'LENGTH - 1 loop
+        WriteInstructionWord(instruction_data(i), to_unsigned(i, ADDR_WIDTH));
+      end loop;
+    end fill_instruction_memory;
 
   -- helper procedures for filling data memory
-  procedure WriteDataWord(
-  data : in std_logic_vector(DATA_WIDTH-1 downto 0);
-  address : in integer) is
-begin
-  tb_dmem_address <= std_logic_vector(to_unsigned(address, ADDR_WIDTH));
-  tb_dmem_data_out <= data;
-  tb_dmem_write_enable <= "1";
-  wait until rising_edge(clk);
-  tb_dmem_write_enable <= "0";
-end WriteDataWord;
+    procedure WriteDataWord(
+                             data : in std_logic_vector(DATA_WIDTH-1 downto 0);
+                             address : in integer) is
+    begin
+      tb_dmem_address <= std_logic_vector(to_unsigned(address, ADDR_WIDTH));
+      tb_dmem_data_out <= data;
+      tb_dmem_write_enable <= "1";
+      wait until rising_edge(clk);
+      tb_dmem_write_enable <= "0";
+    end WriteDataWord;
 
 -- helper procedures for checking the contents of data memory after
 -- the processor has finished executing the tests
-procedure CheckDataWord(
-data : in std_logic_vector(DATA_WIDTH-1 downto 0);
-address : in integer) is
+    procedure CheckDataWord(
+                             data : in std_logic_vector(DATA_WIDTH-1 downto 0);
+                             address : in integer) is
     begin
       tb_dmem_address <= std_logic_vector(to_unsigned(address, ADDR_WIDTH));
       tb_dmem_write_enable <= "0";
@@ -150,10 +163,41 @@ address : in integer) is
       end loop;
     end ClearMemories;
 
-    procedure FillInstructionMemory1 is
-      constant TEST_INSTRS : integer := 30;
-      type InstrData is array (0 to TEST_INSTRS-1) of std_logic_vector(DATA_WIDTH-1 downto 0);
-      variable TestInstrData : InstrData := (
+    procedure FillDataMemory1 is
+    begin
+      WriteDataWord(x"00000002", 1);
+      WriteDataWord(x"0000000A", 2);
+    end FillDataMemory1;
+
+    procedure CheckDataMemory1 is
+    begin
+      wait until processor_enable = '0';
+      -- expected data memory contents, derived from program behavior
+      CheckDataWord(x"00000002", 1);
+      CheckDataWord(x"00000000", 3);
+      CheckDataWord(x"00000000", 4);
+      CheckDataWord(x"0000000C", 5);
+      CheckDataWord(x"0000000C", 6);
+      CheckDataWord(x"0000000C", 7);
+      CheckDataWord(x"00060000", 8);
+      CheckDataWord(x"00060002", 9);
+      CheckDataWord(x"00000001", 12);
+      CheckDataWord(x"0005FFEE", 13);
+      CheckDataWord(x"00000008", 15);
+      CheckDataWord(x"0000000E", 16);
+      CheckDataWord(x"00000000", 18);
+    end CheckDataMemory1;
+
+    procedure CheckDataMemory2 is
+    begin
+      wait until processor_enable = '0';
+      CheckDataWord(x"00000001", 1);
+      CheckDataWord(x"00000002", 2);
+      CheckDataWord(x"00000001", 3);
+    end CheckDataMemory2;
+
+
+    constant SystemTestInstructions : instruction_array_t := (
       X"8C010001", --lw $1, 1($0)		/$1 =  2	
       X"8C020002", --lw $2, 2($0)		/$2 = 10	
       X"00221820", --add $3, $1, $2	   /$3 = 12
@@ -185,41 +229,8 @@ address : in integer) is
       X"1000FFFF", --beq $0, $0, -1	/Branch back one step to hold off code at this spot
       X"AC050012" --sw $5, 18($0)		/SHOULD NEVER HAPPEN (Saving value 14 (= 0xE) on address 18.)
     );
-    begin
-      for i in 0 to TEST_INSTRS-1 loop
-        WriteInstructionWord(TestInstrData(i), to_unsigned(i, ADDR_WIDTH));
-      end loop;
-    end FillInstructionMemory1;
 
-    procedure FillDataMemory1 is
-    begin
-      WriteDataWord(x"00000002", 1);
-      WriteDataWord(x"0000000A", 2);
-    end FillDataMemory1;
-
-    procedure CheckDataMemory1 is
-    begin
-      wait until processor_enable = '0';
-      -- expected data memory contents, derived from program behavior
-      CheckDataWord(x"00000002", 1);
-      CheckDataWord(x"00000000", 3);
-      CheckDataWord(x"00000000", 4);
-      CheckDataWord(x"0000000C", 5);
-      CheckDataWord(x"0000000C", 6);
-      CheckDataWord(x"0000000C", 7);
-      CheckDataWord(x"00060000", 8);
-      CheckDataWord(x"00060002", 9);
-      CheckDataWord(x"00000001", 12);
-      CheckDataWord(x"0005FFEE", 13);
-      CheckDataWord(x"00000008", 15);
-      CheckDataWord(x"0000000E", 16);
-      CheckDataWord(x"00000000", 18);
-    end CheckDataMemory1;
-
-    procedure FillInstructionMemory2 is
-      constant TEST_INSTRS : integer := 8;
-      type InstrData is array (0 to TEST_INSTRS-1) of std_logic_vector(DATA_WIDTH-1 downto 0);
-      variable TestInstrData : InstrData := (
+    constant TestLwSw : instruction_array_t := (
       X"3c010001", -- lui $1, 1
       X"00010c02", -- srl $1, $1, 16
       X"ac010001", -- sw $1, 1($0)
@@ -229,20 +240,6 @@ address : in integer) is
       X"8c030001", -- lw $3, 1($0)
       X"ac030003" -- sw $3, 3($0)
     );
-    begin
-      for i in 0 to TEST_INSTRS-1 loop
-        WriteInstructionWord(TestInstrData(i), to_unsigned(i, ADDR_WIDTH));
-      end loop;
-    end FillInstructionMemory2;
-
-    procedure CheckDataMemory2 is
-    begin
-      wait until processor_enable = '0';
-      CheckDataWord(x"00000001", 1);
-      CheckDataWord(x"00000002", 2);
-      CheckDataWord(x"00000001", 3);
-    end CheckDataMemory2;
-
   begin
     -- hold reset state for 100 ns
     reset <= '1';
@@ -251,14 +248,12 @@ address : in integer) is
 
     processor_enable <= '0';
     -- fill instruction and data mems with test data
-    FillInstructionMemory1;
+    fill_instruction_memory(SystemTestInstructions);
     FillDataMemory1;
 
     wait for clk_period * 10;
 
-    -- enable the processor
     processor_enable <= '1';
-    -- execute for 200 cycles and stop
     wait for clk_period * 200;
 
     processor_enable <= '0';
@@ -279,24 +274,25 @@ address : in integer) is
 
     wait until reset = '0';
 
-    FillInstructionMemory2;
+    fill_instruction_memory(TestLwSw);
 
     wait for clk_period * 10;
 
     processor_enable <= '1';
-    wait for clk_period * 200;
+    wait for clk_period * 50;
 
     processor_enable <= '0';
 
     CheckDataMemory2;
+    ClearMemories;
 
+    wait for clk_period * 10;
     ---------------
     -- Next test --
     ---------------
 
-    ---
-
     report "Test complete";
+    wait;
   end process;
 
 END;
