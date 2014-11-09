@@ -10,8 +10,8 @@ entity pc is
          processor_enable_in : in  std_logic;
          pc_write_enable_in : in std_logic;
 
-         pc_branch_override_in : in std_logic;
-         pc_branch_address_in : in std_logic_vector(ADDR_WIDTH - 1 downto 0);
+         pc_branch_prediction_override_in : in std_logic;
+         pc_branch_prediction_address_in : in std_logic_vector(ADDR_WIDTH - 1 downto 0);
 
          pc_branch_correction_override_in : in std_logic;
          pc_branch_correction_address_in : in std_logic_vector(ADDR_WIDTH - 1 downto 0);
@@ -34,8 +34,10 @@ architecture Behavioral of pc is
   signal pc_output_override : std_logic;
 begin
 
-  with pc_branch_override_in select
-    branch_override_mux <= pc_branch_address_in when '1',
+  -- Set up proper PC bypass priorities:
+  -- Branch correction > Jump > Branch prediction > internal PC
+  with pc_branch_prediction_override_in select
+    branch_override_mux <= pc_branch_prediction_address_in when '1',
                            pc_internal when others;
 
   with pc_jump_override_in select
@@ -46,6 +48,7 @@ begin
     branch_correction_override_mux <= pc_branch_correction_address_in when '1',
                                       jump_override_mux when others;
 
+  -- Update internal PC on clock. Keep copy of PC in pc_internal_hold for use when stalling.
   PC : process ( clk, reset, processor_enable_in, pc_write_enable_in )
   begin
     if reset = '1' then
@@ -56,11 +59,13 @@ begin
     end if;
   end process; -- PC
 
+  -- Only update internal pc when not stalling.
   with pc_write_enable_in select
     pc_may_be_overridden <= pc_internal when '1',
                             pc_internal_hold when others;
 
-  pc_output_override <= pc_branch_override_in or pc_jump_override_in or pc_branch_correction_override_in;
+  -- When Branching / jumping, instantly forward the new address for zero-downtime branches.
+  pc_output_override <= pc_branch_prediction_override_in or pc_jump_override_in or pc_branch_correction_override_in;
   with pc_output_override select
     pc_out <= branch_correction_override_mux when '1',
               pc_may_be_overridden when others;

@@ -194,8 +194,8 @@ begin
              processor_enable_in => processor_enable,
              pc_write_enable_in => hazard_detection_pc_write_out,
 
-             pc_branch_override_in => branch_taken,
-             pc_branch_address_in => pc_branch_add_pc_out,
+             pc_branch_prediction_override_in => branch_taken,
+             pc_branch_prediction_address_in => pc_branch_add_pc_out,
 
              pc_branch_correction_address_in => stage_ex_mem_branch_pc_not_taken_out,
              pc_branch_correction_override_in => branch_guessed_wrong,
