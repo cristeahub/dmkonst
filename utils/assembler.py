@@ -62,7 +62,7 @@ def parse_i_type(instruction_tokens):
 
     # return (opcode << 26) + (rs << 21) + (rt << 16) + imm
 
-    return "{:04X}{:04X}".format((opcode << 10) + (rs << 5) + rt, imm)
+    return "{:04X}{:04X}".format((opcode << 10) + (rs << 5) + rt, imm % 2 ** 16)
 
 
 def parse_j_type(instruction_tokens):
