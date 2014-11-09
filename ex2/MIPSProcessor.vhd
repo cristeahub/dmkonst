@@ -162,19 +162,35 @@ begin
   -- Branch prediction wires
   branch_taken <= control_branch_out and branch_predictor_branch_taken_out;
   branch_guessed_wrong <= stage_ex_mem_should_branch_out and (stage_ex_mem_alu_zero_out xor stage_ex_mem_branch_taken_out);
-
   -- We forward the not selected pc for correction further down the line
   with branch_taken select
     branch_pc_not_taken <= stage_if_id_incremented_pc_out when '1',
                            pc_branch_add_pc_out when others;
 
-  branch_predictor: entity work.two_bit_predictor
-  port map (
-             clk => clk,
-             branch_taken_in => stage_ex_mem_alu_zero_out,
-             update_prediction_in => stage_ex_mem_should_branch_out,
+  -- Set up branch predictor
+  branch_predictor: entity work.branch_predictor
+  generic map(
+               ADDR_WIDTH => ADDR_WIDTH,
+               DATA_WIDTH => DATA_WIDTH)
+  port map( -- Branch status signals
+            clk => clk,
+            branch_taken_in => stage_ex_mem_alu_zero_out,
+            update_prediction_in => stage_ex_mem_should_branch_out,
 
-             branch_taken_out => branch_predictor_branch_taken_out);
+            -- Hazard detection signals
+           registers_read_data_rs_in => registers_read_data_1_out,
+           registers_read_data_rt_in => registers_read_data_2_out,
+
+           if_id_rs_in => instruction_rs,
+           if_id_rt_in => instruction_rt,
+
+           -- Forwarded addresses
+           id_ex_rd_in => write_register_mux_out,
+           id_ex_reg_write_in => stage_id_ex_reg_write_out,
+           ex_mem_rd_in => stage_ex_mem_write_register_out,
+           ex_mem_reg_write_in => stage_ex_mem_reg_write_out,
+
+           branch_taken_out => branch_predictor_branch_taken_out);
 
   -- Here be entity declarations
   alu: entity work.alu
