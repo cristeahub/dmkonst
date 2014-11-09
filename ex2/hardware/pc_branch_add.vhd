@@ -14,7 +14,7 @@ architecture Behavioral of pc_branch_add is
 
 begin
 
-  pc_out <= std_logic_vector(unsigned(old_pc_in) + unsigned(instruction_immediate_in));
+  pc_out <= std_logic_vector(unsigned(old_pc_in) + unsigned(instruction_immediate_in) + 1);
 
 end Behavioral;
 

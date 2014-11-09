@@ -10,8 +10,11 @@ entity pc is
          processor_enable_in : in  std_logic;
          pc_write_enable_in : in std_logic;
 
-         pc_branch_override_in : in std_logic;
-         pc_branch_address_in : in std_logic_vector(ADDR_WIDTH - 1 downto 0);
+         pc_branch_prediction_override_in : in std_logic;
+         pc_branch_prediction_address_in : in std_logic_vector(ADDR_WIDTH - 1 downto 0);
+
+         pc_branch_correction_override_in : in std_logic;
+         pc_branch_correction_address_in : in std_logic_vector(ADDR_WIDTH - 1 downto 0);
 
          pc_jump_override_in : in  std_logic;
          pc_jump_address_in : in  std_logic_vector(ADDR_WIDTH - 1 downto 0);
@@ -20,38 +23,52 @@ entity pc is
 end pc;
 
 architecture Behavioral of pc is
-  signal pc_jump_mux_out : std_logic_vector(ADDR_WIDTH - 1 downto 0);
-  signal pc_branch_mux_out : std_logic_vector(ADDR_WIDTH - 1 downto 0);
-  signal pc_out_may_be_overridden_by_jump : std_logic_vector(ADDR_WIDTH - 1 downto 0);
-  signal pc_out_new : std_logic_vector(ADDR_WIDTH - 1 downto 0);
-  signal pc_out_old : std_logic_vector(ADDR_WIDTH - 1 downto 0);
+  signal branch_override_mux : std_logic_vector(ADDR_WIDTH - 1 downto 0);
+  signal jump_override_mux : std_logic_vector(ADDR_WIDTH - 1 downto 0);
+  signal branch_correction_override_mux : std_logic_vector(ADDR_WIDTH - 1 downto 0);
+
+  signal pc_internal : std_logic_vector(ADDR_WIDTH - 1 downto 0);
+  signal pc_internal_hold : std_logic_vector(ADDR_WIDTH - 1 downto 0);
+
+  signal pc_may_be_overridden :std_logic_vector(ADDR_WIDTH - 1 downto 0);
+  signal pc_output_override : std_logic;
 begin
 
-  with pc_branch_override_in select
-    pc_branch_mux_out <= pc_branch_address_in when '1',
-                         std_logic_vector(unsigned(pc_out_new) + 1) when others;
+  -- Set up proper PC bypass priorities:
+  -- Branch correction > Jump > Branch prediction > internal PC
+  with pc_branch_prediction_override_in select
+    branch_override_mux <= pc_branch_prediction_address_in when '1',
+                           pc_internal when others;
 
   with pc_jump_override_in select
-    pc_jump_mux_out <= std_logic_vector(unsigned(pc_jump_address_in) + 1) when '1',
-                       pc_branch_mux_out when others;
+    jump_override_mux <= pc_jump_address_in when '1',
+                         branch_override_mux when others;
 
-  with pc_write_enable_in select
-    pc_out_may_be_overridden_by_jump <= pc_out_new when '1',
-                                        pc_out_old when others;
+  with pc_branch_correction_override_in select
+    branch_correction_override_mux <= pc_branch_correction_address_in when '1',
+                                      jump_override_mux when others;
 
-  with pc_jump_override_in select
-    pc_out <= pc_jump_address_in when '1',
-              pc_out_may_be_overridden_by_jump when others;
-
+  -- Update internal PC on clock. Keep copy of PC in pc_internal_hold for use when stalling.
   PC : process ( clk, reset, processor_enable_in, pc_write_enable_in )
   begin
     if reset = '1' then
-      pc_out_new <= x"FF";
+      pc_internal <= x"FF";
     elsif rising_edge(clk) and processor_enable_in = '1' and pc_write_enable_in = '1' then
-      pc_out_new <= pc_jump_mux_out;
-      pc_out_old <= pc_out_new;
+      pc_internal <= std_logic_vector(unsigned(branch_correction_override_mux) + 1);
+      pc_internal_hold <= pc_may_be_overridden;
     end if;
   end process; -- PC
+
+  -- Only update internal pc when not stalling.
+  with pc_write_enable_in select
+    pc_may_be_overridden <= pc_internal when '1',
+                            pc_internal_hold when others;
+
+  -- When Branching / jumping, instantly forward the new address for zero-downtime branches.
+  pc_output_override <= pc_branch_prediction_override_in or pc_jump_override_in or pc_branch_correction_override_in;
+  with pc_output_override select
+    pc_out <= branch_correction_override_mux when '1',
+              pc_may_be_overridden when others;
 
 end Behavioral;
 
