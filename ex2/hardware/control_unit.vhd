@@ -20,7 +20,7 @@ entity control_unit is
          -- Write-back stage control lines
          reg_write_out : out  std_logic;
          mem_to_reg_out : out  std_logic;
-         
+
          pc_jump_override_out : out  std_logic
        );
 end control_unit;
@@ -43,7 +43,7 @@ begin
     -- Write-back stage control lines
     reg_write_out <= '0';
     mem_to_reg_out <= '0';
-    
+
     -- Jump
     pc_jump_override_out <= '0';
 

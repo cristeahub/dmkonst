@@ -9,10 +9,10 @@ entity pc is
          reset : in  std_logic;
          processor_enable_in : in  std_logic;
          pc_write_enable_in : in std_logic;
-         
+
          pc_branch_override_in : in std_logic;
          pc_branch_address_in : in std_logic_vector(ADDR_WIDTH - 1 downto 0);
-         
+
          pc_jump_override_in : in  std_logic;
          pc_jump_address_in : in  std_logic_vector(ADDR_WIDTH - 1 downto 0);
 
@@ -37,7 +37,7 @@ begin
 
   with pc_write_enable_in select
     pc_out_may_be_overridden_by_jump <= pc_out_new when '1',
-              pc_out_old when others;
+                                        pc_out_old when others;
 
   with pc_jump_override_in select
     pc_out <= pc_jump_address_in when '1',
