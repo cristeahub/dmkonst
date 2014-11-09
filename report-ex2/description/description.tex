@@ -62,3 +62,16 @@ and then given to the forwarding unit
 and then given to the forwarding unit
 
 That should be it :)
+
+yo peeps. (dette er kanskje discussion-mat)
+trade-off:
+
+forwarding fra ex/mem fra branch calculation, vs. ingen forwarding med mer branch prediction
+
+For at forwarding skal ha noen særlig effekt, må man ha en nop før branch, fordi man ikke kan forwarde fra ex stage.
+Siden man oftest brancher i loops, vil én ekstra overhead per branch calculation, være mye dyrere enn en potensiell 0/2-sykel delay ved korrekt/feil gjett i predictoren.
+Heldigvis vil en to-bit prediktor være svært nøyaktig i en loop, da den raskt vil korrigere seg inn.
+Den kan worst-case starte med to feil, det gir fire sykler delay.
+Altså for loops med flere enn fire iterasjoner vil det lønne seg med prediktor, og uten forwarding.
+
+PS: forwarding kan også introdusere en lengre kritisk sti, og redusere klokkehastigheten.
