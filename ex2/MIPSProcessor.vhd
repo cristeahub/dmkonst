@@ -130,7 +130,7 @@ architecture behavioral of MIPSProcessor is
   alias instruction_rt : std_logic_vector(20 downto 16) is stage_if_id_instruction_out(20 downto 16);
   alias instruction_rd : std_logic_vector(15 downto 11) is stage_if_id_instruction_out(15 downto 11);
   alias instruction_address : std_logic_vector(15 downto 0) is stage_if_id_instruction_out(15 downto 0);
-  alias instruction_shamt : std_logic_vector(4 downto 0) is stage_if_id_instruction_out(10 downto 6);
+  alias instruction_shamt : std_logic_vector(10 downto 6) is stage_id_ex_sign_extend_out(10 downto 6);
   alias instruction_funct : std_logic_vector(5 downto 0) is stage_id_ex_sign_extend_out(5 downto 0);
   alias instruction_jump_address : std_logic_vector(ADDR_WIDTH - 1 downto 0) is stage_if_id_instruction_out(ADDR_WIDTH -1 downto 0);
 
