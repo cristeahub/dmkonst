@@ -341,10 +341,13 @@ begin
   port map ( clk => clk,
              processor_enable_in => processor_enable,
              control_id_ex_mem_read_in => stage_id_ex_mem_read_out,
-             control_if_id_mem_write_in => control_mem_write_out,
+             control_mem_write_in => control_mem_write_out,
+             control_should_branch_in => control_branch_out,
+
              id_ex_rt_in => stage_id_ex_instruction_rt_out,
              if_id_rt_in => instruction_rt,
              if_id_rs_in => instruction_rs,
+
              stall_out => hazard_detection_stall_out,
              pc_write_out => hazard_detection_pc_write_out,
              stage_if_id_write_out => hazard_detection_if_id_write_out,
