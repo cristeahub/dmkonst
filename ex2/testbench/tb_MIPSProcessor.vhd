@@ -251,6 +251,15 @@ BEGIN
       X"1000FFFF" -- beq $0, $0, -1
     );
 
+    constant TestBranchAfterLoad : instruction_array_t := (
+      X"8C020002", -- lw $2, 2($0)
+      X"8C010001", -- lw $1, 1($0)
+      X"10200002", -- beq $1, $0, 2
+      X"AC020004", -- sw $2, 4($0)
+      X"08000006", -- j 6
+      X"AC010004", -- sw $1, 4($0)
+      X"00000000" -- nop
+    );
   begin
 
     ---------------------------------
@@ -315,6 +324,36 @@ BEGIN
     wait until processor_enable = '0';
 
     CheckDataWord(x"00000001", 2);
+    ClearMemories;
+
+    wait for clk_period;
+
+    ---------------
+    -- Next test --
+    ---------------
+    
+    reset <= '1';
+    wait for 100 ns;
+    reset <= '0';
+    
+    wait until reset = '0';
+    
+    fill_instruction_memory(TestBranchAfterLoad);
+    WriteDataWord(X"00000001", 1);
+    WriteDataWord(X"00000002", 2);
+
+    wait for clk_period * 10;
+
+    processor_enable <= '1';
+
+    wait for clk_period * 50;
+    
+    processor_enable <= '0';
+    
+    wait until processor_enable = '0';
+    
+    CheckDataWord(X"00000002", 4);
+    
     ClearMemories;
 
     report "Test complete";
