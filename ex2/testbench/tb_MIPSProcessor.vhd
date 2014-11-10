@@ -240,14 +240,27 @@ BEGIN
       X"8c030001", -- lw $3, 1($0)
       X"ac030003" -- sw $3, 3($0)
     );
+
+    constant TestLoopPrediction : instruction_array_t := (
+      X"8C010000", -- lw $1, 0($0)
+      X"8C020001", -- lw $2, 1($0)
+      X"10400003", -- beq $2, $0, 3
+      X"AC020002", -- sw $2, 2($0)
+      X"00411022", -- sub $2, $2, $1
+      X"08000002", -- j 2
+      X"1000FFFF" -- beq $0, $0, -1
+    );
+
   begin
-    -- hold reset state for 100 ns
+
+    ---------------------------------
+    -- Run system integration test --
+    ---------------------------------
     reset <= '1';
     wait for 100 ns;	
     reset <= '0';
-
     processor_enable <= '0';
-    -- fill instruction and data mems with test data
+
     fill_instruction_memory(SystemTestInstructions);
     FillDataMemory1;
 
@@ -258,16 +271,12 @@ BEGIN
 
     processor_enable <= '0';
 
-    -- check the results
     CheckDataMemory1;
-
-    -- Clear
     ClearMemories;
 
-    ---------------
-    -- Next test --
-    ---------------
-
+    -----------------------------------
+    -- Test Storeword after Loadword --
+    -----------------------------------
     reset <= '1';
     wait for 100 ns;
     reset <= '0';
@@ -287,9 +296,26 @@ BEGIN
     ClearMemories;
 
     wait for clk_period * 10;
-    ---------------
-    -- Next test --
-    ---------------
+
+    -------------------------------------
+    -- Test branch prediction in loops --
+    -------------------------------------
+    reset <= '1';
+    wait for 100 ns;
+    reset <= '0';
+    wait until reset = '0';
+
+    fill_instruction_memory(TestLoopPrediction);
+    WriteDataWord(x"00000001", 0);
+    WriteDataWord(x"00000014", 1);
+
+    processor_enable <= '1';
+    wait for clk_period * 200;
+    processor_enable <= '0';
+    wait until processor_enable = '0';
+
+    CheckDataWord(x"00000001", 2);
+    ClearMemories;
 
     report "Test complete";
     wait;

@@ -33,10 +33,11 @@ begin
   pc_write_out <= not stall;
   stage_if_id_write_out <= not stall;
 
-  -- Generates a pulse the first cycle after processor is enabled
+  -- Generates a pulse the first cycle after processor is enabled.
+  -- The pulse is used to flush IF/ID stage of garbage data.
+  stage_if_id_flush_out <= (not processor_enable_hold) and processor_enable_in;
   process (clk) is
   begin
-    stage_if_id_flush_out <= (not processor_enable_hold) and processor_enable_in;
     if falling_edge(clk) then
       processor_enable_hold <= processor_enable_in;
     end if;

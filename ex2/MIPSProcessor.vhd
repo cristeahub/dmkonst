@@ -86,7 +86,7 @@ architecture behavioral of MIPSProcessor is
   ------------------------------
 
   -- Stage IF/ID
-  signal stage_if_id_incremented_pc_out : std_logic_vector(ADDR_WIDTH -1 downto 0);
+  signal stage_if_id_pc_out : std_logic_vector(ADDR_WIDTH -1 downto 0);
   signal stage_if_id_instruction_out : std_logic_vector(31 downto 0);
 
 
@@ -150,7 +150,7 @@ architecture behavioral of MIPSProcessor is
   signal branch_predictor_branch_taken_out : std_logic;
   signal branch_taken : std_logic;
   signal branch_guessed_wrong : std_logic;
-  signal branch_pc_not_taken : std_logic_vector(ADDR_WIDTH - 1 downto 0);
+  signal branch_address_not_taken_out : std_logic_vector(ADDR_WIDTH - 1 downto 0);
 
 begin
 
@@ -163,10 +163,6 @@ begin
   -- Branch prediction wires
   branch_taken <= control_branch_out and branch_predictor_branch_taken_out;
   branch_guessed_wrong <= stage_ex_mem_should_branch_out and (stage_ex_mem_alu_zero_out xor stage_ex_mem_branch_taken_out);
-  -- We forward the not selected pc for correction further down the line
-  with branch_taken select
-    branch_pc_not_taken <= stage_if_id_incremented_pc_out when '1',
-                           pc_branch_add_pc_out when others;
 
   -- Set up branch predictor
   branch_predictor: entity work.branch_predictor
@@ -317,13 +313,16 @@ begin
              data_in => instruction_address,
              data_out => sign_extend_out);
 
-  pc_branch_add : entity work.pc_branch_add
+  branch_address_calculator : entity work.branch_address_calculator
   generic map(
                ADDR_WIDTH => ADDR_WIDTH)
   port map (
-             old_pc_in => stage_if_id_incremented_pc_out,
+             old_pc_in => stage_if_id_pc_out,
              instruction_immediate_in => stage_if_id_instruction_out(ADDR_WIDTH - 1 downto 0),
-             pc_out => pc_branch_add_pc_out);
+             branch_taken_in => branch_taken,
+
+             branch_address_out => pc_branch_add_pc_out,
+             branch_address_not_taken_out => branch_address_not_taken_out);
 
   forwarding_unit : entity work.forwarding_unit
   port map ( inst_rs_in => stage_id_ex_instruction_rs_out,
@@ -365,7 +364,7 @@ begin
 
              pc_in => pc_out,
              instruction_in => imem_data_in,
-             pc_out => stage_if_id_incremented_pc_out,
+             pc_out => stage_if_id_pc_out,
              instruction_out => stage_if_id_instruction_out);
 
   flush_barrier_id_ex <= hazard_detection_stall_out or branch_guessed_wrong or reset;
@@ -405,7 +404,7 @@ begin
              mem_to_reg_out => stage_id_ex_mem_to_reg_out,
 
              -- Begin branch cables
-             branch_pc_not_taken_in => branch_pc_not_taken,
+             branch_pc_not_taken_in => branch_address_not_taken_out,
              branch_taken_in => branch_taken,
              should_branch_in => control_branch_out,
 
