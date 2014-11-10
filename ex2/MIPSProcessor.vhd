@@ -84,66 +84,66 @@ architecture behavioral of MIPSProcessor is
   ------ Pipeline barriers -----
   ------------------------------
 
-  -- Stage IF/ID
-  signal stage_if_id_pc_out : std_logic_vector(ADDR_WIDTH -1 downto 0);
-  signal stage_if_id_instruction_out : std_logic_vector(31 downto 0);
+  -- barrier IF/ID
+  signal barrier_if_id_pc_out : std_logic_vector(ADDR_WIDTH -1 downto 0);
+  signal barrier_if_id_instruction_out : std_logic_vector(31 downto 0);
 
 
-  -- Stage ID/EX
-  signal stage_id_ex_incremented_pc_out : std_logic_vector(ADDR_WIDTH -1 downto 0);
-  signal stage_id_ex_read_data_1_out : std_logic_vector(31 downto 0);
-  signal stage_id_ex_read_data_2_out : std_logic_vector(31 downto 0);
-  signal stage_id_ex_sign_extend_out : std_logic_vector(31 downto 0);
-  signal stage_id_ex_instruction_rs_out : std_logic_vector(25 downto 21);
-  signal stage_id_ex_instruction_rt_out : std_logic_vector(20 downto 16);
-  signal stage_id_ex_instruction_rd_out : std_logic_vector(15 downto 11);
+  -- barrier ID/EX
+  signal barrier_id_ex_incremented_pc_out : std_logic_vector(ADDR_WIDTH -1 downto 0);
+  signal barrier_id_ex_read_data_1_out : std_logic_vector(31 downto 0);
+  signal barrier_id_ex_read_data_2_out : std_logic_vector(31 downto 0);
+  signal barrier_id_ex_sign_extend_out : std_logic_vector(31 downto 0);
+  signal barrier_id_ex_instruction_rs_out : std_logic_vector(25 downto 21);
+  signal barrier_id_ex_instruction_rt_out : std_logic_vector(20 downto 16);
+  signal barrier_id_ex_instruction_rd_out : std_logic_vector(15 downto 11);
 
-  signal stage_id_ex_reg_dst_out : std_logic;
-  signal stage_id_ex_alu_op_out : std_logic_vector(1 downto 0);
-  signal stage_id_ex_alu_src_out : std_logic;
-  signal stage_id_ex_mem_write_out : std_logic;
-  signal stage_id_ex_mem_read_out : std_logic;
-  signal stage_id_ex_reg_write_out : std_logic;
-  signal stage_id_ex_mem_to_reg_out : std_logic;
+  signal barrier_id_ex_reg_dst_out : std_logic;
+  signal barrier_id_ex_alu_op_out : std_logic_vector(1 downto 0);
+  signal barrier_id_ex_alu_src_out : std_logic;
+  signal barrier_id_ex_mem_write_out : std_logic;
+  signal barrier_id_ex_mem_read_out : std_logic;
+  signal barrier_id_ex_reg_write_out : std_logic;
+  signal barrier_id_ex_mem_to_reg_out : std_logic;
 
-  signal stage_id_ex_branch_taken_out : std_logic;
-  signal stage_id_ex_should_branch_out : std_logic;
-  signal stage_id_ex_branch_pc_not_taken_out : std_logic_vector(ADDR_WIDTH - 1 downto 0);
-
-
-  -- Stage EX/MEM
-  signal stage_ex_mem_alu_zero_out : std_logic;
-  signal stage_ex_mem_alu_result_out : std_logic_vector(31 downto 0);
-  signal stage_ex_mem_read_data_2_out : std_logic_vector(31 downto 0);
-  signal stage_ex_mem_write_register_out : std_logic_vector(4 downto 0);
-
-  signal stage_ex_mem_mem_write_out : std_logic;
-  signal stage_ex_mem_reg_write_out : std_logic;
-  signal stage_ex_mem_mem_to_reg_out : std_logic;
-
-  signal stage_ex_mem_branch_taken_out : std_logic;
-  signal stage_ex_mem_should_branch_out : std_logic;
-  signal stage_ex_mem_branch_pc_not_taken_out : std_logic_vector(ADDR_WIDTH -1 downto 0);
+  signal barrier_id_ex_branch_taken_out : std_logic;
+  signal barrier_id_ex_should_branch_out : std_logic;
+  signal barrier_id_ex_branch_pc_not_taken_out : std_logic_vector(ADDR_WIDTH - 1 downto 0);
 
 
-  -- Stage MEM/WB
-  signal stage_mem_wb_read_data_out : std_logic_vector(31 downto 0);
-  signal stage_mem_wb_alu_result_out : std_logic_vector(31 downto 0);
-  signal stage_mem_wb_write_register_out : std_logic_vector(4 downto 0);
+  -- barrier EX/MEM
+  signal barrier_ex_mem_alu_zero_out : std_logic;
+  signal barrier_ex_mem_alu_result_out : std_logic_vector(31 downto 0);
+  signal barrier_ex_mem_read_data_2_out : std_logic_vector(31 downto 0);
+  signal barrier_ex_mem_write_register_out : std_logic_vector(4 downto 0);
 
-  signal stage_mem_wb_reg_write_out : std_logic;
-  signal stage_mem_wb_mem_to_reg_out : std_logic;
+  signal barrier_ex_mem_mem_write_out : std_logic;
+  signal barrier_ex_mem_reg_write_out : std_logic;
+  signal barrier_ex_mem_mem_to_reg_out : std_logic;
+
+  signal barrier_ex_mem_branch_taken_out : std_logic;
+  signal barrier_ex_mem_should_branch_out : std_logic;
+  signal barrier_ex_mem_branch_pc_not_taken_out : std_logic_vector(ADDR_WIDTH -1 downto 0);
+
+
+  -- barrier MEM/WB
+  signal barrier_mem_wb_read_data_out : std_logic_vector(31 downto 0);
+  signal barrier_mem_wb_alu_result_out : std_logic_vector(31 downto 0);
+  signal barrier_mem_wb_write_register_out : std_logic_vector(4 downto 0);
+
+  signal barrier_mem_wb_reg_write_out : std_logic;
+  signal barrier_mem_wb_mem_to_reg_out : std_logic;
 
 
   -- Instruction aliases
-  alias instruction_opcode : std_logic_vector(31 downto 26) is stage_if_id_instruction_out(31 downto 26);
-  alias instruction_rs : std_logic_vector(25 downto 21) is stage_if_id_instruction_out(25 downto 21);
-  alias instruction_rt : std_logic_vector(20 downto 16) is stage_if_id_instruction_out(20 downto 16);
-  alias instruction_rd : std_logic_vector(15 downto 11) is stage_if_id_instruction_out(15 downto 11);
-  alias instruction_address : std_logic_vector(15 downto 0) is stage_if_id_instruction_out(15 downto 0);
-  alias instruction_shamt : std_logic_vector(10 downto 6) is stage_id_ex_sign_extend_out(10 downto 6);
-  alias instruction_funct : std_logic_vector(5 downto 0) is stage_id_ex_sign_extend_out(5 downto 0);
-  alias instruction_jump_address : std_logic_vector(ADDR_WIDTH - 1 downto 0) is stage_if_id_instruction_out(ADDR_WIDTH -1 downto 0);
+  alias instruction_opcode : std_logic_vector(31 downto 26) is barrier_if_id_instruction_out(31 downto 26);
+  alias instruction_rs : std_logic_vector(25 downto 21) is barrier_if_id_instruction_out(25 downto 21);
+  alias instruction_rt : std_logic_vector(20 downto 16) is barrier_if_id_instruction_out(20 downto 16);
+  alias instruction_rd : std_logic_vector(15 downto 11) is barrier_if_id_instruction_out(15 downto 11);
+  alias instruction_address : std_logic_vector(15 downto 0) is barrier_if_id_instruction_out(15 downto 0);
+  alias instruction_shamt : std_logic_vector(10 downto 6) is barrier_id_ex_sign_extend_out(10 downto 6);
+  alias instruction_funct : std_logic_vector(5 downto 0) is barrier_id_ex_sign_extend_out(5 downto 0);
+  alias instruction_jump_address : std_logic_vector(ADDR_WIDTH - 1 downto 0) is barrier_if_id_instruction_out(ADDR_WIDTH -1 downto 0);
 
   -- Branch prediction signals
   signal branch_predictor_branch_taken_out : std_logic;
@@ -154,14 +154,14 @@ architecture behavioral of MIPSProcessor is
 begin
 
   -- Wire it up!
-  dmem_write_enable <= stage_ex_mem_mem_write_out;
+  dmem_write_enable <= barrier_ex_mem_mem_write_out;
   dmem_data_out <= store_data_mux_out;
-  dmem_address <= stage_ex_mem_alu_result_out(7 downto 0);
+  dmem_address <= barrier_ex_mem_alu_result_out(7 downto 0);
   imem_address <= pc_out;
 
   -- Branch prediction wires
   branch_taken <= control_branch_out and branch_predictor_branch_taken_out;
-  branch_guessed_wrong <= stage_ex_mem_should_branch_out and (stage_ex_mem_alu_zero_out xor stage_ex_mem_branch_taken_out);
+  branch_guessed_wrong <= barrier_ex_mem_should_branch_out and (barrier_ex_mem_alu_zero_out xor barrier_ex_mem_branch_taken_out);
 
   -- Set up branch predictor
   branch_predictor: entity work.branch_predictor
@@ -170,8 +170,8 @@ begin
                DATA_WIDTH => DATA_WIDTH)
   port map( -- Branch status signals
             clk => clk,
-            branch_taken_in => stage_ex_mem_alu_zero_out,
-            update_prediction_in => stage_ex_mem_should_branch_out,
+            branch_taken_in => barrier_ex_mem_alu_zero_out,
+            update_prediction_in => barrier_ex_mem_should_branch_out,
 
             -- Hazard detection signals
            registers_read_data_rs_in => registers_read_data_1_out,
@@ -182,9 +182,9 @@ begin
 
            -- Forwarded addresses
            id_ex_rd_in => write_register_mux_out,
-           id_ex_reg_write_in => stage_id_ex_reg_write_out,
-           ex_mem_rd_in => stage_ex_mem_write_register_out,
-           ex_mem_reg_write_in => stage_ex_mem_reg_write_out,
+           id_ex_reg_write_in => barrier_id_ex_reg_write_out,
+           ex_mem_rd_in => barrier_ex_mem_write_register_out,
+           ex_mem_reg_write_in => barrier_ex_mem_reg_write_out,
 
            branch_taken_out => branch_predictor_branch_taken_out);
 
@@ -203,7 +203,7 @@ begin
              alu_function_in => instruction_funct,
              shamt_in => instruction_shamt,
              shamt_out => alu_control_shamt_out,
-             control_alu_op => stage_id_ex_alu_op_out,
+             control_alu_op => barrier_id_ex_alu_op_out,
              alu_control_out => alu_control_out);
 
   pc: entity work.pc
@@ -217,7 +217,7 @@ begin
              pc_branch_prediction_override_in => branch_taken,
              pc_branch_prediction_address_in => pc_branch_add_pc_out,
 
-             pc_branch_correction_address_in => stage_ex_mem_branch_pc_not_taken_out,
+             pc_branch_correction_address_in => barrier_ex_mem_branch_pc_not_taken_out,
              pc_branch_correction_override_in => branch_guessed_wrong,
 
              pc_jump_override_in => control_pc_jump_override_out,
@@ -230,17 +230,17 @@ begin
              instruction_in => instruction_opcode,
              processor_enable => processor_enable,
 
-             -- Execution / adress calculation stage control lines
+             -- Execution / adress calculation barrier control lines
              reg_dst_out => control_reg_dst_out,
              alu_op_out => control_alu_op_out,
              alu_src_out => control_alu_src_out,
 
-             -- Memory access stage control lines
+             -- Memory access barrier control lines
              branch_out => control_branch_out,
              mem_write_out => control_mem_write_out,
              mem_read_out => control_mem_read_out,
 
-             -- Write-back stage control lines
+             -- Write-back barrier control lines
              reg_write_out => control_reg_write_out,
              mem_to_reg_out => control_mem_to_reg_out,
 
@@ -253,9 +253,9 @@ begin
              clk => clk,
              read_register_1_in => instruction_rs,
              read_register_2_in => instruction_rt,
-             write_register_in => stage_mem_wb_write_register_out,
+             write_register_in => barrier_mem_wb_write_register_out,
              write_data_in => write_data_mux_out,
-             reg_write_in => stage_mem_wb_reg_write_out,
+             reg_write_in => barrier_mem_wb_reg_write_out,
              read_data_1_out => registers_read_data_1_out,
              read_data_2_out => registers_read_data_2_out);
 
@@ -264,45 +264,45 @@ begin
   Generic map (
                 DATA_WIDTH => 5)
   Port map (
-             a_in => stage_id_ex_instruction_rt_out,
-             b_in => stage_id_ex_instruction_rd_out,
-             select_in => stage_id_ex_reg_dst_out,
+             a_in => barrier_id_ex_instruction_rt_out,
+             b_in => barrier_id_ex_instruction_rd_out,
+             select_in => barrier_id_ex_reg_dst_out,
              data_out => write_register_mux_out);
 
   write_data_mux : entity work.mux
   Port map (
-             a_in => stage_mem_wb_alu_result_out,
-             b_in => stage_mem_wb_read_data_out,
-             select_in => stage_mem_wb_mem_to_reg_out,
+             a_in => barrier_mem_wb_alu_result_out,
+             b_in => barrier_mem_wb_read_data_out,
+             select_in => barrier_mem_wb_mem_to_reg_out,
              data_out => write_data_mux_out);
 
   alu_a_forwarding_mux : entity work.mux_4
   Port map (
-             a_in => stage_id_ex_read_data_1_out,
+             a_in => barrier_id_ex_read_data_1_out,
              b_in => write_data_mux_out,
-             c_in => stage_ex_mem_alu_result_out,
+             c_in => barrier_ex_mem_alu_result_out,
              d_in => x"00000000",
              select_in => forwarding_unit_rs_out,
              data_out => alu_a_forwarding_mux_out);
 
   alu_b_forwarding_mux : entity work.mux_4
   Port map (
-             a_in => stage_id_ex_read_data_2_out,
+             a_in => barrier_id_ex_read_data_2_out,
              b_in => write_data_mux_out,
-             c_in => stage_ex_mem_alu_result_out,
+             c_in => barrier_ex_mem_alu_result_out,
              d_in => x"00000000",
              select_in => forwarding_unit_rt_out,
              data_out => alu_b_forwarding_mux_out);
   alu_b_mux : entity work.mux
   Port map (
              a_in => alu_b_forwarding_mux_out,
-             b_in => stage_id_ex_sign_extend_out,
-             select_in => stage_id_ex_alu_src_out,
+             b_in => barrier_id_ex_sign_extend_out,
+             select_in => barrier_id_ex_alu_src_out,
              data_out => alu_b_mux_out);
 
   store_data_mux : entity work.mux
   port map (
-             a_in => stage_ex_mem_read_data_2_out,
+             a_in => barrier_ex_mem_read_data_2_out,
              b_in => write_data_mux_out,
              select_in => forwarding_unit_store_out,
              data_out => store_data_mux_out);
@@ -316,41 +316,41 @@ begin
   generic map(
                ADDR_WIDTH => ADDR_WIDTH)
   port map (
-             old_pc_in => stage_if_id_pc_out,
-             instruction_immediate_in => stage_if_id_instruction_out(ADDR_WIDTH - 1 downto 0),
+             old_pc_in => barrier_if_id_pc_out,
+             instruction_immediate_in => barrier_if_id_instruction_out(ADDR_WIDTH - 1 downto 0),
              branch_taken_in => branch_taken,
 
              branch_address_out => pc_branch_add_pc_out,
              branch_address_not_taken_out => branch_address_not_taken_out);
 
   forwarding_unit : entity work.forwarding_unit
-  port map ( inst_rs_in => stage_id_ex_instruction_rs_out,
-             inst_rt_in => stage_id_ex_instruction_rt_out,
-             addr_ex_mem_in => stage_ex_mem_write_register_out,
-             addr_mem_wb_in => stage_mem_wb_write_register_out,
-             control_ex_mem_in => stage_ex_mem_reg_write_out,
-             control_mem_wb_in => stage_mem_wb_reg_write_out,
+  port map ( inst_rs_in => barrier_id_ex_instruction_rs_out,
+             inst_rt_in => barrier_id_ex_instruction_rt_out,
+             addr_ex_mem_in => barrier_ex_mem_write_register_out,
+             addr_mem_wb_in => barrier_mem_wb_write_register_out,
+             control_ex_mem_in => barrier_ex_mem_reg_write_out,
+             control_mem_wb_in => barrier_mem_wb_reg_write_out,
              forward_rs_out => forwarding_unit_rs_out,
 
              forward_rt_out => forwarding_unit_rt_out,
              forward_store_out => forwarding_unit_store_out);
 
   hazard_detection : entity work.hazard_detection
-  port map ( control_id_ex_mem_read_in => stage_id_ex_mem_read_out,
+  port map ( control_id_ex_mem_read_in => barrier_id_ex_mem_read_out,
              control_mem_write_in => control_mem_write_out,
              control_should_branch_in => control_branch_out,
 
-             id_ex_rt_in => stage_id_ex_instruction_rt_out,
+             id_ex_rt_in => barrier_id_ex_instruction_rt_out,
              if_id_rt_in => instruction_rt,
              if_id_rs_in => instruction_rs,
 
              stall_out => hazard_detection_stall_out,
              pc_write_out => hazard_detection_pc_write_out,
-             stage_if_id_write_out => hazard_detection_if_id_write_out);
+             barrier_if_id_write_out => hazard_detection_if_id_write_out);
 
-  -- Stages
+  -- barriers
 
-  stage_if_id : entity work.stage_if_id
+  barrier_if_id : entity work.barrier_if_id
   generic map(
                ADDR_WIDTH => ADDR_WIDTH)
   port map (
@@ -359,11 +359,11 @@ begin
 
              pc_in => pc_out,
              instruction_in => imem_data_in,
-             pc_out => stage_if_id_pc_out,
-             instruction_out => stage_if_id_instruction_out);
+             pc_out => barrier_if_id_pc_out,
+             instruction_out => barrier_if_id_instruction_out);
 
   flush_barrier_id_ex <= hazard_detection_stall_out or branch_guessed_wrong or reset;
-  stage_id_ex : entity work.stage_id_ex
+  barrier_id_ex : entity work.barrier_id_ex
   generic map(
                ADDR_WIDTH => ADDR_WIDTH)
   port map (
@@ -375,12 +375,12 @@ begin
              instruction_rt_in => instruction_rt,
              instruction_rd_in => instruction_rd,
 
-             read_data_1_out => stage_id_ex_read_data_1_out,
-             read_data_2_out => stage_id_ex_read_data_2_out,
-             sign_extend_out => stage_id_ex_sign_extend_out,
-             instruction_rs_out => stage_id_ex_instruction_rs_out,
-             instruction_rt_out => stage_id_ex_instruction_rt_out,
-             instruction_rd_out => stage_id_ex_instruction_rd_out,
+             read_data_1_out => barrier_id_ex_read_data_1_out,
+             read_data_2_out => barrier_id_ex_read_data_2_out,
+             sign_extend_out => barrier_id_ex_sign_extend_out,
+             instruction_rs_out => barrier_id_ex_instruction_rs_out,
+             instruction_rt_out => barrier_id_ex_instruction_rt_out,
+             instruction_rd_out => barrier_id_ex_instruction_rd_out,
 
              reg_dst_in => control_reg_dst_out,
              alu_op_in => control_alu_op_out,
@@ -390,26 +390,26 @@ begin
              reg_write_in => control_reg_write_out,
              mem_to_reg_in => control_mem_to_reg_out,
 
-             reg_dst_out => stage_id_ex_reg_dst_out,
-             alu_op_out => stage_id_ex_alu_op_out,
-             alu_src_out => stage_id_ex_alu_src_out,
-             mem_write_out => stage_id_ex_mem_write_out,
-             mem_read_out => stage_id_ex_mem_read_out,
-             reg_write_out => stage_id_ex_reg_write_out,
-             mem_to_reg_out => stage_id_ex_mem_to_reg_out,
+             reg_dst_out => barrier_id_ex_reg_dst_out,
+             alu_op_out => barrier_id_ex_alu_op_out,
+             alu_src_out => barrier_id_ex_alu_src_out,
+             mem_write_out => barrier_id_ex_mem_write_out,
+             mem_read_out => barrier_id_ex_mem_read_out,
+             reg_write_out => barrier_id_ex_reg_write_out,
+             mem_to_reg_out => barrier_id_ex_mem_to_reg_out,
 
              -- Begin branch cables
              branch_pc_not_taken_in => branch_address_not_taken_out,
              branch_taken_in => branch_taken,
              should_branch_in => control_branch_out,
 
-             branch_pc_not_taken_out => stage_id_ex_branch_pc_not_taken_out,
-             branch_taken_out => stage_id_ex_branch_taken_out,
-             should_branch_out => stage_id_ex_should_branch_out
+             branch_pc_not_taken_out => barrier_id_ex_branch_pc_not_taken_out,
+             branch_taken_out => barrier_id_ex_branch_taken_out,
+             should_branch_out => barrier_id_ex_should_branch_out
            );
 
   flush_barrier_ex_mem <= branch_guessed_wrong or reset;
-  stage_ex_mem : entity work.stage_ex_mem
+  barrier_ex_mem : entity work.barrier_ex_mem
   generic map(
                ADDR_WIDTH => ADDR_WIDTH)
   port map (
@@ -419,44 +419,44 @@ begin
              read_data_2_in => alu_b_forwarding_mux_out,
              write_register_in => write_register_mux_out,
 
-             alu_zero_out => stage_ex_mem_alu_zero_out,
-             alu_result_out => stage_ex_mem_alu_result_out,
-             read_data_2_out => stage_ex_mem_read_data_2_out,
-             write_register_out => stage_ex_mem_write_register_out,
+             alu_zero_out => barrier_ex_mem_alu_zero_out,
+             alu_result_out => barrier_ex_mem_alu_result_out,
+             read_data_2_out => barrier_ex_mem_read_data_2_out,
+             write_register_out => barrier_ex_mem_write_register_out,
 
-             mem_write_in => stage_id_ex_mem_write_out,
-             reg_write_in => stage_id_ex_reg_write_out,
-             mem_to_reg_in => stage_id_ex_mem_to_reg_out,
+             mem_write_in => barrier_id_ex_mem_write_out,
+             reg_write_in => barrier_id_ex_reg_write_out,
+             mem_to_reg_in => barrier_id_ex_mem_to_reg_out,
 
-             mem_write_out => stage_ex_mem_mem_write_out,
-             reg_write_out => stage_ex_mem_reg_write_out,
-             mem_to_reg_out => stage_ex_mem_mem_to_reg_out,
+             mem_write_out => barrier_ex_mem_mem_write_out,
+             reg_write_out => barrier_ex_mem_reg_write_out,
+             mem_to_reg_out => barrier_ex_mem_mem_to_reg_out,
 
              -- Begin branch cables
-             branch_pc_not_taken_in => stage_id_ex_branch_pc_not_taken_out,
-             branch_taken_in => stage_id_ex_branch_taken_out,
-             should_branch_in => stage_id_ex_should_branch_out,
+             branch_pc_not_taken_in => barrier_id_ex_branch_pc_not_taken_out,
+             branch_taken_in => barrier_id_ex_branch_taken_out,
+             should_branch_in => barrier_id_ex_should_branch_out,
 
-             branch_pc_not_taken_out => stage_ex_mem_branch_pc_not_taken_out,
-             branch_taken_out => stage_ex_mem_branch_taken_out,
-             should_branch_out => stage_ex_mem_should_branch_out
+             branch_pc_not_taken_out => barrier_ex_mem_branch_pc_not_taken_out,
+             branch_taken_out => barrier_ex_mem_branch_taken_out,
+             should_branch_out => barrier_ex_mem_should_branch_out
            );
 
-  stage_mem_wb : entity work.stage_mem_wb
+  barrier_mem_wb : entity work.barrier_mem_wb
   port map (
              clk => clk, reset => reset,
              read_data_in => dmem_data_in,
-             alu_result_in => stage_ex_mem_alu_result_out,
-             write_register_in => stage_ex_mem_write_register_out,
-             read_data_out => stage_mem_wb_read_data_out,
-             alu_result_out => stage_mem_wb_alu_result_out,
-             write_register_out => stage_mem_wb_write_register_out,
+             alu_result_in => barrier_ex_mem_alu_result_out,
+             write_register_in => barrier_ex_mem_write_register_out,
+             read_data_out => barrier_mem_wb_read_data_out,
+             alu_result_out => barrier_mem_wb_alu_result_out,
+             write_register_out => barrier_mem_wb_write_register_out,
 
-             reg_write_in => stage_ex_mem_reg_write_out,
-             mem_to_reg_in => stage_ex_mem_mem_to_reg_out,
+             reg_write_in => barrier_ex_mem_reg_write_out,
+             mem_to_reg_in => barrier_ex_mem_mem_to_reg_out,
 
-             reg_write_out => stage_mem_wb_reg_write_out,
-             mem_to_reg_out => stage_mem_wb_mem_to_reg_out
+             reg_write_out => barrier_mem_wb_reg_write_out,
+             mem_to_reg_out => barrier_mem_wb_mem_to_reg_out
            );
 
 end behavioral;

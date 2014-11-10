@@ -1,7 +1,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
-entity stage_if_id is
+entity barrier_if_id is
   Generic (
             ADDR_WIDTH : integer := 8);
   Port ( clk : in std_logic;
@@ -12,9 +12,9 @@ entity stage_if_id is
 
          pc_out : out std_logic_vector(ADDR_WIDTH - 1 downto 0);
          instruction_out : out std_logic_vector(31 downto 0));
-end stage_if_id;
+end barrier_if_id;
 
-architecture Behavioral of stage_if_id is
+architecture Behavioral of barrier_if_id is
 begin
 
   instruction_out <= instruction_in;
