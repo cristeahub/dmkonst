@@ -2,9 +2,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 entity hazard_detection is
-  port ( clk : in std_logic;
-         processor_enable_in : in std_logic;
-         control_id_ex_mem_read_in : in std_logic;
+  port ( control_id_ex_mem_read_in : in std_logic;
          control_mem_write_in : in std_logic;
          control_should_branch_in : in std_logic;
          id_ex_rt_in : in std_logic_vector(4 downto 0);
@@ -13,8 +11,7 @@ entity hazard_detection is
 
          stall_out : out std_logic;
          pc_write_out : out std_logic;
-         stage_if_id_write_out : out std_logic;
-         stage_if_id_flush_out : out std_logic);
+         stage_if_id_write_out : out std_logic);
 end hazard_detection;
 
 architecture Behavioral of hazard_detection is
@@ -32,15 +29,5 @@ begin
   stall_out <= stall;
   pc_write_out <= not stall;
   stage_if_id_write_out <= not stall;
-
-  -- Generates a pulse the first cycle after processor is enabled.
-  -- The pulse is used to flush IF/ID stage of garbage data.
-  stage_if_id_flush_out <= (not processor_enable_hold) and processor_enable_in;
-  process (clk) is
-  begin
-    if falling_edge(clk) then
-      processor_enable_hold <= processor_enable_in;
-    end if;
-  end process;
 
 end Behavioral;

@@ -76,7 +76,6 @@ architecture behavioral of MIPSProcessor is
   signal hazard_detection_stall_out : std_logic;
   signal hazard_detection_pc_write_out : std_logic;
   signal hazard_detection_if_id_write_out : std_logic;
-  signal hazard_detection_if_id_flush_out : std_logic;
 
   signal flush_barrier_id_ex : std_logic;
   signal flush_barrier_ex_mem : std_logic;
@@ -337,9 +336,7 @@ begin
              forward_store_out => forwarding_unit_store_out);
 
   hazard_detection : entity work.hazard_detection
-  port map ( clk => clk,
-             processor_enable_in => processor_enable,
-             control_id_ex_mem_read_in => stage_id_ex_mem_read_out,
+  port map ( control_id_ex_mem_read_in => stage_id_ex_mem_read_out,
              control_mem_write_in => control_mem_write_out,
              control_should_branch_in => control_branch_out,
 
@@ -349,8 +346,7 @@ begin
 
              stall_out => hazard_detection_stall_out,
              pc_write_out => hazard_detection_pc_write_out,
-             stage_if_id_write_out => hazard_detection_if_id_write_out,
-             stage_if_id_flush_out => hazard_detection_if_id_flush_out);
+             stage_if_id_write_out => hazard_detection_if_id_write_out);
 
   -- Stages
 
@@ -359,7 +355,6 @@ begin
                ADDR_WIDTH => ADDR_WIDTH)
   port map (
              clk => clk,
-             reset => hazard_detection_if_id_flush_out,
              write_enable_in => hazard_detection_if_id_write_out,
 
              pc_in => pc_out,
