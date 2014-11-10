@@ -1,28 +1,28 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
-entity stage_mem_wb is
+entity barrier_mem_wb is
     Port ( read_data_in : in  STD_LOGIC_VECTOR (31 downto 0);
            alu_result_in : in  STD_LOGIC_VECTOR (31 downto 0);
            write_register_in : in  STD_LOGIC_VECTOR (4 downto 0);
 
-           -- Write-back stage control lines
+           -- Write-back barrier control lines
            reg_write_in : in std_logic;
            mem_to_reg_in : in std_logic;
 
            clk : in  STD_LOGIC;
            reset : in  STD_LOGIC;
 
-           -- Write-back stage control lines
+           -- Write-back barrier control lines
            reg_write_out : out std_logic;
            mem_to_reg_out : out std_logic;
 
            read_data_out : out  STD_LOGIC_VECTOR (31 downto 0);
            alu_result_out : out  STD_LOGIC_VECTOR (31 downto 0);
            write_register_out : out  STD_LOGIC_VECTOR (4 downto 0));
-end stage_mem_wb;
+end barrier_mem_wb;
 
-architecture Behavioral of stage_mem_wb is
+architecture Behavioral of barrier_mem_wb is
 
 begin
 

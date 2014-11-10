@@ -1,7 +1,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
-entity stage_ex_mem is
+entity barrier_ex_mem is
   Generic (
             ADDR_WIDTH : integer := 8);
   Port ( branch_pc_not_taken_in : in  STD_LOGIC_VECTOR (ADDR_WIDTH - 1 downto 0);
@@ -11,20 +11,20 @@ entity stage_ex_mem is
          read_data_2_in : in  STD_LOGIC_VECTOR (31 downto 0);
          write_register_in : in  STD_LOGIC_VECTOR (4 downto 0);
 
-         -- Memory access stage control lines
+         -- Memory access barrier control lines
          branch_taken_in : in std_logic;
          mem_write_in : in std_logic;
-         -- Write-back stage control lines
+         -- Write-back barrier control lines
          reg_write_in : in std_logic;
          mem_to_reg_in : in std_logic;
 
          clk : in  STD_LOGIC;
          reset : in  STD_LOGIC;
 
-         -- Memory access stage control lines
+         -- Memory access barrier control lines
          branch_taken_out : out std_logic;
          mem_write_out : out std_logic;
-         -- Write-back stage control lines
+         -- Write-back barrier control lines
          reg_write_out : out std_logic;
          mem_to_reg_out : out std_logic;
 
@@ -34,9 +34,9 @@ entity stage_ex_mem is
          alu_result_out : out  STD_LOGIC_VECTOR (31 downto 0);
          read_data_2_out : out  STD_LOGIC_VECTOR (31 downto 0);
          write_register_out : out  STD_LOGIC_VECTOR (4 downto 0));
-end stage_ex_mem;
+end barrier_ex_mem;
 
-architecture Behavioral of stage_ex_mem is
+architecture Behavioral of barrier_ex_mem is
 
 begin
 

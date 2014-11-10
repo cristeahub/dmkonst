@@ -1,7 +1,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
-entity stage_id_ex is
+entity barrier_id_ex is
   Generic (
             ADDR_WIDTH : integer := 8);
   Port ( branch_pc_not_taken_in : in  STD_LOGIC_VECTOR (ADDR_WIDTH - 1 downto 0);
@@ -13,30 +13,30 @@ entity stage_id_ex is
          instruction_rt_in : in  STD_LOGIC_VECTOR (20 downto 16);
          instruction_rd_in : in  STD_LOGIC_VECTOR (15 downto 11);
 
-         -- Execution / adress calculation stage control lines
+         -- Execution / adress calculation barrier control lines
          reg_dst_in : in std_logic;
          alu_op_in : in std_logic_vector(1 downto 0);
          alu_src_in : in std_logic;
-         -- Memory access stage control lines
+         -- Memory access barrier control lines
          should_branch_in : in std_logic;
          mem_write_in : in std_logic;
          mem_read_in : in std_logic;
-         -- Write-back stage control lines
+         -- Write-back barrier control lines
          reg_write_in : in std_logic;
          mem_to_reg_in : in std_logic;
 
          clk : in  STD_LOGIC;
          reset : in  STD_LOGIC;
 
-         -- Execution / adress calculation stage control lines
+         -- Execution / adress calculation barrier control lines
          reg_dst_out : out std_logic;
          alu_op_out : out std_logic_vector(1 downto 0);
          alu_src_out : out std_logic;
-         -- Memory access stage control lines
+         -- Memory access barrier control lines
          should_branch_out : out std_logic;
          mem_write_out : out std_logic;
          mem_read_out : out std_logic;
-         -- Write-back stage control lines
+         -- Write-back barrier control lines
          reg_write_out : out std_logic;
          mem_to_reg_out : out std_logic;
 
@@ -49,9 +49,9 @@ entity stage_id_ex is
          instruction_rt_out : out  STD_LOGIC_VECTOR (20 downto 16);
          instruction_rd_out : out  STD_LOGIC_VECTOR (15 downto 11)
        );
-end stage_id_ex;
+end barrier_id_ex;
 
-architecture Behavioral of stage_id_ex is
+architecture Behavioral of barrier_id_ex is
 
 begin
 

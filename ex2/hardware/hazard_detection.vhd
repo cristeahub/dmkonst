@@ -11,7 +11,7 @@ entity hazard_detection is
 
          stall_out : out std_logic;
          pc_write_out : out std_logic;
-         stage_if_id_write_out : out std_logic);
+         barrier_if_id_write_out : out std_logic);
 end hazard_detection;
 
 architecture Behavioral of hazard_detection is
@@ -28,6 +28,6 @@ begin
 
   stall_out <= stall;
   pc_write_out <= not stall;
-  stage_if_id_write_out <= not stall;
+  barrier_if_id_write_out <= not stall;
 
 end Behavioral;
