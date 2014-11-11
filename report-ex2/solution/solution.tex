@@ -53,7 +53,7 @@ The improvements include:
     When operands are unavailable in the decode stage, one cannot decide whether to take the branch.
     By making an educated guess using a branch prediction unit (containing a two-bit predictor\todo{cite a two bit predictor explained somewhere else so we dont have to? Or should we explain it}) we can speculatively execute instructions, keeping the pipeline filled.
   \item
-    If a branch is taken wrongly, only two pipeline stages have to be flushed, allways being at least as fast as delayed branching.
+    If a branch is taken wrongly, only two pipeline stages have to be flushed, always being at least as fast as delayed branching.
 \end{enumerate}
 
 To allow for zero-downtime branching, the program counter allows for instant updates, implemented via an internal bypass straight through to the instruction memory.
