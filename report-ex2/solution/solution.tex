@@ -14,6 +14,18 @@ It has been extended to support jumps, data forwarding, hazard detection and bra
 \section{Implementation}
 
 \subsection{Data Forwarding}
+Often, instructions are dependent on data calculated in the instructions directly before it.
+In a pipelined processor, values will sometimes not have been written back to a register at the time they are needed as operands in another instruction.
+The simple solution to this problem would be to stall the processor for 1-2 cycles so that data is available when it is needed.
+This is not an ideal solution, however, as it will render big parts of the pipelined unused at many times, seeing as the pattern of data dependencies between nearby instructions is rather common.
+A better solution, and one that is not much more complicated to implement, is a dedicated data forwarding unit.
+
+The data forwarding unit compares register destinations from the MEM and WB stages, with source registers in the EX stage.
+We add a mux in front of both operands to the ALU in the EX stage, with signals from the data in the MEM and WB stages.
+Control signals from the forwarding unit switch between regular input data read from the register file, data from the MEM stage and data from the WB stage.
+
+In addition to forwarding from the MEM \& WB stages to the EX stage, we support forwarding from WB to the MEM stage.
+This enables us to do fast memory copies, by executing a SW instruction the cycle directly following a LW.
 
 \subsection {Hazard Detection}
 The implemented data forwarding will not be able to handle all kinds of data hazards.
