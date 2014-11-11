@@ -16,6 +16,17 @@ It has been extended to support jumps, data forwarding, hazard detection and bra
 \subsection{Data Forwarding}
 
 \subsection {Hazard Detection}
+The implemented data forwarding will not be able to handle all kinds of data hazards.
+Specifically, an R-type instruction directly following a load instruction, where the load's destination register is one of the source registers of the R-type instruction, can not benefit from data forwarding.
+This is because while the R-type instruction is in the execute stage, the load instruction is still only in the MEM stage, and the data will not be ready before the next cycle.
+
+To work around this issue, a hazard detection unit will detect a load followed by a data-dependent instruction (this does not apply to store instructions, as data forwarding takes care of this case).
+A stall flag is enabled when a load instruction is currently in its execute stage, while a dependent instruction is in the ID stage.
+This causes the dependent instruction to remain in the ID stage for one extra cycle, while the load instruction progresses to the MEM stage.
+To give the effect of a nop (an instruction which does not alter memory) between them, the control signals for the dependent instruction are set to zero for one cycle.
+At the same time, the PC needs to stall for one cycle, so no instructions are skipped.
+The next clock cycle, the instruction enters the execute stage.
+Then, data will be loaded from memory, residing in the WB stage, where we have already implemented data forwarding to the EX stage.
 
 \subsection{Branching}
 
