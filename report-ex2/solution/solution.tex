@@ -4,16 +4,44 @@
 % Contains a detailed description of all the subtasks which have been solved and how they contribute to the solution for the given task.
 % The use of diagrams, figures, tables and similar is welcome as a support to your description.
 
-\subsection{Architecture}
+\section{Architecture}
+
+Data hazards, control hazards, structural hazards.
 
 The design of the processor is based on the architecture provided in Figure 5.1 \cite[p. 50]{compendium}.
 It has been extended to support jumps, data forwarding, hazard detection and branch prediction.
 
-\subsection{Implementation}
+\section{Implementation}
 
-\subsubsection{Data Forwarding}
+\subsection{Data Forwarding}
 
-\subsubsection{Hazard Detection}
+\subsection {Hazard Detection}
 
-\subsubsection{Branch Prediction}
+\subsection{Branching}
 
+This processor implements multiple branch-related improvements compared to a naïve pipelined datapath. These improvements allow for speculative execution of instructions, keeping the pipeline full at all times.
+
+The improvements include:
+\begin{enumerate}
+  \item
+    Moving branch decisions from the memory stage to the instruction decode stage, comparing register values in a dedicated equality unit.
+    This allows for instant branches with no lost cycles when data hazards are absent.
+  \item
+    When operands are unavailable in the ID stage, one cannot decide whether to take the branch.
+    By making an educated guess using a branch prediction unit (containing a two-bit predictor\todo{cite a two bit predictor explained somewhere else so we dont have to? Or should we explain it}) we can speculatively execute instructions, keeping the pipeline filled.
+    If a branch is taken wrongly, only two pipeline stages have to be flushed, always netting an improvement over delayed branching.
+\end{enumerate}
+
+To allow for zero-downtime branching, the program counter allows for instant updates, implemented via an internal bypass straight through to the instruction memory.
+This allows us to update the PC to the target branch address the same cycle we decide to branch, thereby having the branch-target instruction ready at the next clock cycle.
+
+To correct for wrongly taken branches, all branch related signals (branch\_taken, control\_should\_branch, and branch\_pc\_not\_taken) are passed on through the pipeline.
+In the MEM stage, when the branch operands actually have been compared, corrective action can be taken the wrong choice was made. If there was a choice to branch, and the branch taken signal and alu result zero flag differ, the branch was taken wrongly.
+Pipeline stages ID and EX have to be flushed, as well as the pc reset to the address of the pc not taken (branch\_pc\_not\_taken).
+Afterwards, execution resumes as normal, having lost only two cycles if the branch was predicted wrongly.
+
+There are multiple ways to decide on which choice to predict.
+\todo{This entire bit. finish it}
+STATIC BRANCHING VERSUS DYNAMIC
+This data is also fed back to the branch prediction unit, allowing the two bit predictor to learn from recent branch behaviour to give better predictions in the future.
+tradeoff critical path thru branch predictor
