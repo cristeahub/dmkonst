@@ -36,7 +36,8 @@ To allow for zero-downtime branching, the program counter allows for instant upd
 This allows us to update the PC to the target branch address the same cycle we decide to branch, thereby having the branch-target instruction ready at the next clock cycle.
 
 To correct for wrongly taken branches, all branch related signals (branch\_taken, control\_should\_branch, and branch\_pc\_not\_taken) are passed on through the pipeline.
-In the MEM stage, when the branch operands actually have been compared, corrective action can be taken the wrong choice was made. If there was a choice to branch, and the branch taken signal and alu result zero flag differ, the branch was taken wrongly.
+In the MEM stage, when the branch operands actually have been compared, corrective action can be taken if the wrong choice was made.
+If there was a choice to branch, and the branch taken signal and alu result zero flag differ, the branch was taken wrongly.
 Pipeline stages ID and EX have to be flushed, as well as the pc reset to the address of the pc not taken (branch\_pc\_not\_taken).
 Afterwards, execution resumes as normal, having lost only two cycles if the branch was predicted wrongly.
 
