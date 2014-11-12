@@ -15,8 +15,11 @@ ARCHITECTURE behavior OF tb_pc IS
   signal processor_enable_in : std_logic := '0';
   signal pc_write_enable_in : std_logic := '1';
 
-  signal pc_branch_override_in : std_logic := '0';
-  signal pc_branch_address_in : std_logic_vector(7 downto 0) := (others => '0');
+  signal pc_branch_prediction_override_in : std_logic := '0';
+  signal pc_branch_prediction_address_in : std_logic_vector(7 downto 0) := (others => '0');
+
+  signal pc_branch_correction_override_in : std_logic := '0';
+  signal pc_branch_correction_address_in : std_logic_vector(7 downto 0) := (others => '0');
 
   signal pc_jump_override_in : std_logic := '0';
   signal pc_jump_address_in : std_logic_vector(7 downto 0) := (others => '0');
@@ -37,10 +40,16 @@ BEGIN
              reset => reset,
              processor_enable_in => processor_enable_in,
              pc_write_enable_in => pc_write_enable_in,
-             pc_branch_override_in => pc_branch_override_in,
-             pc_branch_address_in => pc_branch_address_in,
+
+             pc_branch_prediction_override_in => pc_branch_prediction_override_in,
+             pc_branch_prediction_address_in => pc_branch_prediction_address_in,
+
+             pc_branch_correction_override_in => pc_branch_correction_override_in,
+             pc_branch_correction_address_in => pc_branch_correction_address_in,
+
              pc_jump_override_in => pc_jump_override_in,
              pc_jump_address_in => pc_jump_address_in,
+
              pc_out => pc_out
            );
 
@@ -63,32 +72,30 @@ BEGIN
     -- hold reset state for 100 ns.
     wait for 100 ns;
 
-    wait for clk_period*10;
-
     processor_enable_in <= '1';
     pc_write_enable_in <= '1';
 
     pc_jump_address_in <= "00000001";
-    pc_branch_address_in <= "10000000";
+    pc_branch_prediction_address_in <= "10000000";
 
     pc_jump_override_in <= '1';
-    pc_branch_override_in <= '0';
+    pc_branch_prediction_override_in <= '0';
 
     wait for clk_period;
 
     assert_equals("00000001", pc_out, "PC out is equal to jump address");
 
     pc_jump_override_in <= '0';
-    pc_branch_override_in <= '1';
+    pc_branch_prediction_override_in <= '1';
 
-    wait for clk_period;
+    wait for clk_period/2; -- Waiting half cycle to check both instant and after one whole cycle
 
-    assert_equals("10000000", pc_out, "PC out is equal to pc in");
+    assert_equals("10000000", pc_out, "PC out is equal to branch predicted address in");
 
     pc_jump_override_in <= '0';
-    pc_branch_override_in <= '0';
+    pc_branch_prediction_override_in <= '0';
 
-    wait for clk_period;
+    wait for clk_period/2; -- Waiting half cycle to check both instant and after one whole cycle
 
     assert_equals("10000001", pc_out, "PC should increment");
 
@@ -100,10 +107,10 @@ BEGIN
     pc_write_enable_in <= '0';
 
     pc_jump_address_in <= "11110000";
-    pc_branch_address_in <= "00001111";
+    pc_branch_prediction_address_in <= "00001111";
 
     pc_jump_override_in <= '1';
-    pc_branch_override_in <= '0';
+    pc_branch_prediction_override_in <= '0';
 
     wait for clk_period;
 
@@ -112,22 +119,38 @@ BEGIN
     ---
 
     pc_jump_override_in <= '0';
-    pc_branch_override_in <= '1';
+    pc_branch_prediction_override_in <= '0';
 
     wait for clk_period;
 
     assert_equals("10000001", pc_out, "PC should pause");
 
-    ---
+    --- Test jump override
 
+    pc_write_enable_in <= '1';
     pc_jump_override_in <= '1';
-    pc_branch_override_in <= '1';
+    pc_branch_prediction_override_in <= '1';
 
     wait for clk_period;
 
     assert_equals("11110000", pc_out, "PC should reflect jump address rather than branch address");
 
-    ---
+    --- Test branch correction override
+
+    pc_branch_correction_override_in <= '1';
+    pc_branch_correction_address_in <= "10101010";
+
+    wait for clk_period / 2;
+
+    assert_equals("10101010", pc_out, "Correct branch address should have highest priority");
+
+    pc_branch_prediction_override_in <= '0';
+    pc_jump_override_in <= '0';
+    pc_branch_correction_override_in <= '0';
+
+    wait for clk_period / 2;
+
+    assert_equals("10101011", pc_out, "PC should keep incrementing after an override");
 
     report "Test complete";
     clk_enable := false;
