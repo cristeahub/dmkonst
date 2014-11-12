@@ -338,6 +338,7 @@ begin
   hazard_detection : entity work.hazard_detection
   port map ( control_id_ex_mem_read_in => barrier_id_ex_mem_read_out,
              control_mem_write_in => control_mem_write_out,
+             control_mem_read_in => control_mem_read_out,
 
              id_ex_rt_in => barrier_id_ex_instruction_rt_out,
              if_id_rt_in => instruction_rt,
