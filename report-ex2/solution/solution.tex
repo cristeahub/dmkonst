@@ -66,10 +66,6 @@ This architecture implements speculation with the help of a globally shared satu
 The saturating counter is a simple state machine with four states: Strongly not taken, Weakly not taken, Weakly taken, and Strongly Taken.
 The prediction given is based on the current state, and whenever a branching decision is confirmed, the state is shifted towards that choice.
 
-\todo{Move this paragraph to discussion? It might fit better there}
-The choice of using a single shared saturating counter versus a predictor table indexed by the low bits of the current instruction, was based on noticing that programs usually were rather short, containing at most a few tight loops.
-As this architecture doesn't support data forwarding to the branch predictor, even the addition of a single two bit predictor reduces pipeline flushing in loops dramatically, as the previous loop condition can be re-used and will be correct for all loop iterations except the last.
-
 To confirm branch decisions, whether a branch was taken, the branch control signal and the pc of the branch not taken are passed down the pipeline to the memory stage.
 In the memory stage, if the branch control signal turns out to be high and the branch taken and alu zero flag differ, the branch was wrongly taken.
 Pipeline stages ID and EX have to be flushed, as well as resetting the pc to the fallback address provided.
