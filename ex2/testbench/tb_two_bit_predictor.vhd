@@ -9,6 +9,7 @@ architecture behavior of tb_two_bit_predictor is
 
   -- Signals
   signal clk : std_logic;
+  signal reset : std_logic := '0';
   signal branch_taken_in : std_logic;
   signal update_prediction_in : std_logic;
 
@@ -21,7 +22,7 @@ begin
   -- Instantiate the Unit Under Test (UUT)
   uut: entity work.two_bit_predictor
   PORT MAP (
-             clk => clk,
+             clk => clk, reset => reset,
              branch_taken_in => branch_taken_in,
              update_prediction_in => update_prediction_in,
              branch_taken_out => branch_taken_out
@@ -81,6 +82,18 @@ begin
     wait for clk_period;
     assert_equals('1', branch_taken_out, "Should predict branch strongly taken!");
 
+    -- Teset reset
+
+    reset <= '1';
+    wait for clk_period;
+    reset <= '0';
+
+    wait for clk_period;
+
+    assert_equals('0', branch_taken_out, "Should predict branch not taken after reset");
+
+
+    report "Test complete";
     wait;
   end process;
 
