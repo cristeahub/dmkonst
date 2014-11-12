@@ -13,6 +13,11 @@ The final estimated clock frequency is about 60 MHz \todo{Har vi dette tallet li
 When comparing to the multi-cycle processor we implemented in assignment 1, we see that the number of cycles required to execute the provided test program is reduced from 98 to 29.
 And although the clock frequency has been somewhat reduced after introducing pipelining, it still represents a speedup of about 2.78.
 
+
+\section{Choosing a branch predictor}
+The choice of using a single shared saturating counter versus a predictor table indexed by the low bits of the current instruction, was based on noticing that programs usually were rather short, containing at most a few tight loops.
+As this architecture doesn't support data forwarding to the branch predictor, even the addition of a single two bit predictor reduces pipeline flushing in loops dramatically, as the previous loop condition can be re-used and will be correct for all loop iterations except the last.
+
 \section{Energy Efficiency}
 
 \section{The Work Process}

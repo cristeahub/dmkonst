@@ -51,23 +51,21 @@ The improvements include:
     This allows for instant branches with no lost cycles when data hazards are absent.
   \item
     When operands are unavailable in the decode stage, one cannot decide whether to take the branch.
-    By making an educated guess using a branch prediction unit (containing a two-bit predictor\todo{cite a two bit predictor explained somewhere else so we dont have to? Or should we explain it}) we can speculatively execute instructions, keeping the pipeline filled.
+    By making an educated guess using a branch prediction unit the processor can speculatively execute instructions, keeping the pipeline filled.
   \item
-    If a branch is taken wrongly, only two pipeline stages have to be flushed, always being at least as fast as delayed branching.
+    If a branch is taken wrongly (as confirmed by calculating the correct branching decision in the execute stage, correcting in the memory stage) only two pipeline stages have to be flushed.
+
+    This turns branching from a required two cycles of pipeline bubbles (delayed branching) to a best case of zero downtime, and a worst case of two cycles flushed.
 \end{enumerate}
 
 To allow for zero-downtime branching, the program counter allows for instant updates, implemented via an internal bypass straight through to the instruction memory.
 This allows us to update the PC to the target branch address the same cycle we decide to branch, thereby having the branch-target instruction ready at the next clock cycle.
 
-There are multiple ways to decide on which choice to predict.
-\todo{This entire bit. finish it}
-STATIC BRANCHING VERSUS DYNAMIC
-This data is also fed back to the branch prediction unit, allowing the two bit predictor to learn from recent branch behaviour to give better predictions in the future.
-tradeoff critical path thru branch predictor
+Moving the branching decision to the decode stage requires us to make a branching choice even when branch operands aren't available.
+This architecture implements speculation with the help of a globally shared saturating counter (informally known as a two bit predictor).
+The saturating counter is a simple state machine with four states: Strongly not taken, Weakly not taken, Weakly taken, and Strongly Taken.
+The prediction given is based on the current state, and whenever a branching decision is confirmed, the state is shifted towards that choice.
 
-To correct for wrongly taken branches, all branch related signals (branch\_taken, control\_should\_branch, and branch\_pc\_not\_taken) are passed on through the pipeline.
-In the MEM stage, when the branch operands actually have been compared, corrective action can be taken if the wrong choice was made.
-If the instruciton is a branch instruction, and the branch taken signal and alu result zero flag differ, the branch was taken wrongly.
-Pipeline stages ID and EX have to be flushed, as well as the pc reset to the address of the pc not taken (branch\_pc\_not\_taken).
-This information is also fed back into the branch prediction unit, allowing the two-bit predictor to update its predictions.
-Afterwards, execution resumes as normal, having lost only two cycles if the branch was predicted wrongly.
+To confirm branch decisions, whether a branch was taken, the branch control signal and the pc of the branch not taken are passed down the pipeline to the memory stage.
+In the memory stage, if the branch control signal turns out to be high and the branch taken and alu zero flag differ, the branch was wrongly taken.
+Pipeline stages ID and EX have to be flushed, as well as resetting the pc to the fallback address provided.
