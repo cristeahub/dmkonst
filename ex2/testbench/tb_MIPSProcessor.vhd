@@ -122,6 +122,7 @@ BEGIN
       for i in 0 to instruction_data'LENGTH - 1 loop
         WriteInstructionWord(instruction_data(i), to_unsigned(i, ADDR_WIDTH));
       end loop;
+      tb_imem_address <= (others => '0');
     end fill_instruction_memory;
 
   -- helper procedures for filling data memory
@@ -317,6 +318,8 @@ BEGIN
     fill_instruction_memory(TestLoopPrediction);
     WriteDataWord(x"00000001", 0);
     WriteDataWord(x"00000014", 1);
+
+    wait for clk_period * 10;
 
     processor_enable <= '1';
     wait for clk_period * 200;
