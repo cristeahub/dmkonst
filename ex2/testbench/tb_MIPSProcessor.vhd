@@ -232,12 +232,6 @@ BEGIN
     );
 
     constant TestLwSw : instruction_array_t := (
-      X"3c010001", -- lui $1, 1
-      X"00010c02", -- srl $1, $1, 16
-      X"ac010001", -- sw $1, 1($0)
-      X"3c020002", -- lui $2, 2
-      X"00021402", -- srl $2, $2, 16
-      X"ac020002", -- sw $2, 2($0)
       X"8c030001", -- lw $3, 1($0)
       X"ac030003" -- sw $3, 3($0)
     );
@@ -294,6 +288,8 @@ BEGIN
     wait until reset = '0';
 
     fill_instruction_memory(TestLwSw);
+    WriteDataWord(x"00000001", 1);
+    WriteDataWord(x"00000002", 2);
 
     wait for clk_period * 10;
 

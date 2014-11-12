@@ -1,9 +1,86 @@
 \chapter{Tests \& Results}
 
-\section{Component Tests}
+\section{Tests}
 
-\section{Top Level Testbenches}
+This section presents highlights from the testing suite of the pipelined MIPS processor with speculative execution. Branch prediction, data forwarding (including load-store forwarding), and pipeline flushing is demonstraded executing successfully.
 
-Branch prediction
+\subsection{System integration test}
 
-Data forwarding
+The provided system integration test from exercise 1 was successfully run on the pipelined architecture.
+The testbench has been extended to be more thorough, checking that the data from store instructions following a branch taken don't end up in memory.
+
+\subsection{Store after load operand forwarding}
+
+The presented architecture has been extended to support operand forwarding from the writeback pipeline stage to the memory stage.
+This allows for load instructions to be followed by store instructions without having to insert pipeline bubbles.
+
+\begin{figure}[h]
+  \begin{code}
+    lw $3, 1($0)     # Loads some value from memory
+    sw $3, 3($0)     # Should store the same value back to memory
+  \end{code}
+  \caption{Assembly to test store after load operand forwarding}
+  \label{fig:test-store-after-load}
+\end{figure}
+
+Expected behavior:
+\begin{itemize}
+  \item
+    The sw instruction should store the newly loaded value from the lw instruction, in effect acting like a memory move instruction.
+  \item
+    Bubbles should not be inserted into the pipeline.
+\end{itemize}
+
+\subsection{Branch prediction}
+
+The test case in figure \ref{fig:test-branch-prediction} tests both the hazard detection and branch prediction capabilities of the processor.
+
+\begin{figure}[h]
+  \begin{code}
+    lw $1, 0($0)
+    lw $2, 1($0)      # Should stall after this instruction (data hazard).
+    beq $2, $0, 3     # Should predict (Control hazard).
+    sw $2, 2($0)
+    sub $2, $2, $1    # Introduce data hazard for beq
+    j 2               # Jump to loop condition
+    beq $0, $0, -1    # Loop forever
+  \end{code}
+  \caption{Assembly to test branch prediction} \label{fig:test-branch-prediction}
+\end{figure}
+
+Expected behavior:
+\begin{itemize}
+  \item
+    The pipeline stalling on instruction 2. Branch after load requires one stall cycle to actually be able to correct for wrongly taken branches.
+  \item
+    The processor predicting whether instruction 2 should branch or not.
+    Operands are available neither the first time (load not having completed yet), or after the end-of-loop jump (the sub instruction not having completed yet).
+    As this architecture doesn't support operand forwarding to the branch predictor, it will have to guess.
+\end{itemize}
+
+
+\subsection{Pipeline flushing}
+
+The test case in figure \ref{fig:test-pipeline-flushing} tests that speculatively executed instructions are correctly flushed from the pipeline.
+
+\begin{figure}[h]
+  \begin{code}
+    lw $2, 2($0)    # Loads 2 into $2
+    lw $1, 1($0)    # Loads 1 into $1
+    beq $1, $0, 2   # Branch speculatively not taken
+    sw $2, 4($0)    # Speculatively executed, to be flushed
+    j 6             # Speculatively executed, to be flushed
+    sw $1, 4($0)    # Should actually be executed
+  \end{code}
+  \caption{Assembly to test pipeline flushing}
+  \label{fig:test-pipeline-flushing}
+\end{figure}
+
+Expected behavior:
+\begin{itemize}
+  \item
+    Instructions 3 and 4 should be speculatively executed, and flushed.
+  \item
+    The value from memory address 1, not 2 should end up at memory address 4.
+\end{itemize}
+
