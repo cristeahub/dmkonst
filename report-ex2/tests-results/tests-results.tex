@@ -101,9 +101,9 @@ Expected behavior:
     Two bit predictor & Confirm that the predictor defaults to 'not taken'. & \checkmark Passed \\ \cline{2-2}
                       & Check that two missed predictions are required before prediction switches. & \\\cline{2-2}
                       & Confirm that it properly resets to 'not taken'. & \\ \hline
-    Hazard detection  & Confirm that the pipeline is not stalled when an r-type instruction follows a load, but there's no overlap in registers & \checkmark Passed \\ \cline{2-2}
-                      & Check that the pipeline is only stalled when a memory read is in the execute stage. & \\\cline{2-2}
-                      & Check that the pipeline is not stalled when a store instruction is dependent on the load. & \\ \hline
+    Hazard detection  & Confirm that the pipeline doesn't stall when an r-type instruction follows a load, but there's no overlap in registers & \checkmark Passed \\ \cline{2-2}
+                      & Check that the pipeline stalls when a memory read precedes a dependent r-type or branch instruction. & \\\cline{2-2}
+                      & Check that the pipeline doesn't stall when a data-dependent store instruction follows a load instruction. & \\ \hline
     Control unit      & Confirm that appropriate control signals are output for all supported instructions. & \checkmark Passed \\ \cline{2-2}
                       & Confirm that all outputs are zero when processor is not enabled. & \\ \hline
     \end{tabular}
