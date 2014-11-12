@@ -32,12 +32,12 @@ ARCHITECTURE behavior OF tb_MIPSProcessor IS
   signal imem_address : std_logic_vector(ADDR_WIDTH-1 downto 0) := (others => '0');
   signal dmem_address : std_logic_vector(ADDR_WIDTH-1 downto 0) := (others => '0');
   signal dmem_data_out : std_logic_vector(DATA_WIDTH-1 downto 0) := (others => '0');
-  signal dmem_write_enable : std_logic_vector(0 downto 0) := (others => '0');
+  signal dmem_write_enable : std_logic := '0';
 
   -- driven only from processor
   signal proc_imem_address : std_logic_vector(ADDR_WIDTH-1 downto 0) := (others => '0');
   signal proc_dmem_data_out : std_logic_vector(DATA_WIDTH-1 downto 0) := (others => '0');
-  signal proc_dmem_write_enable : std_logic_vector(0 downto 0) := (others => '0');
+  signal proc_dmem_write_enable : std_logic := '0';
   signal proc_dmem_address : std_logic_vector(ADDR_WIDTH-1 downto 0) := (others => '0');
 
   -- driven only from testbench
@@ -45,7 +45,7 @@ ARCHITECTURE behavior OF tb_MIPSProcessor IS
   signal imem_write_enable : std_logic_vector(0 downto 0) := (others => '0');
   signal tb_imem_address : std_logic_vector(ADDR_WIDTH-1 downto 0) := (others => '0');
   signal tb_dmem_data_out : std_logic_vector(DATA_WIDTH-1 downto 0) := (others => '0');
-  signal tb_dmem_write_enable : std_logic_vector(0 downto 0) := (others => '0');
+  signal tb_dmem_write_enable : std_logic := '0';
   signal tb_dmem_address : std_logic_vector(ADDR_WIDTH-1 downto 0) := (others => '0');
 
   -- Clock period definitions
@@ -63,7 +63,7 @@ BEGIN
              dmem_data_in => dmem_data_in,
              dmem_address => proc_dmem_address,
              dmem_data_out => proc_dmem_data_out,
-             dmem_write_enable => proc_dmem_write_enable(0)
+             dmem_write_enable => proc_dmem_write_enable
            );
 
   -- instantiate the instruction memory
@@ -81,7 +81,7 @@ BEGIN
   DataMem: entity work.DualPortMem
   port map (
              clka => clk, clkb => clk,
-             wea => dmem_write_enable, dina => dmem_data_out,
+             wea(0) => dmem_write_enable, dina => dmem_data_out,
              addra => dmem_address, douta => dmem_data_in,
                                                 -- plug unused memory port
              web => "0", dinb => x"00", addrb => "0000000000"
@@ -132,9 +132,9 @@ BEGIN
     begin
       tb_dmem_address <= std_logic_vector(to_unsigned(address, ADDR_WIDTH));
       tb_dmem_data_out <= data;
-      tb_dmem_write_enable <= "1";
+      tb_dmem_write_enable <= '1';
       wait until rising_edge(clk);
-      tb_dmem_write_enable <= "0";
+      tb_dmem_write_enable <= '0';
     end WriteDataWord;
 
 -- helper procedures for checking the contents of data memory after
@@ -144,7 +144,7 @@ BEGIN
                              address : in integer) is
     begin
       tb_dmem_address <= std_logic_vector(to_unsigned(address, ADDR_WIDTH));
-      tb_dmem_write_enable <= "0";
+      tb_dmem_write_enable <= '0';
       wait until rising_edge(clk);
       wait for 0.5 * clk_period;
       assert data = dmem_data_in report "Expected data not found at datamem addr " 
