@@ -34,6 +34,14 @@ Expected behavior:
     Bubbles should not be inserted into the pipeline.
 \end{itemize}
 
+\begin{figure}[ht!]
+  \begin{center}
+    \includegraphics[width=\textwidth]{assets/lw-sw-forwarding.png}
+  \end{center}
+  \caption{Simulation of lw/sw forwarding}
+  \label{fig:simulate_lw_sw}
+\end{figure}
+
 \subsection{Branch prediction}
 
 The test case in figure \ref{fig:test-branch-prediction} tests both the hazard detection and branch prediction capabilities of the processor.
@@ -61,12 +69,19 @@ Expected behavior:
     As this architecture doesn't support operand forwarding to the branch predictor, it will have to guess.
 \end{itemize}
 
+\begin{figure}[h!]
+  \begin{center}
+    \includegraphics[width=\textwidth]{assets/pipeline-flushage.png}
+  \end{center}
+  \caption{Simulation of branch prediction}
+  \label{fig:simulate_branch_prediction}
+\end{figure}
 
 \subsection{Pipeline flushing}
 
 The test case in figure \ref{fig:test-pipeline-flushing} tests that speculatively executed instructions are correctly flushed from the pipeline.
 
-\begin{figure}[h]
+\begin{figure}[h!]
   \begin{code}
     lw $2, 2($0)    # Loads 2 into $2
     lw $1, 1($0)    # Loads 0 into $1
@@ -87,9 +102,17 @@ Expected behavior:
     Memory address 5 should have the value 2, address 4 should have the value 0.
 \end{itemize}
 
+\begin{figure}[ht!]
+  \begin{center}
+    \includegraphics[width=\textwidth]{assets/pipeline-flushage.png}
+  \end{center}
+  \caption{Simulation of pipeline flushing}
+  \label{fig:simulate_pipeline_flushing}
+\end{figure}
+
 \section{Component Tests}
 
-\begin{table}[h!]
+\begin{table}[h]
     \begin{tabular}{|l|p{9cm}|l|}
     \hline
     \textbf{Unit under test} & \textbf{Test purpose}               & \textbf{Test status} \\ \hline
