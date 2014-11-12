@@ -232,6 +232,8 @@ BEGIN
     );
 
     constant TestLwSw : instruction_array_t := (
+      X"3C030002", -- lui $3, 2
+      X"00031C02", -- srl $3, $3, 16
       X"8c030001", -- lw $3, 1($0)
       X"ac030003" -- sw $3, 3($0)
     );

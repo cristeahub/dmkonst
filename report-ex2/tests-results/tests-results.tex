@@ -18,8 +18,10 @@ This allows for load instructions to be followed by store instructions without h
 
 \begin{figure}[h]
   \begin{code}
-    lw $3, 1($0)     # Loads some value from memory
-    sw $3, 3($0)     # Should store the same value back to memory
+    lui $3, 2
+    srl $3, $3, 16   # Load 2 to $3
+    lw $3, 1($0)     # Loads 1 from memory
+    sw $3, 3($0)     # Should store 1, not 2 to address 3
   \end{code}
   \caption{Assembly to test store after load operand forwarding}
   \label{fig:test-store-after-load}
