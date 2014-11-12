@@ -1,7 +1,6 @@
 \chapter{Tests \& Results}
 
 \section{Tests}
-
 This section presents highlights from the testing suite of the pipelined MIPS processor with speculative execution. Branch prediction, data forwarding (including load-store forwarding), and pipeline flushing is demonstrated executing successfully.
 
 \subsection{System integration test}
@@ -70,11 +69,11 @@ The test case in figure \ref{fig:test-pipeline-flushing} tests that speculativel
 \begin{figure}[h]
   \begin{code}
     lw $2, 2($0)    # Loads 2 into $2
-    lw $1, 1($0)    # Loads 1 into $1
+    lw $1, 1($0)    # Loads 0 into $1
     beq $1, $0, 2   # Branch speculatively not taken
     sw $2, 4($0)    # Speculatively executed, to be flushed
     j 6             # Speculatively executed, to be flushed
-    sw $1, 4($0)    # Should actually be executed
+    sw $1, 5($0)    # Should actually be executed
   \end{code}
   \caption{Assembly to test pipeline flushing}
   \label{fig:test-pipeline-flushing}
@@ -85,7 +84,7 @@ Expected behavior:
   \item
     Instructions 3 and 4 should be speculatively executed, and flushed.
   \item
-    The value from memory address 1, not 2 should end up at memory address 4.
+    Memory address 5 should have the value 2, address 4 should have the value 0.
 \end{itemize}
 
 \section{Component Tests}

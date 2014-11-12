@@ -254,7 +254,7 @@ BEGIN
       X"10200002", -- beq $1, $0, 2
       X"AC020004", -- sw $2, 4($0)
       X"08000006", -- j 6
-      X"AC010004", -- sw $1, 4($0)
+      X"AC010005", -- sw $1, 5($0)
       X"00000000" -- nop
     );
   begin
@@ -332,15 +332,15 @@ BEGIN
     ---------------
     -- Next test --
     ---------------
-    
+
     reset <= '1';
     wait for 100 ns;
     reset <= '0';
-    
+
     wait until reset = '0';
-    
+
     fill_instruction_memory(TestBranchAfterLoad);
-    WriteDataWord(X"00000001", 1);
+    WriteDataWord(X"00000000", 1);
     WriteDataWord(X"00000002", 2);
 
     wait for clk_period * 10;
@@ -348,13 +348,14 @@ BEGIN
     processor_enable <= '1';
 
     wait for clk_period * 50;
-    
+
     processor_enable <= '0';
-    
+
     wait until processor_enable = '0';
-    
+
+    CheckDataWord(X"00000000", 4);
     CheckDataWord(X"00000002", 4);
-    
+
     ClearMemories;
 
     report "Test complete";
