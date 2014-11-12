@@ -12,7 +12,7 @@ The testbench has been extended to be more thorough, checking that the data from
 \subsection{Store after load operand forwarding}
 
 The presented architecture has been extended to support operand forwarding from the writeback pipeline stage to the memory stage.
-This allows for load instrucions to be followed by store instructions without having to insert pipeline bubbles.
+This allows for load instructions to be followed by store instructions without having to insert pipeline bubbles.
 
 \begin{figure}[h]
   \begin{code}
@@ -23,10 +23,11 @@ This allows for load instrucions to be followed by store instructions without ha
   \label{fig:test-store-after-load}
 \end{figure}
 
-Expected behaviour:
+Expected behavior:
 \begin{itemize}
   \item
-    The sw instruction should store the just loaded value from the lw instruction, in effect acting like a memory move instruction.
+    The sw instruction should store the newly loaded value from the lw instruction, in effect acting like a memory move instruction.
+  \item
     Bubbles should not be inserted into the pipeline.
 \end{itemize}
 
@@ -47,7 +48,7 @@ The test case in figure \ref{fig:test-branch-prediction} tests both the hazard d
   \caption{Assembly to test branch prediction} \label{fig:test-branch-prediction}
 \end{figure}
 
-Expected behaviour:
+Expected behavior:
 \begin{itemize}
   \item
     The pipeline stalling on instruction 2. Branch after load requires one stall cycle to actually be able to correct for wrongly taken branches.
@@ -70,13 +71,12 @@ The test case in figure \ref{fig:test-pipeline-flushing} tests that speculativel
     sw $2, 4($0)    # Speculatively executed, to be flushed
     j 6             # Speculatively executed, to be flushed
     sw $1, 4($0)    # Should actually be executed
-    nop
   \end{code}
   \caption{Assembly to test pipeline flushing}
   \label{fig:test-pipeline-flushing}
 \end{figure}
 
-Expected behaviour:
+Expected behavior:
 \begin{itemize}
   \item
     Instructions 3 and 4 should be speculatively executed, and flushed.
