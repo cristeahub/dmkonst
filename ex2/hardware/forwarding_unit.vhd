@@ -36,6 +36,10 @@ begin
       if addr_mem_wb_in = inst_rs_in then
         forward_rs_out <= "01";
       end if;
+
+      if addr_mem_wb_in = addr_ex_mem_in then
+        forward_store_out <= '1';
+      end if;
     end if;
 
     -- ex/mem precedence
@@ -46,12 +50,6 @@ begin
 
       if addr_ex_mem_in = inst_rs_in then
         forward_rs_out <= "10";
-      end if;
-    end if;
-    
-    if control_mem_wb_in = '1' and addr_mem_wb_in /= "00000" then
-      if addr_mem_wb_in = addr_ex_mem_in then
-        forward_store_out <= '1';
       end if;
     end if;
 
