@@ -84,3 +84,29 @@ Expected behavior:
     The value from memory address 1, not 2 should end up at memory address 4.
 \end{itemize}
 
+\section{Component Tests}
+
+\begin{table}[h!]
+    \begin{tabular}{|l|p{9cm}|l|}
+    \hline
+    \textbf{Unit under test} & \textbf{Test purpose}               & \textbf{Test status} \\ \hline
+    PC                & Does the program counter increment normally? & \checkmark Passed \\ \cline{2-2}
+                      & Can the program counter be paused? & \\ \cline{2-2}
+                      & Is the correct order of overrides respected (branch predict, jump, branch correct)? & \\ \hline
+    Forwarding unit   & Can data be forwarded from MEM stage to EX stage? & \checkmark Passed \\ \cline{2-2}
+                      & Can data be forwarded from WB stage to EX stage? & \\ \cline{2-2}
+                      & Can data be forwarded from WB stage to MEM stage? & \\ \cline{2-2}
+                      & Is \$r0? ignored & \\ \cline{2-2}
+                      & Will it incorrectly forward when control\_reg\_write is not enabled? & \\ \hline
+    Two bit predictor & Confirm that the predictor defaults to 'not taken'. & \checkmark Passed \\ \cline{2-2}
+                      & Check that two missed predictions are required before prediction switches. & \\\cline{2-2}
+                      & Confirm that it properly resets to 'not taken'. & \\ \hline
+    Hazard detection  & Confirm that the pipeline is not stalled when an r-type instruction follows a load, but there's no overlap in registers & \checkmark Passed \\ \cline{2-2}
+                      & Check that the pipeline is only stalled when a memory read is in the execute stage. & \\\cline{2-2}
+                      & Check that the pipeline is not stalled when a store instruction is dependent on the load. & \\ \hline
+    Control unit      & Confirm that appropriate control signals are output for all supported instructions. & \checkmark Passed \\ \cline{2-2}
+                      & Confirm that all outputs are zero when processor is not enabled. & \\ \hline
+    \end{tabular}
+    \caption{VHDL component tests}
+    \label{fig:vhdl_component_tests}
+\end{table}
