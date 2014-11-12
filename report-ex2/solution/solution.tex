@@ -6,7 +6,14 @@
 
 \section{Architecture}
 
-Data hazards, control hazards, structural hazards.
+\begin{figure}[ht!]
+    \begin{center}
+        \includegraphics[width=\textwidth]{assets/RTL.pdf}
+        \label{fig:architecture}
+        \caption{Top view of architecture. Some parts, namely wires,
+                 have been simplified to make the drawing clearer to understand.}
+    \end{center}
+\end{figure}
 
 The design of the processor is based on the architecture provided in Figure 5.1 \cite[p. 50]{compendium}.
 It has been extended to support jumps, data forwarding, hazard detection and branch prediction.
