@@ -3,7 +3,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity two_bit_predictor is
   Port ( -- In ports
-         clk : in std_logic;
+         clk, reset : in std_logic;
          branch_taken_in : in std_logic;
          update_prediction_in : in std_logic;
 
@@ -31,8 +31,10 @@ begin
     end case;
   end process; -- predict
 
-  update_prediction: process (clk, update_prediction_in) begin
-    if rising_edge(clk) and update_prediction_in = '1' then
+  update_prediction: process (clk, update_prediction_in, reset) begin
+    if reset = '1' then
+      state <= STRONGLY_NOT_TAKEN;
+    elsif rising_edge(clk) and update_prediction_in = '1' then
       if branch_taken_in = '1' then
         case state is
           when STRONGLY_TAKEN =>

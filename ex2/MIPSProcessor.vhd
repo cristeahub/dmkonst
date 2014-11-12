@@ -169,7 +169,7 @@ begin
                ADDR_WIDTH => ADDR_WIDTH,
                DATA_WIDTH => DATA_WIDTH)
   port map( -- Branch status signals
-            clk => clk,
+            clk => clk, reset => reset,
             branch_taken_in => barrier_ex_mem_alu_zero_out,
             update_prediction_in => barrier_ex_mem_should_branch_out,
 

@@ -7,7 +7,7 @@ entity branch_predictor is
             ADDR_WIDTH : integer := 8;
             DATA_WIDTH : integer := 32);
   Port ( -- In ports
-         clk : in std_logic;
+         clk, reset : in std_logic;
          branch_taken_in : in std_logic;
          update_prediction_in : in std_logic;
 
@@ -37,7 +37,7 @@ begin
 
   two_bit_predictor: entity work.two_bit_predictor
   port map (
-             clk => clk,
+             clk => clk, reset => reset,
              branch_taken_in => branch_taken_in,
              update_prediction_in => update_prediction_in,
 
