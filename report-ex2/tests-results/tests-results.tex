@@ -15,7 +15,7 @@ instructions following a branch taken doesn't end up in memory.
 The presented architecture has been extended to support operand forwarding from the write-back pipeline stage to the memory stage.
 This allows for load instructions to be followed by store instructions without having to insert pipeline bubbles.
 
-\begin{figure}[h]
+\begin{figure}[H]
   \begin{code}
     lui $3, 2
     srl $3, $3, 16   # Load 2 to $3
@@ -34,19 +34,28 @@ Expected behavior:
     Bubbles should not be inserted into the pipeline.
 \end{itemize}
 
-\begin{figure}[ht!]
+\subsubsection*{simulation results}
+
+\begin{figure}[H]
   \begin{center}
     \includegraphics[width=\textwidth]{assets/lw-sw-forwarding.png}
   \end{center}
-  \caption{Simulation of lw/sw forwarding}
+  \caption{
+    Store after load simulation}
   \label{fig:simulate_lw_sw}
 \end{figure}
+
+Instructions 2 and 3 (lw and sw) are in the wb and mem stages, respectively, in the yellow area of simulation image \ref{fig:simulate_lw_sw}.
+Notice that 'data write enable' is asserted by the sw instruction, and 'forwarding data value' by the forwarding unit.
+The value on the 'data out' line equals the value on the 'data in' line. Forwarding has completed successfully.
+
+The hazard detection stall signal was never asserted, i.e. no bubbles were inserted.
 
 \subsection{Branch prediction}
 
 The test case in figure \ref{fig:test-branch-prediction} tests both the hazard detection and branch prediction capabilities of the processor.
 
-\begin{figure}[h]
+\begin{figure}[H]
   \begin{code}
     lw $1, 0($0)
     lw $2, 1($0)      # Should stall after this instruction (data hazard).
@@ -69,19 +78,33 @@ Expected behavior:
     As this architecture doesn't support operand forwarding to the branch predictor, it will have to guess.
 \end{itemize}
 
-\begin{figure}[h!]
+\subsubsection*{simulation results}
+
+\begin{figure}[H]
   \begin{center}
-    \includegraphics[width=\textwidth]{assets/pipeline-flushage.png}
+    \includegraphics[width=\textwidth]{assets/branch-prediction.png}
   \end{center}
-  \caption{Simulation of branch prediction}
+  \caption{Branch prediction simulation}
   \label{fig:simulate_branch_prediction}
 \end{figure}
+
+Consider the left part of simulation \ref{fig:simulate_branch_prediction}.
+The data dependency between instruction 1 and 2 is detected, resulting in a one cycle stall as instruction 1 reaches the decode stage.
+The 'Control: branch' signal is also asserted, sampling a suggestion from the branch predictor.
+The two bit predictor has to be used, as operands aren't available yet. It suggests not taking the branch.
+This turns out being the correct choice, requiring no corrective action.
+
+In the right part of simulation \ref{fig:simulate_branch_prediction}, one can barely see the end of the last branch instruction of the loop.
+The branch predictor has to speculate yet again, and uses the choice that has worked for the last n-1 iterations: branch not taken.
+Sadly, not all branches can be taken and the choice ends up wrong.
+Two cycles later the error is noticed, and the 'prediction was wrong' signal is asserted.
+The branch predictor takes this suggestion to heart, and decides to switch state to 'weakly not taken'.
 
 \subsection{Pipeline flushing}
 
 The test case in figure \ref{fig:test-pipeline-flushing} tests that speculatively executed instructions are correctly flushed from the pipeline.
 
-\begin{figure}[h!]
+\begin{figure}[H]
   \begin{code}
     lw $2, 2($0)    # Loads 2 into $2
     lw $1, 1($0)    # Loads 0 into $1
@@ -102,13 +125,21 @@ Expected behavior:
     Memory address 5 should have the value 2, address 4 should have the value 0.
 \end{itemize}
 
-\begin{figure}[ht!]
+\subsubsection*{simulation results}
+
+\begin{figure}[H]
   \begin{center}
     \includegraphics[width=\textwidth]{assets/pipeline-flushage.png}
   \end{center}
   \caption{Simulation of pipeline flushing}
   \label{fig:simulate_pipeline_flushing}
 \end{figure}
+
+After stalling for one cycle on instruction 2 (beq) due to the data dependency on the lw preceding it, the branch predictor guesses not taken, and speculative execution of instructions 3 and 4 begins.
+The prediction is confirmed wrong as instruction 4 enters the ID stage, and pipeline stages EX and MEM are flushed by asserting their respective reset signals.
+Note that instruction 3 (sw) correctly puts '2' on the data out line, but doesn't asserts the data write signal, as it has been flushed.
+
+Further down, we see that instruction 5 successfully stores '0', by asserting the data write signal.
 
 \section{Component Tests}
 
