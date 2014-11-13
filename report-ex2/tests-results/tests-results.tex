@@ -175,9 +175,19 @@ The results of the tests, as well as their purpose, are shown in table \ref{tabl
 \section{Results}
 
 \subsection{Performance}
+
+The theoretical perfomance of the processor is 62.38 MHz.
+This is a far above the 24 MHz production simulation frequency, but lower than the multi cycle processor.
+The lower frequency is made up for by filling the pipeline at all times, and in turn get a shorter executing time.
+The processor's critical path is 16.030 ns.
+This path goes from the ID/EX barrier, through the forwarding unit, into the ALU via the B input, out through the zero signal and into the EX/MEM barrier.
+Even though the hardware system not neccesarily takes that path ever, the clock frequency is bound by it.
+If this can be shortened, the clock frequency can go up.
+
 \todo{Throughput and clock frequency analysis compared to the multi-cycle design. Critical path and such}
 \todo{Clock cycle comparison on system integration test, and the loop testbench}
 \todo{Take inspiration from the previous report. Same tables and such}
+\todo{Get the clock cycles from looping program on multi cycle program and pipeline processor}
 
 \subsection{Power efficiency}
 
