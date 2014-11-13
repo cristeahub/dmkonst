@@ -174,22 +174,14 @@ The results of the tests, as well as their purpose, are shown in table \ref{tabl
 
 \section{Hardware Testing}
 
-The solution was verified by testing on the FGPA, see figure \ref{fig:testing_on_fpga}.
+The solution was verified by testing on a Spartan-6 LX16 FGPA.
 A bitfile was generated from Xilinx and then uploaded to the FPGA via the Hostcomm utility \cite{hostcomm} provided for this subject. 
 
-To make the process of talking to the FPGA easier, a assembler was written in Python for translating assembly programs written.
+To make the process of talking to the FPGA easier, an assembler was written in Python for translating self-written assembly programs.
 This assembler also has an option to make a file suited for the reversed endinanness on hostcomm.
 
 The content of multiple programs was tested on the FPGA, most notably the full system test.
 All output read from the FPGA was verified afterwards, as shown in figure \ref{fig:verify_hostcomm}.
-
-\begin{figure}[H]
-  \begin{center}
-    \includegraphics[width=0.60\textwidth]{assets/FPGA.JPG}
-  \end{center}
-  \caption{Testing on FPGA}
-  \label{fig:testing_on_fpga}
-\end{figure}
 
 \begin{figure}[H]
   \begin{center}
@@ -204,13 +196,13 @@ All output read from the FPGA was verified afterwards, as shown in figure \ref{f
 
 \subsection{Performance}
 
-The theoretical perfomance of the processor is 62.38 MHz.
-This is a far above the 24 MHz production simulation frequency, but lower than the multi cycle processor.
+The theoretical clock frequency of the processor is 62.38 MHz.
+This is far above the 24 MHz production simulation frequency, but lower than the multi-cycle processor we previously implemented.
 The lower frequency is made up for by filling the pipeline at all times, and in turn get a shorter executing time.
 The processor's critical path is 16.030 ns.
 This path goes from the ID/EX barrier, through the forwarding unit, into the ALU via the B input, out through the zero signal and into the EX/MEM barrier.
-Even though the hardware system not neccesarily takes that path ever, the clock frequency is bound by it.
-If this can be shortened, the clock frequency can go up.
+Even though the hardware system doesn't necessarily take that path ever, the clock frequency is bound by it.
+If this can be shortened, the clock frequency would increase.
 
 \todo{Throughput and clock frequency analysis compared to the multi-cycle design. Critical path and such}
 \todo{Clock cycle comparison on system integration test, and the loop testbench}
