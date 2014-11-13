@@ -172,6 +172,34 @@ The results of the tests, as well as their purpose, are shown in table \ref{tabl
     \label{table:vhdl_component_tests}
 \end{table}
 
+\section{Hardware Testing}
+
+The solution was verified by testing on the FGPA, see figure \ref{fig:testing_on_fpga}.
+A bitfile was generated from Xilinx and then uploaded to the FPGA via the Hostcomm utility \cite{hostcomm} provided for this subject. 
+
+To make the process of talking to the FPGA easier, a assembler was written in Python for translating assembly programs written.
+This assembler also has an option to make a file suited for the reversed endinanness on hostcomm.
+
+The content of multiple programs was tested on the FPGA, most notably the full system test.
+All output read from the FPGA was verified afterwards, as shown in figure \ref{fig:verify_hostcomm}.
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[width=0.60\textwidth]{assets/FPGA.JPG}
+  \end{center}
+  \caption{Testing on FPGA}
+  \label{fig:testing_on_fpga}
+\end{figure}
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[width=0.60\textwidth]{assets/hostcomm.JPG}
+  \end{center}
+  \caption{Verify on hostcomm}
+  \label{fig:verify_hostcomm}
+\end{figure}
+
+
 \section{Results}
 
 \subsection{Performance}
