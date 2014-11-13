@@ -45,7 +45,7 @@ Expected behavior:
   \label{fig:simulate_lw_sw}
 \end{figure}
 
-Instructions 2 and 3 (lw and sw) are in the wb and mem stages, respectively, in the yellow area of simulation image \ref{fig:simulate_lw_sw}.
+In the yellow area of simulation image \ref{fig:simulate_lw_sw}, instructions 2 and 3 (lw and sw) are in the wb and mem stages, respectively.
 Notice that 'data write enable' is asserted by the sw instruction, and 'forwarding data value' by the forwarding unit.
 The value on the 'data out' line equals the value on the 'data in' line. Forwarding has completed successfully.
 
@@ -58,8 +58,8 @@ The test case in figure \ref{fig:test-branch-prediction} tests both the hazard d
 \begin{figure}[H]
   \begin{code}
     lw $1, 0($0)
-    lw $2, 1($0)      # Should stall after this instruction (data hazard).
-    beq $2, $0, 3     # Should predict (Control hazard).
+    lw $2, 1($0)      # Should stall after this instruction (data hazard)
+    beq $2, $0, 3     # Should allways have to predict this
     sw $2, 2($0)
     sub $2, $2, $1    # Introduce data hazard for beq
     j 2               # Jump to loop condition
@@ -91,13 +91,13 @@ Expected behavior:
 Consider the left part of simulation \ref{fig:simulate_branch_prediction}.
 The data dependency between instruction 1 and 2 is detected, resulting in a one cycle stall as instruction 1 reaches the decode stage.
 The 'Control: branch' signal is also asserted, sampling a suggestion from the branch predictor.
-The two bit predictor has to be used, as operands aren't available yet. It suggests not taking the branch.
+The two bit predictor is used, as operands aren't available yet. It suggests avoiding the branch.
 This turns out being the correct choice, requiring no corrective action.
 
-In the right part of simulation \ref{fig:simulate_branch_prediction}, one can barely see the end of the last branch instruction of the loop.
-The branch predictor has to speculate yet again, and uses the choice that has worked for the last n-1 iterations: branch not taken.
+In the right part of simulation \ref{fig:simulate_branch_prediction}, one can see the end of the last branch instruction of the loop.
+The branch predictor has to speculate yet again, and chooses the prediction that worked for the last n-1 iterations: branch not taken.
 Sadly, some branches have to be taken and the choice ends up wrong.
-Two cycles later the error is noticed, and the 'prediction was wrong' signal is asserted.
+Two cycles later the error is discovered, and the 'prediction was wrong' signal is asserted.
 The branch predictor takes this suggestion to heart, and decides to switch state to 'weakly not taken'.
 
 \subsection{Pipeline flushing}
@@ -139,7 +139,7 @@ After stalling for one cycle on instruction 2 (beq) due to the data dependency o
 The prediction is confirmed wrong as instruction 4 enters the ID stage, and pipeline stages EX and MEM are flushed by asserting their respective reset signals.
 Note that instruction 3 (sw) correctly puts '2' on the data out line, but doesn't assert the data write signal, as it has been flushed.
 
-Further down, we see that instruction 5 successfully stores '0', by asserting the data write signal.
+Further down, we see that instruction 5 successfully stores '0' to memory, by asserting the data write signal.
 
 \section{Component Tests}
 

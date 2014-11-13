@@ -80,4 +80,4 @@ The prediction given is based on the current state, and whenever a branching dec
 
 To confirm branch decisions, whether a branch was taken, the branch control signal and the pc of the branch not taken are passed down the pipeline to the memory stage.
 In the memory stage, if the branch control signal turns out to be high and the branch taken and alu zero flag differ, the branch was wrongly taken.
-Pipeline stages ID and EX have to be flushed, as well as resetting the pc to the fallback address provided.
+Pipeline stages ID and EX will be flushed, and the program counter set to the pc value of the branch destination not taken.
