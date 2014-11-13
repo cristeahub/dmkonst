@@ -16,6 +16,9 @@
     \end{center}
 \end{figure}
 
+In the presented architecture, there are separate instruction fetch, decode, execution, memory access and register writeback stages.
+In the simple MIPS pipeline, one will be fetched, one decoded, one executed, one doing memory operations, and one writing values back to registers.
+
 The design of the processor is based on the architecture provided in Figure 5.1 \cite[p. 50]{compendium}.
 Major changes from a multi-cycle architecture include pipeline barriers\todo{Explain which pipeline barriers have been addded} to separate stages,
 and a new combinatorial control unit (a state machine will not suffice as multiple instructions are executing at the same time).
