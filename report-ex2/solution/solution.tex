@@ -1,7 +1,5 @@
 \chapter{Solution}
 
-\todo{Write about same-cycle write-reads?}
-
 % Solution: describes your solution of the task.
 % Contains a detailed description of all the subtasks which have been solved and how they contribute to the solution for the given task.
 % The use of diagrams, figures, tables and similar is welcome as a support to your description.
@@ -16,13 +14,17 @@
     \end{center}
 \end{figure}
 
-In the presented architecture, there are separate instruction fetch, decode, execution, memory access and register writeback stages.
-In the simple MIPS pipeline, one will be fetched, one decoded, one executed, one doing memory operations, and one writing values back to registers.
-
 The design of the processor is based on the architecture provided in Figure 5.1 \cite[p. 50]{compendium}.
-Major changes from a multi-cycle architecture include pipeline barriers\todo{Explain which pipeline barriers have been addded} to separate stages,
-and a new combinatorial control unit (a state machine will not suffice as multiple instructions are executing at the same time).
-The suggested architecture has been extended to support jumps, data forwarding, hazard detection, speculative execution and dynamic branch prediction.
+Major changes from the multi-cycle architecture include:
+
+\begin{enumerate}
+  \item
+    Barrier-separated instruction fetch, decode, execute, memory access and register writeback stages.
+  \item
+    Combinatorial control unit (a state machine will not suffice as multiple instructions are executing at the same time).
+  \item
+    Extensions to support jumps, data forwarding, hazard detection, speculative instruction execution and dynamic branch prediction.
+\end{enumerate}
 
 \section{Implementation}
 
@@ -70,7 +72,6 @@ The improvements include:
     By making an educated guess using a branch prediction unit the processor can speculatively execute instructions, keeping the pipeline filled.
   \item
     If a branch is taken wrongly (as confirmed by calculating the correct branching decision in the execute stage, correcting in the memory stage) only two pipeline stages have to be flushed.
-
     This turns branching from a required two cycles of pipeline bubbles (delayed branching) to a best case of zero downtime, and a worst case of two cycles flushed.
 \end{enumerate}
 
