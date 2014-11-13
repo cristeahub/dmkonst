@@ -11,7 +11,7 @@ and extended based on sections 4.7 and 4.8 in \cite{thebook}.
 \section{Pipelined processors}
 
 A pipelined processor differs from simple single- and multi-cycle processors by executing multiple instructions at the same time.
-It extends on the multi-cycle architecture in that an instruction goes through different stages of the processor.
+It extends on the multi-cycle architecture in that an instruction goes through different stages of the processor.\todo{This sentence just suddenly ends!}
 The difference is that while in the multi-cycle processor parts of the hardware is unused at most times, the pipelined processor tries to utilize all parts of the processor at all times.
 When an instruction progresses from the instruction fetch stage to the decode stage, a new instruction can be fetched at the same time. And when one instruction is in the execute stage, another one can be writing to data memory.
 Having up to five instructions execute at once can provide a speed-up of almost 4 times on large programs \cite[p.276]{thebook}.

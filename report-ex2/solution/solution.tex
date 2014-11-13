@@ -16,9 +16,9 @@
 \end{figure}
 
 The design of the processor is based on the architecture provided in Figure 5.1 \cite[p. 50]{compendium}.
-Major changes from a multi-cycle architecture include pipeline barriers to separate stages,
+Major changes from a multi-cycle architecture include pipeline barriers\todo{Explain which pipeline barriers have been addded} to separate stages,
 and a new combinatorial control unit (a state machine will not suffice as multiple instructions are executing at the same time).
-The suggested architecture has been extended to support jumps, data forwarding, hazard detection and dynamic branch prediction.
+The suggested architecture has been extended to support jumps, data forwarding, hazard detection, speculative execution and dynamic branch prediction.
 
 \section{Implementation}
 
@@ -29,7 +29,7 @@ The simple solution to this problem would be to stall the processor for 1-2 cycl
 This is not an ideal solution, however, as it will render big parts of the pipelined unused at many times.
 To solve this a dedicated data forwarding unit is implemented.
 
-The data forwarding unit compares register destinations from the MEM and WB stages, with source registers in the EX stage.
+The data forwarding unit compares destination registers from the MEM and WB stages, with source registers in the EX stage.
 If the registers that the EX stage reads has been written to in the last two cycles, the new value hasn't been stored yet.
 The forwarding unit hotlinks the values straight into the ALU unit, which in turns skips the wait for the values to be written to memory.
 We add a mux in front of both operands to the ALU in the EX stage, with signals from the data in the MEM and WB stages.
@@ -46,10 +46,10 @@ This is because while the R-type instruction is in the execute stage, the load i
 To work around this issue, a hazard detection unit will detect a load followed by a data-dependent instruction (this does not apply to store instructions, as data forwarding takes care of this case).
 A stall flag is enabled when a load instruction is currently in its execute stage, while a dependent instruction is in the ID stage.
 This causes the dependent instruction to remain in the ID stage for one extra cycle, while the load instruction progresses to the MEM stage.
-To give the effect of a nop (an instruction which does not alter memory) between them, the control signals for the dependent instruction are set to zero for one cycle.
+To give the effect of a nop (an instruction that does not affect program execution) between them, the control signals for the dependent instruction are set to zero for one cycle.
 At the same time, the PC needs to stall for one cycle, so no instructions are skipped.
 The next clock cycle, the instruction enters the execute stage.
-Then, data will be loaded from memory, residing in the WB stage, where we have already implemented data forwarding to the EX stage.
+Then, data will be loaded from memory, and as it enters the WB stage, be forwarded to the EX stage.
 
 \subsection{Branching}
 
