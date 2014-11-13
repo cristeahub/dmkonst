@@ -14,7 +14,7 @@ However, the pipelined processor gives a tremendous increase in instruction thro
 The critical path is introduced by having a forwarding unit.
 To reduce the path, one could remove the unit.
 If this is done there will be a lot of data hazards, which will mean that the processor has to stall a lot of the time.
-It is not reasonable to believe that the higher clock frequence achieved from removing the forwarding unit, but with a lot of new stalls, will make programs run faster.
+It is not reasonable to believe that the higher clock frequency achieved from removing the forwarding unit, but with a lot of new stalls, will make programs run faster.
 This might be the case in a program with no data hazards, but this is not the case in most programs.
 
 When comparing to the multi-cycle processor we implemented in assignment 1, we see that the number of cycles required to execute the provided test program is reduced from 98 to 29.
@@ -36,8 +36,8 @@ This approach let us test each new component's integration in the system before 
 \section{Further Work}
 
 The branch prediction unit can be extended quite easily.
-As the current implementation uses a single shared two bit predictor, it is ill suited for larger programs with more complex branching behaviour.
-If one wishes to support such programs, one can use a table of two bit predictors indexed by the current pc to get more finegrained prediction.
+As the current implementation uses a single shared two bit predictor, it is ill suited for larger programs with more complex branching behavior.
+If one wishes to support such programs, one can use a table of two bit predictors indexed by the current pc to get more fine-grained prediction.
 
 With the addition of a global predictor, that is a table of two-bit predictors indexed by the last five branching decisions, complex behavior resulting from correlating branches can also be captured.
-Combining these global and local predictors, choosing between them with a toplevel two bit predictor, tournament prediction has been reinvented.
+Combining these global and local predictors, choosing between them with a top-level two bit predictor, tournament prediction has been reinvented.

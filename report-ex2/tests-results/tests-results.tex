@@ -59,7 +59,7 @@ The test case in figure \ref{fig:test-branch-prediction} tests both the hazard d
   \begin{code}
     lw $1, 0($0)
     lw $2, 1($0)      # Should stall after this instruction (data hazard)
-    beq $2, $0, 3     # Should allways have to predict this
+    beq $2, $0, 3     # Should always have to predict this
     sw $2, 2($0)
     sub $2, $2, $1    # Introduce data hazard for beq
     j 2               # Jump to loop condition
