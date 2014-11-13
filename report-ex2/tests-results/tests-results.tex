@@ -96,7 +96,7 @@ This turns out being the correct choice, requiring no corrective action.
 
 In the right part of simulation \ref{fig:simulate_branch_prediction}, one can barely see the end of the last branch instruction of the loop.
 The branch predictor has to speculate yet again, and uses the choice that has worked for the last n-1 iterations: branch not taken.
-Sadly, not all branches can be taken and the choice ends up wrong.
+Sadly, some branches have to be taken and the choice ends up wrong.
 Two cycles later the error is noticed, and the 'prediction was wrong' signal is asserted.
 The branch predictor takes this suggestion to heart, and decides to switch state to 'weakly not taken'.
 
@@ -137,7 +137,7 @@ Expected behavior:
 
 After stalling for one cycle on instruction 2 (beq) due to the data dependency on the lw preceding it, the branch predictor guesses not taken, and speculative execution of instructions 3 and 4 begins.
 The prediction is confirmed wrong as instruction 4 enters the ID stage, and pipeline stages EX and MEM are flushed by asserting their respective reset signals.
-Note that instruction 3 (sw) correctly puts '2' on the data out line, but doesn't asserts the data write signal, as it has been flushed.
+Note that instruction 3 (sw) correctly puts '2' on the data out line, but doesn't assert the data write signal, as it has been flushed.
 
 Further down, we see that instruction 5 successfully stores '0', by asserting the data write signal.
 
