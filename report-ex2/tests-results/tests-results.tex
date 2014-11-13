@@ -214,20 +214,22 @@ If this can be shortened, the clock frequency can go up.
 
 \todo{Throughput and clock frequency analysis compared to the multi-cycle design. Critical path and such}
 \todo{Clock cycle comparison on system integration test, and the loop testbench}
-\todo{Take inspiration from the previous report. Same tables and such}
-\todo{Get the clock cycles from looping program on multi cycle program and pipeline processor}
 
-lw/sw:
-Pipeline: 7 cycles
-Multi-cycle: 17 cycles
+When comparing execution time of programs run on this pipelined processor with the multi-cycle processor we implemented in exercise 1, we see that even though the clock frequency is slightly reduced, the overall performance is increased significantly. See table \ref{table:execution_time} for exact timings.
 
-loop:
-Pipeline: 88 cycles
-Multi-cycle: 290 cycles
-
-flush:
-Pipeline: 10 cycles
-Multi-cycle: 17 cycles
+\begin{table}
+    \begin{tabular}{|l|l|l|l|l|}
+    \hline
+    Test program          & \multicolumn{2}{l|}{Cycle count} & \multicolumn{2}{l|}{Execution time} \\ \hline
+    ~                     & Pipeline    & Multi-cycle & Pipeline       & Multi-cycle \\ \hline
+    Top level system test & 29          & 98          & 0.465 ms       & 1.332 ms    \\ \hline
+    Load/store            & 7           & 17          & 0.112 ms       & 0.23 ms     \\ \hline
+    Looping               & 88          & 290         & 1.41 ms        & 3.941 ms    \\ \hline
+    Pipeline flushing     & 10          & 17          & 0.16 ms        & 0.23 ms     \\ \hline
+    \end{tabular}
+    \caption{Performance comparison between multi-cycle processor from exercise 1, and the pipelined processor}
+    \label{table:execution_time}
+\end{table}
 
 \subsection{Power efficiency}
 
