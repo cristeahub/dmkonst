@@ -149,4 +149,33 @@ The results of the tests, as well as their purpose, are shown in table \ref{tabl
 \todo{Take inspiration from the previous report. Same tables and such}
 
 \subsection{Power efficiency}
-\todo{Power usage from isim}
+
+The MIPS processor makes use of the whole pipeline as much as possible.
+By always filling up the pipeline and overlaying instructions, it makes sure as few cycles as possible are wasted.
+This makes it so that the total execution time of programs is significantly reduced, which in turn reduces the total static power consumption by allowing earlier return to lower power modes.
+The usage of block ram and other dedicated FPGA resources provides additional power savings.
+Also, a high maximum clock frequency (62.38 MHz) ensures that each part of the pipeline is executed quickly.
+
+A post-place-and-route power data from Xilinx ISE gives a rough idea of what actual power consumption might look like, see table \ref{tab:power_consumption}.
+Even though these values are inaccurate, they can still be used in estimates.
+
+A huge percentage of total power consumption comes from quiescent power draw (simply keeping the FPGA active).
+As the processor itself uses very little power, further improvements would be to implement sleeping for inactive states, as well as switching to a more power efficient FPGA.
+This would greatly reduce the power consumption of the processor.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|l|l|}
+        \hline
+        \textbf{On-Chip} & \textbf{Power (mW)} \\ \hline
+        Clocks           & 1.74                \\ \hline
+        Logic            & 0.27                \\ \hline
+        Signals          & 0.57                \\ \hline
+        IOs              & 0.04                \\ \hline
+        16k BlockRAM     & 1.43                \\ \hline
+        Quiescent        & 24.00               \\ \hline
+        \textbf{Total}   & 28.06               \\ \hline
+    \end{tabular}
+    \caption{Power estimates from Xilinx ISE}
+    \label{tab:power_consumption}
+\end{table}
