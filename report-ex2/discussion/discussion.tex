@@ -6,9 +6,10 @@ Furthermore, the solution includes a data forwarding unit, a hazard detector, an
 It has been successfully tested on a Xilinx Spartan-6 LX16 FPGA, using the provided hostcomm\cite{hostcomm} utility.
 
 \section{Performance}
-\todo{A branch predictor brings along quite the critical path, yadda yadda}
 
 The final estimated clock frequency is 62.38 MHz.
+This is mostly due to a long critical path introduced by having a branch predictor and a forwarding unit.
+However, the pipelined processor gives a tremendous speedup.
 
 When comparing to the multi-cycle processor we implemented in assignment 1, we see that the number of cycles required to execute the provided test program is reduced from 98 to 29.
 And although the clock frequency has been somewhat reduced after introducing pipelining, it still represents a speedup of about 2.78.
@@ -16,11 +17,13 @@ And although the clock frequency has been somewhat reduced after introducing pip
 
 \section{Choosing a branch predictor}
 The choice of using a single shared saturating counter versus a predictor table indexed by the low bits of the current instruction, was based on noticing that programs usually were rather short, containing at most a few tight loops.
+
 As this architecture doesn't support data forwarding to the branch predictor, even the addition of a single two bit predictor reduces pipeline flushing in loops dramatically, as the previous loop condition can be re-used and will be correct for all loop iterations except the last.
 
 \section{The Work Process}
 We decided to take a gradual approach to the assignment.
-We first converted the processor from Assignment 1 into a processor with five pipeline stages, and modified the test program to have enough nops to remove all hazards.
+The first stage was to convert the processor from Assignment 1 into a processor with five pipeline stages, and modified the test program to have enough nops to remove all hazards.
+
 With this implementation working, we could progress to add data forwarding, and observe that the test passed with significantly fewer nops required.
 This approach let us test each new component's integration in the system before progressing to the new task, until finally the original test program ran to completion.
 
@@ -29,5 +32,6 @@ This approach let us test each new component's integration in the system before 
 The branch prediction unit can be extended quite easily.
 As the current implementation uses a single shared two bit predictor, it is ill suited for larger programs with more complex branching behaviour.
 If one wishes to support such programs, one can use a table of two bit predictors indexed by the current pc to get more finegrained prediction.
+
 With the addition of a global predictor, that is a table of two-bit predictors indexed by the last five branching decisions, complex behavior resulting from correlating branches can also be captured.
 Combining these global and local predictors, choosing between them with a toplevel two bit predictor, tournament prediction has been reinvented.
