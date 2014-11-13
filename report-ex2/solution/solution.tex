@@ -16,7 +16,9 @@
 \end{figure}
 
 The design of the processor is based on the architecture provided in Figure 5.1 \cite[p. 50]{compendium}.
-It has been extended to support jumps, data forwarding, hazard detection and branch prediction.
+Major changes from a multi-cycle architecture include pipeline barriers to separate stages,
+and a new combinatorial control unit (a state machine will not suffice as multiple instructions are executing at the same time).
+The suggested architecture has been extended to support jumps, data forwarding, hazard detection and dynamic branch prediction.
 
 \section{Implementation}
 
