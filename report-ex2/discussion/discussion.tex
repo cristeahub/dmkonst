@@ -9,7 +9,13 @@ It has been successfully tested on a Xilinx Spartan-6 LX16 FPGA, using the provi
 
 The final estimated clock frequency is 62.38 MHz.
 This is mostly due to a long critical path introduced by having a branch predictor and a forwarding unit.
-However, the pipelined processor gives a tremendous speedup.
+However, the pipelined processor gives a tremendous increase in instruction throughput.
+
+The critical path is introduced by having a forwarding unit.
+To reduce the path, one could remove the unit.
+If this is done there will be a lot of data hazards, which will mean that the processor has to stall a lot of the time.
+It is not reasonable to believe that the higher clock frequence achieved from removing the forwarding unit, but with a lot of new stalls, will make programs run faster.
+This might be the case in a program with no data hazards, but this is not the case in most programs.
 
 When comparing to the multi-cycle processor we implemented in assignment 1, we see that the number of cycles required to execute the provided test program is reduced from 98 to 29.
 And although the clock frequency has been somewhat reduced after introducing pipelining, it still represents a speedup of about 2.78.
