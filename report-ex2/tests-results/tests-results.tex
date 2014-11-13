@@ -112,6 +112,10 @@ Expected behavior:
 
 \section{Component Tests}
 
+All tests are written in VHDL and simulated in ISim.
+Each component has been tested and verified with a testbench designed to confirm normal operation and detect edge-cases in the behavior.
+The results of the tests, as well as their purpose, are shown in table \ref{table:vhdl_component_tests}.
+
 \begin{table}[h]
     \begin{tabular}{|l|p{9cm}|l|}
     \hline
@@ -134,7 +138,7 @@ Expected behavior:
                       & Confirm that all outputs are zero when processor is not enabled. & \\ \hline
     \end{tabular}
     \caption{VHDL component tests}
-    \label{fig:vhdl_component_tests}
+    \label{table:vhdl_component_tests}
 \end{table}
 
 \section{Results}
